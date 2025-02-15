@@ -3,12 +3,18 @@
 class StabilizationAlgorithm {
 public:
     virtual Solenoids getStabilization(Data data) = 0;
-}
+};
 
-class PID: StabilizationAlgorithm {
+class PID: public StabilizationAlgorithm {
+public:
+    Solenoids getStabilization(Data data) {
+        // TODO
+    }
+};
 
-}
-
-class BangBang: StabilizationAlgorithm {
-    
-}
+class BangBang: public StabilizationAlgorithm {
+public:
+    Solenoids getStabilization(Data data) {
+        // TODO
+    }
+};

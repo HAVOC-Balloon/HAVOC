@@ -84,5 +84,6 @@ struct Data {
     // have telemetry, they should format it themselves and append
     // it to this variable.
     // Appended telemetry should be CSV and should END with a comma.
-    String extraTelemetry = "";
+
+    std::string extraTelemetry = "";
 };

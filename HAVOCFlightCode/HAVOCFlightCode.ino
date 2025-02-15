@@ -5,30 +5,37 @@
 #include "stabilization.cpp"
 #include "telemetry.cpp"
 
+// --- THIS BIT IS TEMPORARY TO MAKE THE RED LINES GO AWAY ---
+extern enum IOMode {INPUT, OUTPUT};
+extern void pinMode(int pin, IOMode ioMode);
+extern enum PinState {LOW, HIGH};
+extern void digitalWrite(int pin, PinState pinState);
+// --- DELETE IT WHEN WE START USING ARDUINO ---
+
 Config config;
 Data data;
 Sensors sensors;
-TargetPresets TargetPresets;
-Logger logger = OpenLog();
+TargetPresets targetPresets;
+Logger* logger = new OpenLog();
 void initPins();
 void setSolenoids();
 
 void setup() {
-    logger.init();
-    sensors.imu = BNO055();
-    sensors.gps = M9N();
-    sensors.barometer = BMP388();
+    logger->init();
+    sensors.imu = new BNO055();
+    sensors.gps = new M9N();
+    sensors.barometer = new BMP388();
 }
 
 void loop() {
-    sensors.imu.collectData(data);
-    sensors.gps.collectData(data);
-    sensors.barometer.collectData(data);
-    data.target = targetPresets.sun.getTarget(data);
-    StabilizationAlgorithm algorithm = PID();
-    data.solenoids = algorithm.getStabilization(data);
+    sensors.imu->collectData(data);
+    sensors.gps->collectData(data);
+    sensors.barometer->collectData(data);
+    data.target = targetPresets.sun->getTarget(data);
+    StabilizationAlgorithm* algorithm = new PID();
+    data.solenoids = algorithm->getStabilization(data);
     setSolenoids();
-    logger.writeTelemetry(data);
+    logger->writeTelemetry(data);
 }
 
 void initPins() {

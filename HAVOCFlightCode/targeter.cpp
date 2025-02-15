@@ -5,7 +5,7 @@ public:
     virtual Target getTarget(Data data) = 0;
 };
 
-class ConstantTargeter: Targeter {
+class ConstantTargeter: public Targeter {
 private:
     Target target;
 public:
@@ -17,7 +17,7 @@ public:
     }
 };
 
-class SolarTargeter: Targeter {
+class SolarTargeter: public Targeter {
 public:
     Target getTarget(Data data) {
         Target target;
@@ -27,7 +27,7 @@ public:
     }
 };
 
-class GPSTargeter: Targeter {
+class GPSTargeter: public Targeter {
 private:
     Position position;
 public:
@@ -38,25 +38,21 @@ public:
         Target target;
         target.mode = ORIENTATION;
         target.target = 0; // TODO: GPS CODE HERE
-        return target
+        return target;
     }
 };
 
 struct TargetPresets {
-    ConstantTargeter north = ConstantTargeter({ORIENTATION, 0}),
-    ConstantTargeter east = ConstantTargeter({ORIENTATION, 90}),
-    ConstantTargeter south = ConstantTargeter({ORIENTATION, 180}),
-    ConstantTargeter west = ConstantTargeter({ORIENTATION, 270}),
-    ConstantTargeter rotationLimiter = ConstantTargeter({VELOCITY, 0}),
-    ConstantTargeter slowClockwise = ConstantTargeter({VELOCITY, 10}),
-    ConstantTargeter slowCounterclockwise = ConstantTargeter({VELOCITY, -10}),
-    ConstantTargeter fastClockwise = ConstantTargeter({VELOCITY, 40}),
-    ConstantTargeter fastCounterclockwise = ConstantTargeter({VELOCITY, -40}),
-    SolarTargeter sun = SolarTargeter(),
-    GPSTargeter swirll = GPSTargeter({ORIENTATION, {
-        34.725032, -86.646366, 200
-    }})
-    GPSTargeter uah = GPSTargeter({ORIENTATION, {
-        34.7246131, -86.6397583, 190
-    }})
+    Targeter* north = new ConstantTargeter({ORIENTATION, 0});
+    Targeter* east = new ConstantTargeter({ORIENTATION, 90});
+    Targeter* south = new ConstantTargeter({ORIENTATION, 180});
+    Targeter* west = new ConstantTargeter({ORIENTATION, 270});
+    Targeter* rotationLimiter = new ConstantTargeter({VELOCITY, 0});
+    Targeter* slowClockwise = new ConstantTargeter({VELOCITY, 10});
+    Targeter* slowCounterclockwise = new ConstantTargeter({VELOCITY, -10});
+    Targeter* fastClockwise = new ConstantTargeter({VELOCITY, 40});
+    Targeter* fastCounterclockwise = new ConstantTargeter({VELOCITY, -40});
+    Targeter* sun = new SolarTargeter();
+    Targeter* swirll = new GPSTargeter({34.725032, -86.646366, 200});
+    Targeter* uah = new GPSTargeter({34.7246131, -86.6397583, 190});
 };

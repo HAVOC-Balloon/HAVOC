@@ -1,3 +1,5 @@
+extern unsigned long millis();
+
 class Stopwatch {
 protected:
     unsigned long startTime; // ms
