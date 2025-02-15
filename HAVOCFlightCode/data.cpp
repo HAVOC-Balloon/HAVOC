@@ -19,7 +19,7 @@ struct Vector {
 struct Position {
     double lat; // DD.dddd
     double lon; // DD.dddd
-    long alt; // mm MSL
+    double alt; // m MSL
 };
 
 struct UTCTime {

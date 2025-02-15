@@ -72,6 +72,7 @@ public:
     }
     Position getPosition() {
         // TODO
+        // Make sure to convert altitude from mm to m
     }
     UTCTime getUTCTime() {
         // TODO

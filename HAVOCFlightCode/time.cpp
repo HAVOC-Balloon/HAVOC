@@ -18,7 +18,7 @@ public:
     }
 };
 
-class Timer: Stopwatch {
+class Timer: public Stopwatch {
 protected:
     unsigned long duration; // ms
 public:

@@ -48,10 +48,10 @@ struct TargetPresets {
     Targeter* south = new ConstantTargeter({ORIENTATION, 180});
     Targeter* west = new ConstantTargeter({ORIENTATION, 270});
     Targeter* rotationLimiter = new ConstantTargeter({VELOCITY, 0});
-    Targeter* slowClockwise = new ConstantTargeter({VELOCITY, 10});
-    Targeter* slowCounterclockwise = new ConstantTargeter({VELOCITY, -10});
-    Targeter* fastClockwise = new ConstantTargeter({VELOCITY, 40});
-    Targeter* fastCounterclockwise = new ConstantTargeter({VELOCITY, -40});
+    Targeter* slowClockwise = new ConstantTargeter({VELOCITY, -10});
+    Targeter* slowCounterclockwise = new ConstantTargeter({VELOCITY, 10});
+    Targeter* fastClockwise = new ConstantTargeter({VELOCITY, -40});
+    Targeter* fastCounterclockwise = new ConstantTargeter({VELOCITY, 40});
     Targeter* sun = new SolarTargeter();
     Targeter* swirll = new GPSTargeter({34.725032, -86.646366, 200});
     Targeter* uah = new GPSTargeter({34.7246131, -86.6397583, 190});

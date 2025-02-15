@@ -4,6 +4,7 @@
 #include "targeter.cpp"
 #include "stabilization.cpp"
 #include "telemetry.cpp"
+#include "time.cpp"
 
 // --- THIS BIT IS TEMPORARY TO MAKE THE RED LINES GO AWAY ---
 extern enum IOMode {INPUT, OUTPUT};
@@ -18,6 +19,9 @@ Sensors sensors;
 TargetPresets targetPresets;
 Logger* logger = new OpenLog();
 void initPins();
+void blinkLEDs();
+void updateFlightState();
+void stateActions();
 void setSolenoids();
 
 void setup() {
@@ -28,12 +32,12 @@ void setup() {
 }
 
 void loop() {
+    blinkLEDs();
     sensors.imu->collectData(data);
     sensors.gps->collectData(data);
     sensors.barometer->collectData(data);
-    data.target = targetPresets.sun->getTarget(data);
-    StabilizationAlgorithm* algorithm = new PID();
-    data.solenoids = algorithm->getStabilization(data);
+    updateFlightState();
+    stateActions();
     setSolenoids();
     logger->writeTelemetry(data);
 }
@@ -43,6 +47,57 @@ void initPins() {
     pinMode(config.pins.counterclockwise, OUTPUT);
     pinMode(config.pins.led1, OUTPUT);
     pinMode(config.pins.led2, OUTPUT);
+}
+
+void blinkLEDs() {
+    static Timer cycleTime = Timer(config.blink.cycleTime);
+    static Timer duration = Timer(config.blink.duration);
+
+    if (cycleTime.isComplete()) {
+        digitalWrite(config.pins.led1, HIGH);
+        digitalWrite(config.pins.led2, HIGH);
+        duration.reset();
+        cycleTime.reset();
+    }
+    if (duration.isComplete()) {
+        digitalWrite(config.pins.led1, LOW);
+        digitalWrite(config.pins.led2, LOW);
+    }
+}
+
+void updateFlightState() {
+    switch (data.state) {
+        case STANDBY:
+            if (data.gps.pos.alt >= config.targetAltitude) {
+                // TODO: Make this resistant to one-time altitude errors
+                data.state = FlightState::STABILIZATION;
+            }
+            break;
+        case STABILIZATION:
+            if (data.gps.pos.alt <= config.deactivateAltitude) {
+                // TODO: Make this resistant to one-time altitude errors
+                data.state = FlightState::STABILIZATION;
+            }
+            break;
+        case LANDED:
+            break;
+    }
+}
+
+void stateActions() {
+    switch (data.state) {
+        case STANDBY:
+            data.solenoids = Solenoids::OFF;
+            break;
+        case STABILIZATION:
+            data.target = targetPresets.sun->getTarget(data);
+            StabilizationAlgorithm* algorithm = new PID();
+            data.solenoids = algorithm->getStabilization(data);
+            break;
+        case LANDED:
+            data.solenoids = Solenoids::OFF;
+            break;
+    }
 }
 
 void setSolenoids() {
@@ -59,8 +114,5 @@ void setSolenoids() {
             digitalWrite(config.pins.clockwise, LOW);
             digitalWrite(config.pins.counterclockwise, HIGH);
             break;
-        default:
-            digitalWrite(config.pins.clockwise, LOW);
-            digitalWrite(config.pins.counterclockwise, LOW);
     }
 }
