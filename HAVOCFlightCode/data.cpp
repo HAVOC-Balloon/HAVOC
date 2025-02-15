@@ -40,15 +40,27 @@ struct GPS {
     int SIV;
 }
 
+struct Atmospheric {
+    float pressure; // Pa?
+    float temperature; // deg C?
+    float alt; // m MSL
+}
+
+enum TargetingMode {
+    OFF = 0,
+    ORIENTATION = 1,
+    VELOCITY = 2
+}
+
+struct Target {
+    TargetingMode mode = ORIENTATION;
+    float target = 0; // deg if ORIENTATION; deg/s if VELOCITY
+}
+
 enum Solenoids {
     OFF = 0,
     CLOCKWISE = 1,
     COUNTERCLOCKWISE = 2
-}
-
-struct Atmospheric {
-    float pressure; // Pa?
-    float temperature; // deg C?
 }
 
 struct Data {
@@ -62,8 +74,10 @@ struct Data {
     Vector gyro; // deg/s
     Vector orientation; // deg
     GPS gps;
-    Solenoids solenoids;
     Atmospheric atmo;
+
+    Solenoids solenoids = OFF;
+
 
     // If additional subsets of the code, outside of the primary loop,
     // have telemetry, they should format it themselves and append
