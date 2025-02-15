@@ -77,9 +77,8 @@ struct Data {
     Vector orientation; // deg
     GPS gps;
     Atmospheric atmo;
-
+    Target target;
     Solenoids solenoids = OFF;
-
 
     // If additional subsets of the code, outside of the primary loop,
     // have telemetry, they should format it themselves and append

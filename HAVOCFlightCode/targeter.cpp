@@ -47,6 +47,11 @@ struct TargetPresets {
     ConstantTargeter east = ConstantTargeter({ORIENTATION, 90}),
     ConstantTargeter south = ConstantTargeter({ORIENTATION, 180}),
     ConstantTargeter west = ConstantTargeter({ORIENTATION, 270}),
+    ConstantTargeter rotationLimiter = ConstantTargeter({VELOCITY, 0}),
+    ConstantTargeter slowClockwise = ConstantTargeter({VELOCITY, 10}),
+    ConstantTargeter slowCounterclockwise = ConstantTargeter({VELOCITY, -10}),
+    ConstantTargeter fastClockwise = ConstantTargeter({VELOCITY, 40}),
+    ConstantTargeter fastCounterclockwise = ConstantTargeter({VELOCITY, -40}),
     SolarTargeter sun = SolarTargeter(),
     GPSTargeter swirll = GPSTargeter({ORIENTATION, {
         34.725032, -86.646366, 200
