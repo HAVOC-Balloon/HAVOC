@@ -23,8 +23,7 @@ void loop() {
     sensors.imu.collectData(data);
     sensors.gps.collectData(data);
     sensors.barometer.collectData(data);
-    Targeter targeter = SolarTargeter();
-    data.target = targeter.getTarget(data);
+    data.target = TargetPresets.sun.getTarget(data);
     StabilizationAlgorithm algorithm = PID();
     data.solenoids = algorithm.getStabilization(data);
     setSolenoids();

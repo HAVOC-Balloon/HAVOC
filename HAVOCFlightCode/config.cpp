@@ -3,7 +3,7 @@ struct Pins {
     const int counterclockwise = 14;
     const int led1 = 29;
     const int led2 = 33;
-}
+};
 
 struct Config {
     const Pins pins;
@@ -12,4 +12,4 @@ struct Config {
     const double targetAltitude = 20000; // m
     const double deactivateAltitude = 1000; // m
     const double GPSTick = 1000; // ms?
-}
+};
