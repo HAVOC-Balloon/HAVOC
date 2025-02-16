@@ -1,4 +1,5 @@
-#include "data.cpp"
+#pragma once
+#include "data.h"
 
 class StabilizationAlgorithm {
 public:
@@ -7,14 +8,10 @@ public:
 
 class PID: public StabilizationAlgorithm {
 public:
-    Solenoids getStabilization(Data data) {
-        // TODO
-    }
+    Solenoids getStabilization(Data data);
 };
 
 class BangBang: public StabilizationAlgorithm {
 public:
-    Solenoids getStabilization(Data data) {
-        // TODO
-    }
+    Solenoids getStabilization(Data data);
 };

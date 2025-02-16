@@ -1,3 +1,5 @@
+#pragma once
+
 struct Pins {
     const int clockwise = 15;
     const int counterclockwise = 14;
