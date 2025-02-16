@@ -1,6 +1,6 @@
 #include <time/time.h>
 #include <procedures/stabilization.h>
-#include <actions.h>
+#include <havoc.h>
 
 Config config;
 Data data;
