@@ -42,7 +42,7 @@ void updateFlightState() {
         case STABILIZATION:
             if (data.gps.pos.alt <= config.deactivateAltitude) {
                 // TODO: Make this resistant to one-time altitude errors
-                data.state = STABILIZATION;
+                data.state = LANDED;
             }
             break;
         case LANDED:
