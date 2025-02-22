@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 enum FlightState {
@@ -49,18 +50,18 @@ struct Atmospheric {
 };
 
 enum TargetingMode {
-    OFF = 0,
+    NO_TARGET = 0,
     ORIENTATION = 1,
     VELOCITY = 2
 };
 
 struct Target {
-    TargetingMode mode = ORIENTATION;
+    TargetingMode mode = TargetingMode::ORIENTATION;
     float target = 0; // deg if ORIENTATION; deg/s if VELOCITY
 };
 
 enum Solenoids {
-    OFF = 0,
+    SOLENOIDS_OFF = 0,
     CLOCKWISE = 1,
     COUNTERCLOCKWISE = 2
 };
@@ -71,14 +72,14 @@ struct Data {
     // long lastTime = 0;
     unsigned long packetCount = 0;
     unsigned long missionTime = 0; // ms
-    FlightState state = STANDBY;
+    FlightState state = FlightState::STANDBY;
     Vector acceleration; // m/s
     Vector gyro; // deg/s
     Vector orientation; // deg
     GPS gps;
     Atmospheric atmo;
     Target target;
-    Solenoids solenoids = OFF;
+    Solenoids solenoids = SOLENOIDS_OFF;
 
     // If additional subsets of the code, outside of the primary loop,
     // have telemetry, they should format it themselves and append
