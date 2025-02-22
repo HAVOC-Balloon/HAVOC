@@ -1,12 +1,16 @@
+#include <Arduino.h>
 #include <data.h>
 #include <board-io/telemetry.h>
 
 void OpenLog::init() {
-    // TODO: INIT CODE FOR OPENLOG
+    Serial1.begin(115200);
 }
 
 void OpenLog::writeTelemetry(Data data) {
-    // TODO: TELEMETRY CODE FOR OPENLOG
+    Serial1.print(data.missionTime);
+    Serial1.print(",");
+    // etc.
+    // TODO: Finish writeTelemetry function
 }
 
 void SPILogger::init() {
