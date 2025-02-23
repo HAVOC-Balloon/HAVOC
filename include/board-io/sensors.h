@@ -1,4 +1,5 @@
 #pragma once
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h> 
 
 class Sensor {
 public:
@@ -38,6 +39,8 @@ public:
 };
 
 class M9N: public GPSReciever {
+private:
+    SFE_UBLOX_GNSS m9n;
 public:
     void init();
     Position getPosition();
