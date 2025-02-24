@@ -86,5 +86,8 @@ struct Data {
     // it to this variable.
     // Appended telemetry should be CSV and should END with a comma.
 
-    std::string extraTelemetry = "";
+    // extraTelemetry has been temporarily removed until we determine
+    // a proper mechanism for allowing telemetry to be collected
+    // from alternate sources
+    // std::string extraTelemetry = "";
 };

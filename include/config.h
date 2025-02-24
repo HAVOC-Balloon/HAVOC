@@ -12,8 +12,13 @@ struct Blink {
     const int duration = 50; // ms
 };
 
+struct BaudRates {
+    const int serial1 = 115200;
+};
+
 struct Config {
     const Pins pins;
+    const BaudRates bauds;
     const Blink blink;
     // TO BE DISCUSSED: DELETE SAMPLE RATE
     // BECAUSE NOT LOGGING EVERY LOOP IS SILLY IF YOU CAN
