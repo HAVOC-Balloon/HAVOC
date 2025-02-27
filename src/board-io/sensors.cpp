@@ -4,10 +4,10 @@
 
 Sensor::Sensor() { init(); }
 
-void IMU::collectData(Data data) {
-  data.acceleration = getAcceleration();
-  data.gyro = getGyro();
-  data.orientation = getOrientation();
+void IMU::collectData(Data* data) {
+  data->acceleration = getAcceleration();
+  data->gyro = getGyro();
+  data->orientation = getOrientation();
 }
 
 void GPSReceiver::collectData(Data* data) {
@@ -25,8 +25,8 @@ void GPSReceiver::collectData(Data* data) {
   }
 }
 
-void Barometer::collectData(Data data) {
-  data.atmo.pressure = getPressure();
-  data.atmo.temperature = getTemperature();
-  data.atmo.alt = getAltitude();
+void Barometer::collectData(Data* data) {
+  data->atmo.pressure = getPressure();
+  data->atmo.temperature = getTemperature();
+  data->atmo.alt = getAltitude();
 }
