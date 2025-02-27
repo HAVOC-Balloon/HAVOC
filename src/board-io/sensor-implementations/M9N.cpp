@@ -59,41 +59,19 @@ std::optional<Position> M9N::getPosition() {
   return std::nullopt;
 }
 
-<<<<<<< HEAD
-UTCTime M9N::getUTCTime() {
-
-    // Ask whether it is a problem to call the functions that request the data a bunch.
-    // It would be bad to clog up our satellites, but idk if that is how it works
-
-    // Returns the last outputted time if it hasn't passed the GPS tick
-    if (millis() > lastTickTime) {
-        lastUTCTime.year = (int)m9n.getYear();
-        lastUTCTime.month = (int)m9n.getMonth();
-        lastUTCTime.day = (int)m9n.getDay();
-        lastUTCTime.hour = (int)m9n.getHour();
-        lastUTCTime.minute = (int)m9n.getMinute();
-        lastUTCTime.second = (int)m9n.getSecond();
-        
-        return lastUTCTime;
-    } else {
-        
-    }
-     
-=======
 std::optional<UTCTime> M9N::getUTCTime() {
   if (millis() - lastTick > tickRate) {
     UTCTime toReturn;
-    toReturn.year = m9n.getYear();
-    toReturn.month = m9n.getMonth();
-    toReturn.day = m9n.getDay();
-    toReturn.hour = m9n.getHour();
-    toReturn.minute = m9n.getMinute();
-    toReturn.second = m9n.getSecond();
+    toReturn.year = (int)m9n.getYear();
+    toReturn.month = (int)m9n.getMonth();
+    toReturn.day = (int)m9n.getDay();
+    toReturn.hour = (int)m9n.getHour();
+    toReturn.minute = (int)m9n.getMinute();
+    toReturn.second = (int)m9n.getSecond();
     toReturn.hour = (int)m9n.getHour();
     return toReturn;
   }
   return std::nullopt;
->>>>>>> ee3f62bf20c3e6dad42a11f7501aac075fdc02c9
 }
 
 std::optional<int> M9N::getSIV() {
