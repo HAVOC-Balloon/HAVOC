@@ -19,9 +19,9 @@ class IMU : public Sensor {
 };
 
 class GPSReceiver : public Sensor {
- private:
+ protected:
   unsigned int lastTick;
-  unsigned int tick;
+  unsigned int tickRate;
 
  public:
   void collectData(Data* data);
@@ -48,7 +48,6 @@ class BNO055 : public IMU {
 class M9N : public GPSReceiver {
  private:
   SFE_UBLOX_GNSS m9n;
-  unsigned int tick = 1000;
 
  public:
   void init();

@@ -9,6 +9,16 @@
 // TODO Update each of the getters to only update when it has passed the tick
 // time.
 
+/**
+ * NOTE:
+ *      Here, I have it set up to where each getter will only update when
+ *      it has passed the tick time, but only the overall `collectData()`
+ *      function will update the tickTime. Keep that as a note: the specific
+ *      getters for each value are meant to be used by the `collectData()`
+ *      function, not the end user directly.
+ *
+ */
+
 void M9N::init() {
   // Optional debug statements are commented out
 
@@ -32,22 +42,41 @@ void M9N::init() {
   while (m9n.getSIV() < 3) {
     delay(1000);
   }
+
+  // Setting the constants for this sensor
+  tickRate = 1000;
+  lastTick = 0;
 }
 
 std::optional<Position> M9N::getPosition() {
-  // TODO
-  // Make sure to convert altitude from mm to m
+  if (millis() - lastTick > tickRate) {
+    Position toReturn;
+    toReturn.alt = m9n.getAltitude() / 1000.0;
+    toReturn.lon = ((double)m9n.getLongitude()) * pow(10, -7);
+    toReturn.lat = ((double)m9n.getLatitude()) * pow(10, -7);
+    return toReturn;
+  }
+  return std::nullopt;
 }
 
 std::optional<UTCTime> M9N::getUTCTime() {
-  // Jadens code lol
-  /* Year = (int)myGNSS.getYear();
-  Month = (int)myGNSS.getMonth();
-  Day = (int)myGNSS.getDay();
-  date = String(Month) + "/" + String(Day) + "/" + String(Year);
-  //date = " Hello";
-  */
-  // TODO
+  if (millis() - lastTick > tickRate) {
+    UTCTime toReturn;
+    toReturn.year = m9n.getYear();
+    toReturn.month = m9n.getMonth();
+    toReturn.day = m9n.getDay();
+    toReturn.hour = m9n.getHour();
+    toReturn.minute = m9n.getMinute();
+    toReturn.second = m9n.getSecond();
+    toReturn.hour = (int)m9n.getHour();
+    return toReturn;
+  }
+  return std::nullopt;
 }
 
-std::optional<int> M9N::getSIV() {}
+std::optional<int> M9N::getSIV() {
+  if (millis() - lastTick > tickRate) {
+    return m9n.getSIV();
+  }
+  return std::nullopt;
+}
