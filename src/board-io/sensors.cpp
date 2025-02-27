@@ -4,26 +4,29 @@
 
 Sensor::Sensor() { init(); }
 
-void IMU::collectData(Data data) {
-  data.acceleration = getAcceleration();
-  data.gyro = getGyro();
-  data.orientation = getOrientation();
+void IMU::collectData(Data* data) {
+  data->acceleration = getAcceleration();
+  data->gyro = getGyro();
+  data->orientation = getOrientation();
 }
 
 void GPSReceiver::collectData(Data* data) {
-  // Ensuring each has a value
   auto pos = getPosition();
-  if (pos.has_value()) data->gps.pos = pos.value();
-  auto time = getUTCTime();
-  if (time.has_value()) data->gps.time = time.value();
   auto siv = getSIV();
-  if (siv.has_value()) data->gps.SIV = siv.value();
+  auto time = getUTCTime();
 
-  lastTick = millis();
+  // Only updating if the tick time has passed, thus each has a value
+  if (pos.has_value() && time.has_value() && siv.has_value()) {
+    data->gps.pos = pos.value();
+    data->gps.time = time.value();
+    data->gps.SIV = siv.value();
+
+    lastTick = millis();
+  }
 }
 
-void Barometer::collectData(Data data) {
-  data.atmo.pressure = getPressure();
-  data.atmo.temperature = getTemperature();
-  data.atmo.alt = getAltitude();
+void Barometer::collectData(Data* data) {
+  data->atmo.pressure = getPressure();
+  data->atmo.temperature = getTemperature();
+  data->atmo.alt = getAltitude();
 }

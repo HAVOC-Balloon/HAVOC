@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 
 #include <optional>
@@ -7,21 +8,21 @@ class Sensor {
  public:
   Sensor();
   virtual void init() {};
-  virtual void collectData(Data data) = 0;
+  virtual void collectData(Data* data) = 0;
 };
 
 class IMU : public Sensor {
  public:
-  void collectData(Data data);
+  void collectData(Data* data);
   virtual Vector getAcceleration() = 0;
   virtual Vector getGyro() = 0;
   virtual Vector getOrientation() = 0;
 };
 
 class GPSReceiver : public Sensor {
- private:
+ protected:
   unsigned int lastTick;
-  unsigned int tick;
+  unsigned int tickRate;
 
  public:
   void collectData(Data* data);
@@ -31,7 +32,7 @@ class GPSReceiver : public Sensor {
 };
 
 class Barometer : public Sensor {
-  void collectData(Data data);
+  void collectData(Data* data);
   virtual float getPressure() = 0;
   virtual float getTemperature() = 0;
   virtual float getAltitude() = 0;
@@ -48,7 +49,6 @@ class BNO055 : public IMU {
 class M9N : public GPSReceiver {
  private:
   SFE_UBLOX_GNSS m9n;
-  unsigned int tick = 1000;
 
  public:
   void init();
