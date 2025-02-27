@@ -39,15 +39,25 @@ std::optional<Position> M9N::getPosition() {
   // Make sure to convert altitude from mm to m
 }
 
-std::optional<UTCTime> M9N::getUTCTime() {
-  // Jadens code lol
-  /* Year = (int)myGNSS.getYear();
-  Month = (int)myGNSS.getMonth();
-  Day = (int)myGNSS.getDay();
-  date = String(Month) + "/" + String(Day) + "/" + String(Year);
-  //date = " Hello";
-  */
-  // TODO
+UTCTime M9N::getUTCTime() {
+
+    // Ask whether it is a problem to call the functions that request the data a bunch.
+    // It would be bad to clog up our satellites, but idk if that is how it works
+
+    // Returns the last outputted time if it hasn't passed the GPS tick
+    if (millis() > lastTickTime) {
+        lastUTCTime.year = (int)m9n.getYear();
+        lastUTCTime.month = (int)m9n.getMonth();
+        lastUTCTime.day = (int)m9n.getDay();
+        lastUTCTime.hour = (int)m9n.getHour();
+        lastUTCTime.minute = (int)m9n.getMinute();
+        lastUTCTime.second = (int)m9n.getSecond();
+        
+        return lastUTCTime;
+    } else {
+        
+    }
+     
 }
 
 std::optional<int> M9N::getSIV() {}
