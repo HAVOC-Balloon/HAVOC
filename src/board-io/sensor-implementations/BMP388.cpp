@@ -7,12 +7,15 @@ void BMP388::init() {
 
 float BMP388::getPressure() {
     // TODO
+    return 0;
 }
 
 float BMP388::getTemperature() {
     // TODO
+    return 0;
 }
 
 float BMP388::getAltitude() {
     // TODO
+    return 0;
 }
