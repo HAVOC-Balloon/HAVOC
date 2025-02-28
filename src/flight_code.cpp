@@ -12,9 +12,9 @@ void setup() {
 
 void loop() {
   blinkLEDs();
-  sensors.imu->collectData(&data);
-  sensors.gps->collectData(&data);
-  sensors.barometer->collectData(&data);
+  sensors.imu->collectData(data);
+  sensors.gps->collectData(data);
+  sensors.barometer->collectData(data);
   updateFlightState();
   stateActions();
   setSolenoids();

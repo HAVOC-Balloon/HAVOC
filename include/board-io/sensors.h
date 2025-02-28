@@ -8,12 +8,12 @@ class Sensor {
  public:
   Sensor();
   virtual void init() {};
-  virtual void collectData(Data* data) = 0;
+  virtual void collectData(Data &data) = 0;
 };
 
 class IMU : public Sensor {
  public:
-  void collectData(Data* data);
+  void collectData(Data &data);
   virtual Vector getAcceleration() = 0;
   virtual Vector getGyro() = 0;
   virtual Vector getOrientation() = 0;
@@ -25,14 +25,14 @@ class GPSReceiver : public Sensor {
   unsigned int tickRate;
 
  public:
-  void collectData(Data* data);
+  void collectData(Data &data);
   virtual std::optional<Position> getPosition() = 0;
   virtual std::optional<UTCTime> getUTCTime() = 0;
   virtual std::optional<int> getSIV() = 0;
 };
 
 class Barometer : public Sensor {
-  void collectData(Data* data);
+  void collectData(Data &data);
   virtual float getPressure() = 0;
   virtual float getTemperature() = 0;
   virtual float getAltitude() = 0;
