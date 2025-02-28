@@ -76,7 +76,7 @@ void OpenLog::writeTelemetry(Data &data) {
 void SPILogger::init() {
     SD.begin(config.pins.sdCSPin);
     // Start with number 1
-    int fileNumber = 1;
+    unsigned short int fileNumber = 1;
     // Reserve space for filenames up to 31 chars
     char fileName[32];
     // Reserve space for converting number to string
