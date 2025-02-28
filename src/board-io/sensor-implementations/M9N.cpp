@@ -20,63 +20,63 @@
  */
 
 void M9N::init() {
-  // Optional debug statements are commented out
+    // Optional debug statements are commented out
 
-  // Initialization
-  while (!m9n.begin()) {
-    // Serial.println("GPS not found. Retrying momentarily.");
-    delay(1000);
-  }
+    // Initialization
+    while (!m9n.begin()) {
+        // Serial.println("GPS not found. Retrying momentarily.");
+        delay(1000);
+    }
 
-  // Updating settings
-  m9n.setI2COutput(COM_TYPE_UBX);
-  m9n.setNavigationFrequency(5);
-  if (m9n.setDynamicModel(DYN_MODEL_AIRBORNE4g) == false) {
-    // Serial1.println(F("*** Warning: setDynamicModel failed ***"));
-  }
-  m9n.saveConfiguration();
+    // Updating settings
+    m9n.setI2COutput(COM_TYPE_UBX);
+    m9n.setNavigationFrequency(5);
+    if (m9n.setDynamicModel(DYN_MODEL_AIRBORNE4g) == false) {
+        // Serial1.println(F("*** Warning: setDynamicModel failed ***"));
+    }
+    m9n.saveConfiguration();
 
-  // Serial.println("GPS Online.");
+    // Serial.println("GPS Online.");
 
-  // Serial.println("Waiting for GPS lock");
-  while (m9n.getSIV() < 3) {
-    delay(1000);
-  }
+    // Serial.println("Waiting for GPS lock");
+    while (m9n.getSIV() < 3) {
+        delay(1000);
+    }
 
-  // Setting the constants for this sensor
-  tickRate = 1000;
-  lastTick = 0;
+    // Setting the constants for this sensor
+    tickRate = 1000;
+    lastTick = 0;
 }
 
 std::optional<Position> M9N::getPosition() {
-  if (millis() - lastTick > tickRate) {
-    Position toReturn;
-    toReturn.alt = m9n.getAltitude() / 1000.0;
-    toReturn.lon = ((double)m9n.getLongitude()) * pow(10, -7);
-    toReturn.lat = ((double)m9n.getLatitude()) * pow(10, -7);
-    return toReturn;
-  }
-  return std::nullopt;
+    if (millis() - lastTick > tickRate) {
+        Position toReturn;
+        toReturn.alt = m9n.getAltitude() / 1000.0;
+        toReturn.lon = ((double)m9n.getLongitude()) * pow(10, -7);
+        toReturn.lat = ((double)m9n.getLatitude()) * pow(10, -7);
+        return toReturn;
+    }
+    return std::nullopt;
 }
 
 std::optional<UTCTime> M9N::getUTCTime() {
-  if (millis() - lastTick > tickRate) {
-    UTCTime toReturn;
-    toReturn.year = (int)m9n.getYear();
-    toReturn.month = (int)m9n.getMonth();
-    toReturn.day = (int)m9n.getDay();
-    toReturn.hour = (int)m9n.getHour();
-    toReturn.minute = (int)m9n.getMinute();
-    toReturn.second = (int)m9n.getSecond();
-    toReturn.hour = (int)m9n.getHour();
-    return toReturn;
-  }
-  return std::nullopt;
+    if (millis() - lastTick > tickRate) {
+        UTCTime toReturn;
+        toReturn.year = (int)m9n.getYear();
+        toReturn.month = (int)m9n.getMonth();
+        toReturn.day = (int)m9n.getDay();
+        toReturn.hour = (int)m9n.getHour();
+        toReturn.minute = (int)m9n.getMinute();
+        toReturn.second = (int)m9n.getSecond();
+        toReturn.hour = (int)m9n.getHour();
+        return toReturn;
+    }
+    return std::nullopt;
 }
 
 std::optional<int> M9N::getSIV() {
-  if (millis() - lastTick > tickRate) {
-    return m9n.getSIV();
-  }
-  return std::nullopt;
+    if (millis() - lastTick > tickRate) {
+        return m9n.getSIV();
+    }
+    return std::nullopt;
 }
