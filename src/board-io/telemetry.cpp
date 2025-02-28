@@ -75,16 +75,25 @@ void OpenLog::writeTelemetry(Data &data) {
 
 void SPILogger::init() {
     SD.begin(config.pins.sdCSPin);
+    // Start with number 1
     int fileNumber = 1;
+    // Reserve space for filenames up to 31 chars
     char fileName[32];
+    // Reserve space for converting number to string
     char fileNumberStr[6];
     do {
+        // Overwrite fileName with prefix
         strcpy(fileName, config.telemetryFilePrefix);
+        // Convert fileNumber to five-char string (e.g. 1 -> 00001)
         sprintf(fileNumberStr, "%0*d", 5, fileNumber);
+        // Append fileNumber to prefix
         strcat(fileName, fileNumberStr);
+        // Append ".csv" to file name
         strcat(fileName, ".csv");
+        // Increment the filenumber for next loop
         fileNumber++;
-    } while (SD.exists(fileName));
+    } while (SD.exists(fileName)); // Do that again if the file exists already
+    // Once we find a file name that doesn't exist, use it!
     currentFile = SD.open(fileName);
 }
 
