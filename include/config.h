@@ -5,6 +5,7 @@ struct Pins {
     const int counterclockwise = 14;
     const int led1 = 29;
     const int led2 = 33;
+    const int sdCSPin = 5; // EXAMPLE. Change when value is known.
 };
 
 struct Blink {
@@ -26,6 +27,7 @@ struct Config {
     const float seaLevelPressure = 1013.25; // Pa
     const double targetAltitude = 20000; // m
     const double deactivateAltitude = 1000; // m
+    const char * telemetryFilePrefix = "telemetry/HAVOC-Data-";
     // No idea what this is but we can bring it back if we ever use it
     // const double GPSTick = 1000; // ms?
 };

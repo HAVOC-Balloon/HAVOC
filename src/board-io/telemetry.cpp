@@ -74,9 +74,80 @@ void OpenLog::writeTelemetry(Data &data) {
 }
 
 void SPILogger::init() {
-    // TODO: INIT CODE FOR SPI LOGGER
+    SD.begin(config.pins.sdCSPin);
+    int fileNumber = 1;
+    char fileName[32];
+    char fileNumberStr[6];
+    do {
+        strcpy(fileName, config.telemetryFilePrefix);
+        sprintf(fileNumberStr, "%0*d", 5, fileNumber);
+        strcat(fileName, fileNumberStr);
+        strcat(fileName, ".csv");
+        fileNumber++;
+    } while (SD.exists(fileName));
+    currentFile = SD.open(fileName);
 }
 
 void SPILogger::writeTelemetry(Data &data) {
-    // TODO: TELEMETRY CODE FOR SPI LOGGER
+    currentFile.print(data.packetCount);
+    currentFile.print(",");
+    currentFile.print(data.missionTime);
+    currentFile.print(",");
+    currentFile.print(data.state);
+    currentFile.print(",");
+    currentFile.print(data.acceleration.x);
+    currentFile.print(",");
+    currentFile.print(data.acceleration.y);
+    currentFile.print(",");
+    currentFile.print(data.acceleration.z);
+    currentFile.print(",");
+    currentFile.print(data.gyro.x);
+    currentFile.print(",");
+    currentFile.print(data.gyro.y);
+    currentFile.print(",");
+    currentFile.print(data.gyro.z);
+    currentFile.print(",");
+    currentFile.print(data.orientation.x);
+    currentFile.print(",");
+    currentFile.print(data.orientation.y);
+    currentFile.print(",");
+    currentFile.print(data.orientation.z);
+    currentFile.print(",");
+    currentFile.print(data.gps.pos.alt);
+    currentFile.print(",");
+    currentFile.print(data.gps.pos.lat);
+    currentFile.print(",");
+    currentFile.print(data.gps.pos.lon);
+    currentFile.print(",");
+    currentFile.print(data.gps.time.year);
+    currentFile.print(",");
+    currentFile.print(data.gps.time.month);
+    currentFile.print(",");
+    currentFile.print(data.gps.time.day);
+    currentFile.print(",");
+    currentFile.print(data.gps.time.hour);
+    currentFile.print(",");
+    currentFile.print(data.gps.time.minute);
+    currentFile.print(",");
+    currentFile.print(data.gps.time.second);
+    currentFile.print(",");
+    currentFile.print(data.gps.SIV);
+    currentFile.print(",");
+    currentFile.print(data.atmo.alt);
+    currentFile.print(",");
+    currentFile.print(data.atmo.pressure);
+    currentFile.print(",");
+    currentFile.print(data.atmo.temperature);
+    currentFile.print(",");
+    currentFile.print(data.target.mode);
+    currentFile.print(",");
+    currentFile.print(data.target.target);
+    currentFile.print(",");
+    currentFile.print(data.solenoids);
+    currentFile.println();
+    // Flush written data to SD card to ensure it's written and not just
+    // waiting in the buffer
+    // This is important because microcontrollers can't guarantee
+    // that file I/O that waits too long won't be corrupted by power loss
+    currentFile.flush();
 }

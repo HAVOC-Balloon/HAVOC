@@ -1,5 +1,6 @@
 #pragma once
 #include <data.h>
+#include <SD.h>
 
 class Logger {
 public:
@@ -14,6 +15,9 @@ public:
 };
 
 class SPILogger: public Logger {
+private:
+    File currentFile;
+public:
     void init();
     void writeTelemetry(Data &data);
 };
