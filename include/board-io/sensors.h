@@ -1,4 +1,5 @@
 #pragma once
+#include <Adafruit_BMP3XX.h>
 
 class Sensor {
 public:
@@ -46,6 +47,8 @@ public:
 };
 
 class BMP388: public Barometer {
+private:
+    Adafruit_BMP3XX bmp;
 public:
     void init();
     float getPressure();
