@@ -1,4 +1,5 @@
 #pragma once
+#include <Adafruit_BMP3XX.h>
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 
 #include "data.h"
@@ -55,7 +56,9 @@ public:
     std::optional<int> getSIV();
 };
 
-class BMP388 : public Barometer {
+class BMP388: public Barometer {
+private:
+    Adafruit_BMP3XX bmp;
 public:
     void init();
     float getPressure();
