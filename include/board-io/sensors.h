@@ -22,7 +22,7 @@ public:
 
 class GPSReceiver : public Sensor {
 protected:
-    Timer tick{1000};
+    Timer tick = Timer(1000); // Change to config.gpsrate or something later
 public:
     void collectData(Data &data);
     virtual std::optional<Position> getPosition() = 0;
