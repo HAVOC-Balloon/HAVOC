@@ -6,9 +6,6 @@
 #include "time/time.h"
 #include "board-io/sensors.h"
 
-// TODO Update each of the getters to only update when it has passed the tick
-// time.
-
 /**
  * NOTE:
  *      Here, I have it set up to where each getter will only update when
