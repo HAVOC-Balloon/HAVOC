@@ -1,5 +1,6 @@
 #include <data.h>
 #include <board-io/sensors.h>
+#include <havoc.h>
 
 void BMP388::init() {
     bmp.begin_I2C();
@@ -21,5 +22,5 @@ float BMP388::getTemperature() {
 }
 
 float BMP388::getAltitude() {
-    return bmp.readAltitude(1013.25);
+    return bmp.readAltitude(config.seaLevelPressure);
 }
