@@ -1,23 +1,24 @@
-#include "data.h"
 #include "board-io/sensors.h"
 
-Sensor::Sensor() {
-    init();
-}
+#include "data.h"
 
-void IMU::collectData(Data data) {
+Sensor::Sensor() { init(); }
+
+void IMU::collectData(Data &data) {
     data.acceleration = getAcceleration();
     data.gyro = getGyro();
     data.orientation = getOrientation();
 }
 
-void GPSReciever::collectData(Data data) {
-    data.gps.pos = getPosition();
-    data.gps.time = getUTCTime();
-    data.gps.SIV = getSIV();
+void GPSReceiver::collectData(Data &data) {
+    if (!tick.isComplete()) return;
+    data.gps.pos = getPosition().value_or(data.gps.pos);
+    data.gps.time = getUTCTime().value_or(data.gps.time);
+    data.gps.SIV = getSIV().value_or(data.gps.SIV);
+    tick.reset();
 }
 
-void Barometer::collectData(Data data) {
+void Barometer::collectData(Data &data) {
     data.atmo.pressure = getPressure();
     data.atmo.temperature = getTemperature();
     data.atmo.alt = getAltitude();

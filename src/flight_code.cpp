@@ -1,4 +1,5 @@
 #include <Arduino.h>
+
 #include "havoc.h"
 
 void setup() {
@@ -18,4 +19,5 @@ void loop() {
     stateActions();
     setSolenoids();
     logger->writeTelemetry(data);
+    data.packetCount += 1;
 }
