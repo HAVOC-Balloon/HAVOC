@@ -3,7 +3,7 @@
 #include <data.h>
 
 #include <optional>
-
+#include "time/time.h"
 #include "board-io/sensors.h"
 
 // TODO Update each of the getters to only update when it has passed the tick
@@ -43,13 +43,10 @@ void M9N::init() {
         delay(1000);
     }
 
-    // Setting the constants for this sensor
-    tickRate = 1000;
-    lastTick = 0;
 }
 
 std::optional<Position> M9N::getPosition() {
-    if (millis() - lastTick > tickRate) {
+    if (tick.isComplete()) {
         Position toReturn;
         toReturn.alt = m9n.getAltitude() / 1000.0;
         toReturn.lon = ((double)m9n.getLongitude()) * pow(10, -7);
@@ -60,7 +57,7 @@ std::optional<Position> M9N::getPosition() {
 }
 
 std::optional<UTCTime> M9N::getUTCTime() {
-    if (millis() - lastTick > tickRate) {
+    if (tick.isComplete()) {
         UTCTime toReturn;
         toReturn.year = (int)m9n.getYear();
         toReturn.month = (int)m9n.getMonth();
@@ -75,7 +72,7 @@ std::optional<UTCTime> M9N::getUTCTime() {
 }
 
 std::optional<int> M9N::getSIV() {
-    if (millis() - lastTick > tickRate) {
+    if (tick.isComplete()) {
         return m9n.getSIV();
     }
     return std::nullopt;

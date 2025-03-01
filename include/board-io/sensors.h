@@ -2,9 +2,10 @@
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 
 #include "data.h"
+#include "time/time.h"
 #include <optional>
 
-class Sensor {
+class Sensor {    
 public:
     Sensor();
     virtual void init() {};
@@ -21,9 +22,7 @@ public:
 
 class GPSReceiver : public Sensor {
 protected:
-    unsigned int lastTick;
-    unsigned int tickRate;
-
+    Timer tick{1000};
 public:
     void collectData(Data &data);
     virtual std::optional<Position> getPosition() = 0;
@@ -49,7 +48,6 @@ public:
 class M9N : public GPSReceiver {
 private:
     SFE_UBLOX_GNSS m9n;
-
 public:
     void init();
     std::optional<Position> getPosition();

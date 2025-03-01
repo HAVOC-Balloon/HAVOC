@@ -11,18 +11,11 @@ void IMU::collectData(Data &data) {
 }
 
 void GPSReceiver::collectData(Data &data) {
-    auto pos = getPosition();
-    auto siv = getSIV();
-    auto time = getUTCTime();
-
-    // Only updating if the tick time has passed, thus each has a value
-    if (pos.has_value() && time.has_value() && siv.has_value()) {
-        data.gps.pos = pos.value();
-        data.gps.time = time.value();
-        data.gps.SIV = siv.value();
-
-        lastTick = millis();
-    }
+    if (!tick.isComplete()) return;
+    data.gps.pos = getPosition().value_or(data.gps.pos);
+    data.gps.time = getUTCTime().value_or(data.gps.time);
+    data.gps.SIV = getSIV().value_or(data.gps.SIV);
+    tick.reset();
 }
 
 void Barometer::collectData(Data &data) {
