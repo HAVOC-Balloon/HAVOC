@@ -7,12 +7,15 @@ void BNO055::init() {
 
 Vector BNO055::getAcceleration() {
     // TODO
+    return {0, 0, 0};
 }
 
 Vector BNO055::getGyro() {
     // TODO
+    return {0, 0, 0};
 }
 
 Vector BNO055::getOrientation() {
     // TODO
+    return {0, 0, 0};
 }
