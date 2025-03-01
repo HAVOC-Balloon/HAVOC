@@ -19,4 +19,5 @@ void loop() {
     stateActions();
     setSolenoids();
     logger->writeTelemetry(data);
+    data.packetCount += 1;
 }
