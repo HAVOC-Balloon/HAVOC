@@ -14,4 +14,4 @@ private:
 public:
     PIDMath(float kp, float ki, float kd, float deadbandError);
     float getOutput(float error);
-}
+};
