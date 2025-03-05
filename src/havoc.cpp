@@ -1,4 +1,4 @@
-#include <time/time.h>
+#include <utilities/time.h>
 #include <procedures/stabilization.h>
 #include <havoc.h>
 
@@ -57,7 +57,7 @@ void stateActions() {
             break;
         case FlightState::STABILIZATION:
             data.target = targetPresets.sun->getTarget(data);
-            data.solenoids = PID().getStabilization(data);
+            data.solenoids = CascadedPID().getStabilization(data);
             break;
         case FlightState::LANDED:
             data.solenoids = SOLENOIDS_OFF;

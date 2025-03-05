@@ -1,13 +1,17 @@
 #pragma once
 #include "data.h"
+#include <utilities/pid.h>
 
 class StabilizationAlgorithm {
 public:
     virtual Solenoids getStabilization(Data data) = 0;
 };
 
-class PID: public StabilizationAlgorithm {
+class CascadedPID: public StabilizationAlgorithm {
+private:
+    OutputTransform outputTranform;
 public:
+    CascadedPID(OutputTransform transform);
     Solenoids getStabilization(Data data);
 };
 
