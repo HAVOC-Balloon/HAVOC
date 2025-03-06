@@ -21,30 +21,31 @@ Solenoids BangBang::getStabilization(Data data) {
     }else{
         return data.solenoids;
     }
-    
-    if(data.target.mode == TargetingMode::ORIENTATION){
-        //Normalized error
-        double error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
 
-        if(error > 10){
-            return Solenoids::CLOCKWISE;
-        }else if(error < -10){
-            return Solenoids::COUNTERCLOCKWISE;
-        }else{
+    switch(data.target.mode){
+        case ORIENTATION:
+            //Normalized error
+            double error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
+            if(error > 10){
+                return Solenoids::CLOCKWISE;
+            }else if(error < -10){
+                return Solenoids::COUNTERCLOCKWISE;
+            }else{
+                return Solenoids::SOLENOIDS_OFF;
+            }
+            break;
+        case VELOCITY:
+            double error = data.target.target - data.gyro.z;
+            if(error > 7){
+                return Solenoids::CLOCKWISE;
+            }else if(error < -7){
+                return Solenoids::COUNTERCLOCKWISE;
+            }else{
+                return Solenoids::SOLENOIDS_OFF;
+            }
+            break;
+        default:
             return Solenoids::SOLENOIDS_OFF;
-        }
-    }
-
-    if(data.target.mode == TargetingMode::VELOCITY){
-        double error = data.target.target - data.gyro.z;
-
-        if(error > 7){
-            return Solenoids::CLOCKWISE;
-        }else if(error < -7){
-            return Solenoids::COUNTERCLOCKWISE;
-        }else{
-            return Solenoids::SOLENOIDS_OFF;
-        }
     }
     
     return Solenoids::SOLENOIDS_OFF;
