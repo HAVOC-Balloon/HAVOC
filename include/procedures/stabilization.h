@@ -9,9 +9,9 @@ public:
 
 class CascadedPID: public StabilizationAlgorithm {
 private:
-    OutputTransform outputTranform;
+    //OutputTransform outputTranform;
 public:
-    CascadedPID(OutputTransform transform);
+    //CascadedPID(OutputTransform transform);
     Solenoids getStabilization(Data data);
 };
 
