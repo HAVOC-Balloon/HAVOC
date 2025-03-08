@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <Adafruit_BNO055.h>
 
 enum FlightState {
     STANDBY = 0,
@@ -73,9 +74,9 @@ struct Data {
     unsigned long packetCount = 0;
     unsigned long missionTime = 0; // ms
     FlightState state = FlightState::STANDBY;
-    Vector acceleration; // m/s
-    Vector gyro; // deg/s
-    Vector orientation; // deg
+    imu::Vector<3> acceleration; // m/s
+    imu::Vector<3> gyro; // deg/s
+    imu::Vector<3> orientation; // deg
     GPS gps;
     Atmospheric atmo;
     Target target;
