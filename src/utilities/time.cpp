@@ -33,6 +33,15 @@ void Timer::setDuration(unsigned long newDuration) {
     duration = newDuration;
 }
 
+void Timer::reset(){
+    startTime = millis();
+}
+
+void Timer::reset(unsigned long newDuration){
+    setDuration(newDuration);
+    reset();
+}
+
 Alarm::Alarm(unsigned long endTime) {
     this->endTime = endTime;
 }

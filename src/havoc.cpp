@@ -51,23 +51,33 @@ void updateFlightState() {
 }
 
 void stateActions() {
+    Solenoids requestedSolenoidState;
     switch (data.state) {
         case FlightState::STANDBY:
-            data.solenoids = SOLENOIDS_OFF;
+            setSolenoids(SOLENOIDS_OFF);
             break;
         case FlightState::STABILIZATION:
             data.target = targetPresets.sun->getTarget(data);
-            data.solenoids = CascadedPID().getStabilization(data);
+            // data.solenoids = CascadedPID().getStabilization(data);
+            requestedSolenoidState = CascadedPID(PFM()).getStabilization(data);
+            setSolenoids(requestedSolenoidState);
             break;
         case FlightState::LANDED:
-            data.solenoids = SOLENOIDS_OFF;
+            setSolenoids(SOLENOIDS_OFF);
             break;
         default:
-            data.solenoids = SOLENOIDS_OFF;
+            setSolenoids(SOLENOIDS_OFF);
     }
 }
 
-void setSolenoids() {
+void setSolenoids(Solenoids solenoidState) {
+    static Timer canToggleSolenoids = Timer(config.solenoidCycleTime);
+
+    if (solenoidState == data.solenoids || !canToggleSolenoids.isComplete()) {
+        return;
+    }
+
+    data.solenoids = solenoidState;
     switch (data.solenoids) {
         case SOLENOIDS_OFF:
             digitalWrite(config.pins.clockwise, LOW);
@@ -82,4 +92,5 @@ void setSolenoids() {
             digitalWrite(config.pins.counterclockwise, HIGH);
             break;
     }
+    canToggleSolenoids.reset();
 }

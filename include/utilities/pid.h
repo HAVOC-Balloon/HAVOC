@@ -1,4 +1,3 @@
-
 #include <utilities/time.h>
 
 class PIDMath {

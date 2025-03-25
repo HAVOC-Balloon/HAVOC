@@ -17,7 +17,6 @@ void loop() {
     sensors.barometer->collectData(data);
     updateFlightState();
     stateActions();
-    setSolenoids();
     logger->writeTelemetry(data);
     data.packetCount += 1;
 }
