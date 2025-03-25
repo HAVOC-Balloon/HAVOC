@@ -16,7 +16,7 @@ public:
 
 class IMU : public Sensor {
 public:
-    void collectData(Data data);
+    void collectData(Data &data);
     virtual imu::Vector<3> getAcceleration() = 0;
     virtual imu::Vector<3> getGyro() = 0;
     virtual imu::Vector<3> getOrientation() = 0;

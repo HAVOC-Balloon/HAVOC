@@ -19,7 +19,7 @@ void BNO055::init() {
     // Below this is code for Calibration
     int eeAddress = 0;
     long bnoID;
-    bool foundCalib = false;
+    // bool foundCalib = false; // Unused variable warning.
 
     EEPROM.get(eeAddress, bnoID);
 
