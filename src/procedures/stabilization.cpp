@@ -134,20 +134,14 @@ Solenoids PiddedBangBang::getStabilization(Data data){
 */
 
 Solenoids BangBang::getStabilization(Data data) {
+    float targetVelocity = data.target.target;
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
             //Normalized error
             error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
-            if(error > 10){
-                return Solenoids::CLOCKWISE;
-            }else if(error < -10){
-                return Solenoids::COUNTERCLOCKWISE;
-            }else{
-                return Solenoids::SOLENOIDS_OFF;
-            }
-            break;
+            targetVelocity = abs(error) > 10 ? constrain(error * 0.5, -50, 50) : 0;
         case TargetingMode::VELOCITY:
-            error = data.target.target - data.gyro.z;
+            error = targetVelocity - data.gyro.z;
             if(error > 7){
                 return Solenoids::CLOCKWISE;
             }else if(error < -7){
