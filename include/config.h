@@ -28,6 +28,7 @@ struct Config {
     const double targetAltitude = 20000; // m
     const double deactivateAltitude = 1000; // m
     const char * telemetryFilePrefix = "telemetry/HAVOC-Data-";
+    const unsigned long solenoidCycleTime = 50; // ms
     // No idea what this is but we can bring it back if we ever use it
     // const double GPSTick = 1000; // ms?
 };
