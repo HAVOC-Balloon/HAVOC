@@ -1,4 +1,5 @@
 #include <Arduino.h>
+
 #include "havoc.h"
 
 void setup() {
@@ -16,6 +17,6 @@ void loop() {
     sensors.barometer->collectData(data);
     updateFlightState();
     stateActions();
-    setSolenoids();
     logger->writeTelemetry(data);
+    data.packetCount += 1;
 }

@@ -18,6 +18,8 @@ public:
     bool isComplete();
     unsigned long timeRemaining();
     void setDuration(unsigned long newDuration);
+    void reset();
+    void reset(unsigned long newDuration);
 };
 
 class Alarm {

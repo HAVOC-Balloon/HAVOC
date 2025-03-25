@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <time/time.h>
+#include <utilities/time.h>
 
 Stopwatch::Stopwatch() {
     startTime = millis();
@@ -31,6 +31,15 @@ unsigned long Timer::timeRemaining() {
 
 void Timer::setDuration(unsigned long newDuration) {
     duration = newDuration;
+}
+
+void Timer::reset(){
+    startTime = millis();
+}
+
+void Timer::reset(unsigned long newDuration){
+    setDuration(newDuration);
+    reset();
 }
 
 Alarm::Alarm(unsigned long endTime) {

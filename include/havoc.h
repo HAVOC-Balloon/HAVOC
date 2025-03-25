@@ -16,4 +16,4 @@ void initPins();
 void blinkLEDs();
 void updateFlightState();
 void stateActions();
-void setSolenoids();
+void setSolenoids(Solenoids solenoidState);

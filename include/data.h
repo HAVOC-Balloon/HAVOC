@@ -19,9 +19,9 @@ struct Vector {
 };
 
 struct Position {
-    double lat; // DD.dddd
-    double lon; // DD.dddd
-    double alt; // m MSL
+    double lat;  // DD.dddd
+    double lon;  // DD.dddd
+    double alt;  // m MSL
 };
 
 struct UTCTime {
@@ -45,34 +45,26 @@ struct GPS {
 };
 
 struct Atmospheric {
-    float pressure; // Pa?
-    float temperature; // deg C?
-    float alt; // m MSL
+    float pressure;     // Pa?
+    float temperature;  // deg C?
+    float alt;          // m MSL
 };
 
-enum TargetingMode {
-    NO_TARGET = 0,
-    ORIENTATION = 1,
-    VELOCITY = 2
-};
+enum TargetingMode { NO_TARGET = 0, ORIENTATION = 1, VELOCITY = 2 };
 
 struct Target {
     TargetingMode mode = TargetingMode::ORIENTATION;
-    float target = 0; // deg if ORIENTATION; deg/s if VELOCITY
+    float target = 0;  // deg if ORIENTATION; deg/s if VELOCITY
 };
 
-enum Solenoids {
-    SOLENOIDS_OFF = 0,
-    CLOCKWISE = 1,
-    COUNTERCLOCKWISE = 2
-};
+enum Solenoids { SOLENOIDS_OFF = 0, CLOCKWISE = 1, COUNTERCLOCKWISE = 2 };
 
 struct Data {
     // Nikki says we shouldn't use this.
     // Drew says it should be called "previous time" if we do.
     // long lastTime = 0;
     unsigned long packetCount = 0;
-    unsigned long missionTime = 0; // ms
+    unsigned long missionTime = 0;  // ms
     FlightState state = FlightState::STANDBY;
     imu::Vector<3> acceleration; // m/s
     imu::Vector<3> gyro; // deg/s
@@ -87,5 +79,8 @@ struct Data {
     // it to this variable.
     // Appended telemetry should be CSV and should END with a comma.
 
-    std::string extraTelemetry = "";
+    // extraTelemetry has been temporarily removed until we determine
+    // a proper mechanism for allowing telemetry to be collected
+    // from alternate sources
+    // std::string extraTelemetry = "";
 };
