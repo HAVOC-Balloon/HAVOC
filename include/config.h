@@ -1,4 +1,5 @@
 #pragma once
+#include <board-io/sensors.h>
 
 struct Pins {
     const int clockwise = 15;
@@ -30,4 +31,10 @@ struct Config {
     const unsigned long solenoidCycleTime = 50; // ms
     // No idea what this is but we can bring it back if we ever use it
     // const double GPSTick = 1000; // ms?
+};
+
+struct Sensors {
+    BNO055 imu = BNO055();
+    M9N gps = M9N();
+    BME280 barometer = BME280();     
 };

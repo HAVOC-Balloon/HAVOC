@@ -48,6 +48,7 @@ struct Atmospheric {
     float pressure;     // Pa?
     float temperature;  // deg C?
     float alt;          // m MSL
+    float humidity;     // percent
 };
 
 enum TargetingMode { NO_TARGET = 0, ORIENTATION = 1, VELOCITY = 2 };

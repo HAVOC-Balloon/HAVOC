@@ -4,19 +4,21 @@
 
 void setup() {
     initPins();
+    setSolenoids(SOLENOIDS_OFF);
     logger->init();
-    sensors.imu = new BNO055();
-    sensors.gps = new M9N();
-    sensors.barometer = new BMP388();
+    sensors.imu.init();
+    sensors.gps.init();
+    //sensors.barometer.init();
 }
 
 void loop() {
+    data.packetCount += 1;
+    data.missionTime = millis();
     blinkLEDs();
-    sensors.imu->collectData(data);
-    sensors.gps->collectData(data);
-    sensors.barometer->collectData(data);
+    sensors.imu.collectData(data);
+    sensors.gps.collectData(data);
+    //sensors.barometer.collectData(data);
     updateFlightState();
     stateActions();
     logger->writeTelemetry(data);
-    data.packetCount += 1;
 }

@@ -74,7 +74,10 @@ void OpenLog::writeTelemetry(Data &data) {
 }
 
 void SPILogger::init() {
-    SD.begin(config.pins.sdCSPin);
+    while (!SD.begin(config.pins.sdCSPin)) {
+        Serial.println("Waiting for SD");
+        delay(100);
+    }
     // Start with number 1
     unsigned short int fileNumber = 1;
     // Reserve space for filenames up to 31 chars
@@ -92,9 +95,15 @@ void SPILogger::init() {
         strcat(fileName, ".csv");
         // Increment the filenumber for next loop
         fileNumber++;
+        Serial.println(fileName);
     } while (SD.exists(fileName)); // Do that again if the file exists already
+    Serial.print("Found ");
+    Serial.println(fileName);
     // Once we find a file name that doesn't exist, use it!
-    currentFile = SD.open(fileName);
+    while (!(currentFile = SD.open(fileName, FILE_WRITE))) {
+        Serial.println("File could not be opened.");
+        delay(200);
+    }
 }
 
 void SPILogger::writeTelemetry(Data &data) {

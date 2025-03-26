@@ -1,16 +1,16 @@
 #pragma once
 
-#include <Adafruit_BMP3XX.h>
+
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 
 #include "data.h"
 #include "utilities/time.h"
 #include <optional>
+#include <BME280.h> 
 
 class Sensor {    
 public:
-    Sensor();
-    virtual void init() {};
+    virtual void init() = 0;
     virtual void collectData(Data &data) = 0;
 };
 
@@ -33,10 +33,12 @@ public:
 };
 
 class Barometer : public Sensor {
+public:
     void collectData(Data &data);
     virtual float getPressure() = 0;
     virtual float getTemperature() = 0;
     virtual float getAltitude() = 0;
+    virtual float getHumidity() = 0;
 };
 
 class BNO055 : public IMU {
@@ -57,18 +59,13 @@ public:
     std::optional<int> getSIV();
 };
 
-class BMP388: public Barometer {
+class BME280: public Barometer {
 private:
-    Adafruit_BMP3XX bmp;
+    BME280_Class bme; 
 public:
     void init();
     float getPressure();
     float getTemperature();
     float getAltitude();
-};
-
-struct Sensors {
-    Sensor* imu;
-    Sensor* gps;
-    Sensor* barometer;
+    float getHumidity();
 };

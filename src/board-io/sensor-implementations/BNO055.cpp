@@ -49,7 +49,7 @@ void BNO055::init() {
 }
 
 Vector BNO055::getAcceleration() {
-    bno.getEvent(&event);
+    //bno.getEvent(&event);
     imu::Vector<3> acceleration = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     return {acceleration.x(), acceleration.y(), acceleration.z()};
 }

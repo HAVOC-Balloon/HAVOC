@@ -6,7 +6,7 @@ Config config;
 Data data;
 Sensors sensors;
 TargetPresets targetPresets;
-Logger* logger = new OpenLog();
+Logger* logger = new SPILogger();
 
 void initPins() {
     pinMode(config.pins.clockwise, OUTPUT);

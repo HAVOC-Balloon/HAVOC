@@ -2,8 +2,6 @@
 
 #include "data.h"
 
-Sensor::Sensor() { init(); }
-
 void IMU::collectData(Data &data) {
     data.acceleration = getAcceleration();
     data.gyro = getGyro();
@@ -22,4 +20,5 @@ void Barometer::collectData(Data &data) {
     data.atmo.pressure = getPressure();
     data.atmo.temperature = getTemperature();
     data.atmo.alt = getAltitude();
+    data.atmo.
 }

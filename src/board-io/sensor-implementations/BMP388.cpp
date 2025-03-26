@@ -3,24 +3,25 @@
 #include <havoc.h>
 
 void BMP388::init() {
-    bmp.begin_I2C();
-    if (!bmp.begin_I2C()) {
+    while (!bme.begin()) {
         // TODO: Handle error here once we get error lights going
+        Serial.println("BME not connected");
+        delay(200);
     }
     
-    bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-    bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-    bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+    //bme.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+    //bme.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+    //bme.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
 }
 
 float BMP388::getPressure() {
-    return bmp.readPressure();
+    return bme.readPressure();
 }
 
 float BMP388::getTemperature() {
-    return bmp.readTemperature();
+    return bme.readTemperature();
 }
 
 float BMP388::getAltitude() {
-    return bmp.readAltitude(config.seaLevelPressure);
+    return bme.readAltitude(config.seaLevelPressure);
 }

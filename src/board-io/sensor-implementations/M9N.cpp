@@ -1,10 +1,12 @@
 #include <Arduino.h>
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 #include <data.h>
-
 #include <optional>
 #include "utilities/time.h"
 #include "board-io/sensors.h"
+// TEMPORARY INCLUDE
+#include "config.h"
+Config config2;
 
 /**
  * NOTE:
@@ -22,7 +24,10 @@ void M9N::init() {
     // Initialization
     while (!m9n.begin()) {
         // Serial.println("GPS not found. Retrying momentarily.");
-        delay(1000);
+        digitalWrite(config2.pins.sideLed, HIGH);
+        delay(800);
+        digitalWrite(config2.pins.sideLed, LOW);
+        delay(200);
     }
 
     // Updating settings
@@ -37,7 +42,10 @@ void M9N::init() {
 
     // Serial.println("Waiting for GPS lock");
     while (m9n.getSIV() < 3) {
-        delay(1000);
+        digitalWrite(config2.pins.sideLed, HIGH);
+        delay(100);
+        digitalWrite(config2.pins.sideLed, LOW);
+        delay(100);
     }
 
 }
