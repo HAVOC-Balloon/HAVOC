@@ -73,6 +73,7 @@ struct Data {
     Atmospheric atmo;
     Target target;
     Solenoids solenoids = SOLENOIDS_OFF;
+    time_t t_object = 0; 
 
     // If additional subsets of the code, outside of the primary loop,
     // have telemetry, they should format it themselves and append
