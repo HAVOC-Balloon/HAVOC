@@ -74,7 +74,7 @@ Solenoids CascadedPID::getStabilization(Data data) {
             static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
             static PIDMath oVelocityPID = PIDMath(0.006, 0, 0, 7);
             //Normalized error
-            error = int(data.target.target - (360 - data.orientation.x())) % 360 - 180;            
+            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;            
             pidOutput = oVelocityPID.getOutput(
                 constrain(orientationPID.getOutput(error), -50, 50)
             );
@@ -102,7 +102,7 @@ Solenoids PurePID::getStabilization(Data data) {
             //Needs to be tuned
             static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
             //Normalized error
-            error = int(data.target.target - (360 - data.orientation.x())) % 360 - 180;
+            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
             pidOutput = orientationPID.getOutput(error);
             break;
         case TargetingMode::VELOCITY:
@@ -138,10 +138,10 @@ Solenoids BangBang::getStabilization(Data data) {
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
             //Normalized error
-            error = int(data.target.target - (360 - data.orientation.x())) % 360 - 180;
+            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
             targetVelocity = abs(error) > 10 ? constrain(error * 0.5, -50, 50) : 0;
         case TargetingMode::VELOCITY:
-            error = targetVelocity - data.gyro.z();
+            error = targetVelocity - data.gyro.z;
             if(error > 7){
                 return Solenoids::CLOCKWISE;
             }else if(error < -7){

@@ -17,9 +17,9 @@ public:
 class IMU : public Sensor {
 public:
     void collectData(Data &data);
-    virtual imu::Vector<3> getAcceleration() = 0;
-    virtual imu::Vector<3> getGyro() = 0;
-    virtual imu::Vector<3> getOrientation() = 0;
+    virtual Vector getAcceleration() = 0;
+    virtual Vector getGyro() = 0;
+    virtual Vector getOrientation() = 0;
 };
 
 class GPSReceiver : public Sensor {
@@ -42,9 +42,9 @@ class Barometer : public Sensor {
 class BNO055 : public IMU {
 public:
     void init();
-    imu::Vector<3> getAcceleration();
-    imu::Vector<3> getGyro();
-    imu::Vector<3> getOrientation();
+    Vector getAcceleration();
+    Vector getGyro();
+    Vector getOrientation();
 };
 
 class M9N : public GPSReceiver {
