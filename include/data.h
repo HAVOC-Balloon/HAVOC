@@ -66,9 +66,9 @@ struct Data {
     unsigned long packetCount = 0;
     unsigned long missionTime = 0;  // ms
     FlightState state = FlightState::STANDBY;
-    imu::Vector<3> acceleration; // m/s
-    imu::Vector<3> gyro; // deg/s
-    imu::Vector<3> orientation; // deg
+    Vector acceleration; // m/s
+    Vector gyro; // deg/s
+    Vector orientation; // deg
     GPS gps;
     Atmospheric atmo;
     Target target;

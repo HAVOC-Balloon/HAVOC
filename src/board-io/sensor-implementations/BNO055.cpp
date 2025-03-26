@@ -48,15 +48,18 @@ void BNO055::init() {
   }
 }
 
-imu::Vector<3> BNO055::getAcceleration() {
+Vector BNO055::getAcceleration() {
     bno.getEvent(&event);
-    return bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+    imu::Vector<3> acceleration = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+    return {acceleration.x(), acceleration.y(), acceleration.z()};
 }
 
-imu::Vector<3> BNO055::getGyro() {
-    return bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+Vector BNO055::getGyro() {
+    imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+    return {gyro.x(), gyro.y(), gyro.z()};
 }
 
-imu::Vector<3> BNO055::getOrientation() {
-    return bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+Vector BNO055::getOrientation() {
+    imu::Vector<3> orientation = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+    return {orientation.x(), orientation.y(), orientation.z()};
 }
