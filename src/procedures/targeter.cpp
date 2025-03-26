@@ -25,13 +25,14 @@ Target GPSTargeter::getTarget(Data data) {
     Target target;
     target.mode = TargetingMode::ORIENTATION;
     target.target = 0; // TODO: GPS CODE HERE
-
+    /*
     setTime(Hour, Minute, Second, Day, Month, Year); 
     t_object = now();  
 
     SolarPosition location(latitude, longitude);
     int solar_Azimuth = ((int)location.getSolarAzimuth(t));
-
+    */
+   // P.S. This is the GPS targeter class; it should be in SolarTargeter!
 
 
     return target;
