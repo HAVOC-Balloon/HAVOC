@@ -20,5 +20,5 @@ void Barometer::collectData(Data &data) {
     data.atmo.pressure = getPressure();
     data.atmo.temperature = getTemperature();
     data.atmo.alt = getAltitude();
-    data.atmo.
+    data.atmo.humidity = getHumidity();
 }

@@ -61,7 +61,7 @@ public:
 
 class BME280: public Barometer {
 private:
-    BME280_Class bme; 
+
 public:
     void init();
     float getPressure();
