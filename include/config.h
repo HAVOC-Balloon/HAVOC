@@ -3,9 +3,8 @@
 struct Pins {
     const int clockwise = 15;
     const int counterclockwise = 14;
-    const int led1 = 29;
-    const int led2 = 33;
-    const int sdCSPin = 5; // EXAMPLE. Change when value is known.
+    const int sideLed = 16;
+    const int sdCSPin = 10; // EXAMPLE. Change when value is known.
 };
 
 struct Blink {

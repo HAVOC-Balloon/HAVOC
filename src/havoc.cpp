@@ -11,8 +11,7 @@ Logger* logger = new OpenLog();
 void initPins() {
     pinMode(config.pins.clockwise, OUTPUT);
     pinMode(config.pins.counterclockwise, OUTPUT);
-    pinMode(config.pins.led1, OUTPUT);
-    pinMode(config.pins.led2, OUTPUT);
+    pinMode(config.pins.sideLed, OUTPUT);
 }
 
 void blinkLEDs() {
@@ -20,14 +19,12 @@ void blinkLEDs() {
     static Timer duration = Timer(config.blink.duration);
 
     if (cycleTime.isComplete()) {
-        digitalWrite(config.pins.led1, HIGH);
-        digitalWrite(config.pins.led2, HIGH);
+        digitalWrite(config.pins.sideLed, HIGH);
         duration.reset();
         cycleTime.reset();
     }
     if (duration.isComplete()) {
-        digitalWrite(config.pins.led1, LOW);
-        digitalWrite(config.pins.led2, LOW);
+        digitalWrite(config.pins.sideLed, LOW);
     }
 }
 
