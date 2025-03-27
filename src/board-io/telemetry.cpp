@@ -157,6 +157,8 @@ void SPILogger::writeTelemetry(Data &data) {
     currentFile.print(",");
     currentFile.print(data.atmo.temperature);
     currentFile.print(",");
+    currentFile.print(data.atmo.humidity);
+    currentFile.print(",");
     currentFile.print(data.target.mode);
     currentFile.print(",");
     currentFile.print(data.target.target);
