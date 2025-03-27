@@ -53,13 +53,14 @@ void BNO055::init() {
   }
 }
 
-void BNO055::prefetchData() {
+bool BNO055::prefetchData() {
     imu::Vector<3> fetchedAcceleration = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     acceleration = {fetchedAcceleration.x(), fetchedAcceleration.y(), fetchedAcceleration.z()};
     imu::Vector<3> fetchedGyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
     gyro = {fetchedGyro.x(), fetchedGyro.y(), fetchedGyro.z()};
     imu::Vector<3> fetchedOrientation = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
     orientation = {fetchedOrientation.x(), fetchedOrientation.y(), fetchedOrientation.z()};
+    return true;
 }
 
 std::optional<Vector> BNO055::getAcceleration() {

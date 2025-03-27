@@ -3,8 +3,7 @@
 #include "data.h"
 
 void IMU::collectData(Data &data) {
-    if (dataReady.isComplete()) {
-        prefetchData();
+    if (dataReady.isComplete() && prefetchData()) {
         dataReady.reset();
     }
     data.acceleration = getAcceleration().value_or(data.acceleration);
@@ -13,8 +12,7 @@ void IMU::collectData(Data &data) {
 }
 
 void GPSReceiver::collectData(Data &data) {
-    if (dataReady.isComplete()) {
-        prefetchData();
+    if (dataReady.isComplete() && prefetchData()) {
         dataReady.reset();
     }
     data.gps.pos = getPosition().value_or(data.gps.pos);
@@ -23,8 +21,7 @@ void GPSReceiver::collectData(Data &data) {
 }
 
 void Barometer::collectData(Data &data) {
-    if (dataReady.isComplete()) {
-        prefetchData();
+    if (dataReady.isComplete() && prefetchData()) {
         dataReady.reset();
     }
     data.atmo.pressure = getPressure().value_or(data.atmo.pressure);

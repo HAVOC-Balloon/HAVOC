@@ -65,23 +65,27 @@ void M9N::init() {
     dataReady.setDuration(1000);
 }
 
-void M9N::prefetchData() {
-    errorLED.setColor(colorPresets.blue);
-    pos = {
-        m9n.getAltitude() / 1000.0,
-        ((double)m9n.getLongitude()) * pow(10, -7),
-        ((double)m9n.getLatitude()) * pow(10, -7)
-    };
-    time = {
-        (int)m9n.getYear(),
-        (int)m9n.getMonth(),
-        (int)m9n.getDay(),
-        (int)m9n.getHour(),
-        (int)m9n.getMinute(),
-        (int)m9n.getSecond(),
-    };
-    SIV = m9n.getSIV();
-    errorLED.setColor(colorPresets.green);
+bool M9N::prefetchData() {
+    if (m9n.checkUblox()) {
+        errorLED.setColor(colorPresets.blue);
+        pos = {
+            m9n.getAltitude() / 1000.0,
+            ((double)m9n.getLongitude()) * pow(10, -7),
+            ((double)m9n.getLatitude()) * pow(10, -7)
+        };
+        time = {
+            (int)m9n.getYear(),
+            (int)m9n.getMonth(),
+            (int)m9n.getDay(),
+            (int)m9n.getHour(),
+            (int)m9n.getMinute(),
+            (int)m9n.getSecond(),
+        };
+        SIV = m9n.getSIV();
+        errorLED.setColor(colorPresets.green);
+        return true;
+    }
+    return false;    
 }
 
 std::optional<Position> M9N::getPosition() {

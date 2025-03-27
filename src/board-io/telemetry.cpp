@@ -3,7 +3,7 @@
 #include <havoc.h>
 #include <board-io/telemetry.h>
 #include <SPI.h>
-#include <SD.h>
+#include <SdFat.h>
 
 void OpenLog::init() {
     Serial1.begin(config.bauds.serial1);

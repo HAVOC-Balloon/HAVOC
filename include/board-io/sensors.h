@@ -12,7 +12,7 @@ protected:
     Timer dataReady = Timer(0);
 public:
     virtual void init() = 0;
-    virtual void prefetchData() = 0;
+    virtual bool prefetchData() = 0;
     virtual void collectData(Data &data) = 0;
 };
 
@@ -48,7 +48,7 @@ private:
     std::optional<Vector> orientation = std::nullopt;
 public:
     void init();
-    void prefetchData();
+    bool prefetchData();
     std::optional<Vector> getAcceleration();
     std::optional<Vector> getGyro();
     std::optional<Vector> getOrientation();
@@ -62,7 +62,7 @@ private:
     std::optional<int> SIV = std::nullopt;
 public:
     void init();
-    void prefetchData();
+    bool prefetchData();
     std::optional<Position> getPosition();
     std::optional<UTCTime> getUTCTime();
     std::optional<int> getSIV();
@@ -76,7 +76,7 @@ private:
     std::optional<float> altitude = std::nullopt;
 public:
     void init();
-    void prefetchData();
+    bool prefetchData();
     std::optional<float> getPressure();
     std::optional<float> getTemperature();
     std::optional<float> getAltitude();
