@@ -12,12 +12,9 @@ sensors_event_t event;
 void BNO055::init() {
     if(!bno.begin())
     {
-        errorLED.setColor(colorPresets.magenta);
-        delay(250);
-        errorLED.setColor(colorPresets.red);
-        delay(250);
+        errorLED.timedColor(colorPresets.magenta, 250);
+        errorLED.timedColor(colorPresets.red, 250);
     }
-    errorLED.setColor(colorPresets.off);
 
     bno.setExtCrystalUse(true);
 
@@ -34,8 +31,9 @@ void BNO055::init() {
     bno.getSensor(&sensor);
     if (bnoID != sensor.sensor_id)
     {
-        Serial1.println("\nNo Calibration Data for this sensor exists in EEPROM");
-        delay(500);
+        // No calibration found
+        errorLED.timedColor(colorPresets.magenta, 250);
+        errorLED.timedColor(colorPresets.cyan, 250);
     }
     else
     {
@@ -50,7 +48,7 @@ void BNO055::init() {
 
         Serial1.println("\n\nCalibration data loaded into BNO055");
         //foundCalib = true;
-  }
+    }
 }
 
 bool BNO055::prefetchData() {

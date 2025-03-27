@@ -13,7 +13,6 @@ void setup() {
 }
 
 void loop() {
-    errorLED.setColor(colorPresets.green);
     data.packetCount += 1;
     data.missionTime = millis();
     blinkLEDs();

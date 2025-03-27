@@ -8,12 +8,9 @@ BME280_Class bme;
 void BME280::init() {
     while (!bme.begin(I2C_FAST_MODE_PLUS_MODE)) { 
         // TODO: Handle error here once we get error lights going
-        errorLED.setColor(colorPresets.magenta);
-        delay(250);
-        errorLED.setColor(colorPresets.green);
-        delay(250);
+        errorLED.timedColor(colorPresets.magenta, 250);
+        errorLED.timedColor(colorPresets.green, 250);
     }
-    errorLED.setColor(colorPresets.off);
 
     bme.mode(ForcedMode); // Force one measurement to begin
 

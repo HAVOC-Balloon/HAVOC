@@ -22,17 +22,16 @@ void M9N::init() {
     // Initialization
     while (!m9n.begin()) {
         // Serial.println("GPS not found. Retrying momentarily.");
-        errorLED.setColor(colorPresets.red);
-        delay(250);
-        errorLED.setColor(colorPresets.blue);
-        delay(250);
+        errorLED.timedColor(colorPresets.red, 250);
+        errorLED.timedColor(colorPresets.blue, 250);
     }
-    errorLED.setColor(colorPresets.off);
     // Updating settings
     m9n.setI2COutput(COM_TYPE_UBX);
     m9n.setNavigationFrequency(5);
-    if (m9n.setDynamicModel(DYN_MODEL_AIRBORNE4g) == false) {
+    if (!m9n.setDynamicModel(DYN_MODEL_AIRBORNE4g)) {
         // Serial1.println(F("*** Warning: setDynamicModel failed ***"));
+        errorLED.timedColor(colorPresets.cyan, 250);
+        errorLED.timedColor(colorPresets.red, 250);
     }
     m9n.saveConfiguration();
 
@@ -42,23 +41,16 @@ void M9N::init() {
     int siv;
     while ((siv = m9n.getSIV()) < 3 && true) {
         if (siv == 0) {
-            errorLED.setColor(colorPresets.red);
-            delay(250);
-            errorLED.setColor(colorPresets.green);
-            delay(250);
+            errorLED.timedColor(colorPresets.red, 250);
+            errorLED.timedColor(colorPresets.green, 250);
         } else if (siv == 1) {
-            errorLED.setColor(colorPresets.red);
-            delay(150);
-            errorLED.setColor(colorPresets.green);
-            delay(150);
+            errorLED.timedColor(colorPresets.red, 125);
+            errorLED.timedColor(colorPresets.green, 125);
         } else {
-            errorLED.setColor(colorPresets.red);
-            delay(75);
-            errorLED.setColor(colorPresets.green);
-            delay(75);
+            errorLED.timedColor(colorPresets.red, 63);
+            errorLED.timedColor(colorPresets.green, 63);
         }
     }
-    errorLED.setColor(colorPresets.off);
     
     
 
@@ -67,7 +59,7 @@ void M9N::init() {
 
 bool M9N::prefetchData() {
     if (m9n.checkUblox()) {
-        errorLED.setColor(colorPresets.blue);
+        errorLED.temporaryColor(colorPresets.blue);
         pos = {
             m9n.getAltitude() / 1000.0,
             ((double)m9n.getLongitude()) * pow(10, -7),
@@ -82,7 +74,7 @@ bool M9N::prefetchData() {
             (int)m9n.getSecond(),
         };
         SIV = m9n.getSIV();
-        errorLED.setColor(colorPresets.green);
+        errorLED.clearTemporaryColor();
         return true;
     }
     return false;    

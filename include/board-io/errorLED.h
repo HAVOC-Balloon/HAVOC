@@ -22,9 +22,17 @@ private:
     int red;
     int blue;
     int green;
+    Color currentColor;
+    void setPins(Color color);
 public:
     ErrorLED(int redPin, int bluePin, int greenPin);
     void initPins();
+    // Primary function to set the color
     void setColor(Color color);
-    void colorSweep(Color start, Color end, unsigned long duration);
+    // Pair of functions to set a temporary color
+    void temporaryColor(Color color);
+    void clearTemporaryColor();
+    // Blocking functions for specific animations and such
+    void timedColor(Color color, unsigned long duration);
+    void colorSweep(Color nextColor, unsigned long duration);
 };

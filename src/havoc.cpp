@@ -18,13 +18,12 @@ void initPins() {
 }
 
 void happyHavocLightDance() {
-    errorLED.setColor(colorPresets.off);
-    errorLED.colorSweep(colorPresets.off, colorPresets.yellow, 500);
-    errorLED.colorSweep(colorPresets.yellow, colorPresets.red, 500);
-    errorLED.colorSweep(colorPresets.red, colorPresets.magenta, 500);
-    errorLED.colorSweep(colorPresets.magenta, colorPresets.blue, 500);
-    errorLED.colorSweep(colorPresets.blue, colorPresets.cyan, 500);
-    errorLED.colorSweep(colorPresets.cyan, colorPresets.green, 500);
+    errorLED.colorSweep(colorPresets.yellow, 500);
+    errorLED.colorSweep(colorPresets.red, 500);
+    errorLED.colorSweep(colorPresets.magenta, 500);
+    errorLED.colorSweep(colorPresets.blue, 500);
+    errorLED.colorSweep(colorPresets.cyan, 500);
+    errorLED.colorSweep(colorPresets.green, 500);
 }
 
 void blinkLEDs() {

@@ -75,12 +75,9 @@ void OpenLog::writeTelemetry(Data &data) {
 
 void SPILogger::init() {
     while (!SD.begin(config.pins.sdCSPin)) {
-        errorLED.setColor(colorPresets.blue);
-        delay(250);
-        errorLED.setColor(colorPresets.green);
-        delay(250);
+        errorLED.timedColor(colorPresets.blue, 250);
+        errorLED.timedColor(colorPresets.green, 250);
     }
-    errorLED.setColor(colorPresets.off);
     // Start with number 1
     unsigned short int fileNumber = 1;
     // Reserve space for filenames up to 31 chars
@@ -104,12 +101,9 @@ void SPILogger::init() {
     Serial.println(fileName);
     // Once we find a file name that doesn't exist, use it!
     while (!(currentFile = SD.open(fileName, FILE_WRITE))) {
-        errorLED.setColor(colorPresets.magenta);
-        delay(250);
-        errorLED.setColor(colorPresets.blue);
-        delay(250);
+        errorLED.timedColor(colorPresets.magenta, 250);
+        errorLED.timedColor(colorPresets.blue, 250);
     }
-    errorLED.setColor(colorPresets.off);
 }
 
 void SPILogger::writeTelemetry(Data &data) {
@@ -177,9 +171,9 @@ void SPILogger::writeTelemetry(Data &data) {
     currentFile.print(data.solenoids);
     currentFile.println();
     if (flushTimer.isComplete()) {
-        errorLED.setColor(colorPresets.red);
+        errorLED.temporaryColor(colorPresets.red);
         currentFile.flush();
-        errorLED.setColor(colorPresets.green);
+        errorLED.clearTemporaryColor();
         flushTimer.reset();
     }
     
