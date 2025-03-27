@@ -75,9 +75,12 @@ void OpenLog::writeTelemetry(Data &data) {
 
 void SPILogger::init() {
     while (!SD.begin(config.pins.sdCSPin)) {
-        Serial.println("Waiting for SD");
-        delay(100);
+        errorLED.setColor(colorPresets.blue);
+        delay(250);
+        errorLED.setColor(colorPresets.green);
+        delay(250);
     }
+    errorLED.setColor(colorPresets.off);
     // Start with number 1
     unsigned short int fileNumber = 1;
     // Reserve space for filenames up to 31 chars
@@ -101,12 +104,20 @@ void SPILogger::init() {
     Serial.println(fileName);
     // Once we find a file name that doesn't exist, use it!
     while (!(currentFile = SD.open(fileName, FILE_WRITE))) {
-        Serial.println("File could not be opened.");
-        delay(200);
+        errorLED.setColor(colorPresets.magenta);
+        delay(250);
+        errorLED.setColor(colorPresets.blue);
+        delay(250);
     }
+    errorLED.setColor(colorPresets.off);
 }
 
 void SPILogger::writeTelemetry(Data &data) {
+    static Timer flushTimer(2000);
+    // Flush written data to SD card to ensure it's written and not just
+    // waiting in the buffer
+    // This is important because microcontrollers can't guarantee
+    // that file I/O that waits too long won't be corrupted by power loss
     currentFile.print(data.packetCount);
     currentFile.print(",");
     currentFile.print(data.missionTime);
@@ -165,9 +176,11 @@ void SPILogger::writeTelemetry(Data &data) {
     currentFile.print(",");
     currentFile.print(data.solenoids);
     currentFile.println();
-    // Flush written data to SD card to ensure it's written and not just
-    // waiting in the buffer
-    // This is important because microcontrollers can't guarantee
-    // that file I/O that waits too long won't be corrupted by power loss
-    currentFile.flush();
+    if (flushTimer.isComplete()) {
+        errorLED.setColor(colorPresets.red);
+        currentFile.flush();
+        errorLED.setColor(colorPresets.green);
+        flushTimer.reset();
+    }
+    
 }

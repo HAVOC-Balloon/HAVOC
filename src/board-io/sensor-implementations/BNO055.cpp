@@ -1,5 +1,6 @@
 #include <optional>
 #include "data.h"
+#include "havoc.h"
 #include "board-io/sensors.h"
 #include <EEPROM.h>
 
@@ -11,9 +12,12 @@ sensors_event_t event;
 void BNO055::init() {
     if(!bno.begin())
     {
-      Serial.println(F("Oops, no BNO055 detected ... Check your wiring or I2C ADDR!"));
-      // TODO - Error Code 
+        errorLED.setColor(colorPresets.magenta);
+        delay(250);
+        errorLED.setColor(colorPresets.red);
+        delay(250);
     }
+    errorLED.setColor(colorPresets.off);
 
     bno.setExtCrystalUse(true);
 

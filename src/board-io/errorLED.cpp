@@ -4,7 +4,7 @@
 
 ColorPresets colorPresets;
 
-ErrorLED::ErrorLED(int redPin, int bluePin, int greenPin) {
+ErrorLED::ErrorLED(int redPin, int greenPin, int bluePin) {
     red = redPin;
     blue = bluePin;
     green = greenPin;

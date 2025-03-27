@@ -8,20 +8,23 @@ BME280_Class bme;
 void BME280::init() {
     while (!bme.begin(I2C_FAST_MODE_PLUS_MODE)) { 
         // TODO: Handle error here once we get error lights going
-        Serial.println("BME not connected");
-        delay(200);
+        errorLED.setColor(colorPresets.magenta);
+        delay(250);
+        errorLED.setColor(colorPresets.green);
+        delay(250);
     }
+    errorLED.setColor(colorPresets.off);
 
     if(bme.mode()==0) 
     {
         bme.mode(NormalMode); //set to normal use case mode
     }
 
-    bme.setOversampling(TemperatureSensor,Oversample16);
-    bme.setOversampling(HumiditySensor,   Oversample16);
-    bme.setOversampling(PressureSensor,   Oversample16);
+    bme.setOversampling(TemperatureSensor,Oversample4);
+    bme.setOversampling(HumiditySensor,   Oversample4);
+    bme.setOversampling(PressureSensor,   Oversample4);
 
-    bme.iirFilter(IIR16);
+    bme.iirFilter(IIR4);
     bme.inactiveTime(inactive1000ms); //Setting time between measurements to 1 second
 
     dataReady.setDuration(1000);

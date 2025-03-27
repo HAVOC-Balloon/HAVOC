@@ -138,13 +138,29 @@ Solenoids BangBang::getStabilization(Data data) {
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
             //Normalized error
-            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
-            targetVelocity = abs(error) > 10 ? constrain(error * 0.5, -50, 50) : 0;
+            error = ((int)(data.orientation.x - data.target.target) % 360) - 180; //Normalization
+            Serial.println(error);
+            //targetVelocity = abs(error) > 10 ? constrain(error * 0.5, -50, 50) : 0;
+            if (abs(error) < 7) {
+                targetVelocity = 0;
+            } else {
+                error = error * 0.5;
+                if (error < -50) {
+                    targetVelocity = -50;
+                } else if (error > 50) {
+                    targetVelocity = 50;
+                } else {
+                    targetVelocity = error;
+                }
+            }
+
+            //NOTE: NO BREAK STATEMENT (we need to continue into next case)
+    
         case TargetingMode::VELOCITY:
             error = targetVelocity - data.gyro.z;
-            if(error > 7){
+            if(error > 5){
                 return Solenoids::CLOCKWISE;
-            }else if(error < -7){
+            }else if(error < -5){
                 return Solenoids::COUNTERCLOCKWISE;
             }else{
                 return Solenoids::SOLENOIDS_OFF;

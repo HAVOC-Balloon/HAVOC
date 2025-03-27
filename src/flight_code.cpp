@@ -4,23 +4,24 @@
 
 void setup() {
     initPins();
-    errorLED.setColor(colorPresets.white);
     setSolenoids(SOLENOIDS_OFF);
     logger->init();
     sensors.imu.init();
     sensors.gps.init();
-    //sensors.barometer.init();
+    sensors.barometer.init();
     happyHavocLightDance();
 }
 
 void loop() {
+    errorLED.setColor(colorPresets.green);
     data.packetCount += 1;
     data.missionTime = millis();
     blinkLEDs();
     sensors.imu.collectData(data);
     sensors.gps.collectData(data);
-    //sensors.barometer.collectData(data);
+    sensors.barometer.collectData(data);
     updateFlightState();
     stateActions();
     logger->writeTelemetry(data);
+    Serial.println(millis());
 }

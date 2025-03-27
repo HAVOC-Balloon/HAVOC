@@ -4,9 +4,7 @@
 #include <optional>
 #include "utilities/time.h"
 #include "board-io/sensors.h"
-// TEMPORARY INCLUDE
-#include "config.h"
-Config config2;
+#include "havoc.h"
 
 /**
  * NOTE:
@@ -24,12 +22,12 @@ void M9N::init() {
     // Initialization
     while (!m9n.begin()) {
         // Serial.println("GPS not found. Retrying momentarily.");
-        digitalWrite(config2.pins.sideLed, HIGH);
-        delay(800);
-        digitalWrite(config2.pins.sideLed, LOW);
-        delay(200);
+        errorLED.setColor(colorPresets.red);
+        delay(250);
+        errorLED.setColor(colorPresets.blue);
+        delay(250);
     }
-
+    errorLED.setColor(colorPresets.off);
     // Updating settings
     m9n.setI2COutput(COM_TYPE_UBX);
     m9n.setNavigationFrequency(5);
@@ -41,17 +39,34 @@ void M9N::init() {
     // Serial.println("GPS Online.");
 
     // Serial.println("Waiting for GPS lock");
-    while (m9n.getSIV() < 3) {
-        digitalWrite(config2.pins.sideLed, HIGH);
-        delay(100);
-        digitalWrite(config2.pins.sideLed, LOW);
-        delay(100);
+    int siv;
+    while ((siv = m9n.getSIV()) < 3 && true) {
+        if (siv == 0) {
+            errorLED.setColor(colorPresets.red);
+            delay(250);
+            errorLED.setColor(colorPresets.green);
+            delay(250);
+        } else if (siv == 1) {
+            errorLED.setColor(colorPresets.red);
+            delay(150);
+            errorLED.setColor(colorPresets.green);
+            delay(150);
+        } else {
+            errorLED.setColor(colorPresets.red);
+            delay(75);
+            errorLED.setColor(colorPresets.green);
+            delay(75);
+        }
     }
+    errorLED.setColor(colorPresets.off);
+    
+    
 
     dataReady.setDuration(1000);
 }
 
 void M9N::prefetchData() {
+    errorLED.setColor(colorPresets.blue);
     pos = {
         m9n.getAltitude() / 1000.0,
         ((double)m9n.getLongitude()) * pow(10, -7),
@@ -66,6 +81,7 @@ void M9N::prefetchData() {
         (int)m9n.getSecond(),
     };
     SIV = m9n.getSIV();
+    errorLED.setColor(colorPresets.green);
 }
 
 std::optional<Position> M9N::getPosition() {

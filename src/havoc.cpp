@@ -13,12 +13,13 @@ void initPins() {
     pinMode(config.pins.clockwise, OUTPUT);
     pinMode(config.pins.counterclockwise, OUTPUT);
     pinMode(config.pins.sideLed, OUTPUT);
+    digitalWrite(config.pins.sideLed, HIGH);
     errorLED.initPins();
 }
 
 void happyHavocLightDance() {
-    errorLED.setColor(colorPresets.white);
-    errorLED.colorSweep(colorPresets.white, colorPresets.yellow, 500);
+    errorLED.setColor(colorPresets.off);
+    errorLED.colorSweep(colorPresets.off, colorPresets.yellow, 500);
     errorLED.colorSweep(colorPresets.yellow, colorPresets.red, 500);
     errorLED.colorSweep(colorPresets.red, colorPresets.magenta, 500);
     errorLED.colorSweep(colorPresets.magenta, colorPresets.blue, 500);
@@ -63,7 +64,14 @@ void stateActions() {
     Solenoids requestedSolenoidState;
     switch (data.state) {
         case FlightState::STANDBY:
-            setSolenoids(SOLENOIDS_OFF);
+            //setSolenoids(SOLENOIDS_OFF);
+
+            data.target = targetPresets.north->getTarget(data);
+            // data.solenoids = CascadedPID().getStabilization(data);
+            requestedSolenoidState = BangBang().getStabilization(data);
+            setSolenoids(requestedSolenoidState);
+
+
             break;
         case FlightState::STABILIZATION:
             data.target = targetPresets.sun->getTarget(data);
