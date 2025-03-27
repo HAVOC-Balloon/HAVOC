@@ -4,11 +4,13 @@
 
 void setup() {
     initPins();
+    errorLED.setColor(colorPresets.white);
     setSolenoids(SOLENOIDS_OFF);
     logger->init();
     sensors.imu.init();
     sensors.gps.init();
     //sensors.barometer.init();
+    happyHavocLightDance();
 }
 
 void loop() {

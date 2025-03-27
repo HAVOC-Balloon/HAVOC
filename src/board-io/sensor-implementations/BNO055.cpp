@@ -1,3 +1,4 @@
+#include <optional>
 #include "data.h"
 #include "board-io/sensors.h"
 #include <EEPROM.h>
@@ -48,18 +49,23 @@ void BNO055::init() {
   }
 }
 
-Vector BNO055::getAcceleration() {
-    //bno.getEvent(&event);
-    imu::Vector<3> acceleration = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-    return {acceleration.x(), acceleration.y(), acceleration.z()};
+void BNO055::prefetchData() {
+    imu::Vector<3> fetchedAcceleration = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+    acceleration = {fetchedAcceleration.x(), fetchedAcceleration.y(), fetchedAcceleration.z()};
+    imu::Vector<3> fetchedGyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+    gyro = {fetchedGyro.x(), fetchedGyro.y(), fetchedGyro.z()};
+    imu::Vector<3> fetchedOrientation = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+    orientation = {fetchedOrientation.x(), fetchedOrientation.y(), fetchedOrientation.z()};
 }
 
-Vector BNO055::getGyro() {
-    imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-    return {gyro.x(), gyro.y(), gyro.z()};
+std::optional<Vector> BNO055::getAcceleration() {
+    return acceleration;
 }
 
-Vector BNO055::getOrientation() {
-    imu::Vector<3> orientation = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-    return {orientation.x(), orientation.y(), orientation.z()};
+std::optional<Vector> BNO055::getGyro() {
+    return gyro;
+}
+
+std::optional<Vector> BNO055::getOrientation() {
+    return orientation;
 }

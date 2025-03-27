@@ -7,11 +7,23 @@ Data data;
 Sensors sensors;
 TargetPresets targetPresets;
 Logger* logger = new SPILogger();
+ErrorLED errorLED = ErrorLED(config.pins.redLed, config.pins.greenLed, config.pins.blueLed);
 
 void initPins() {
     pinMode(config.pins.clockwise, OUTPUT);
     pinMode(config.pins.counterclockwise, OUTPUT);
     pinMode(config.pins.sideLed, OUTPUT);
+    errorLED.initPins();
+}
+
+void happyHavocLightDance() {
+    errorLED.setColor(colorPresets.white);
+    errorLED.colorSweep(colorPresets.white, colorPresets.yellow, 500);
+    errorLED.colorSweep(colorPresets.yellow, colorPresets.red, 500);
+    errorLED.colorSweep(colorPresets.red, colorPresets.magenta, 500);
+    errorLED.colorSweep(colorPresets.magenta, colorPresets.blue, 500);
+    errorLED.colorSweep(colorPresets.blue, colorPresets.cyan, 500);
+    errorLED.colorSweep(colorPresets.cyan, colorPresets.green, 500);
 }
 
 void blinkLEDs() {

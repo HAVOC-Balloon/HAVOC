@@ -48,37 +48,34 @@ void M9N::init() {
         delay(100);
     }
 
+    dataReady.setDuration(1000);
+}
+
+void M9N::prefetchData() {
+    pos = {
+        m9n.getAltitude() / 1000.0,
+        ((double)m9n.getLongitude()) * pow(10, -7),
+        ((double)m9n.getLatitude()) * pow(10, -7)
+    };
+    time = {
+        (int)m9n.getYear(),
+        (int)m9n.getMonth(),
+        (int)m9n.getDay(),
+        (int)m9n.getHour(),
+        (int)m9n.getMinute(),
+        (int)m9n.getSecond(),
+    };
+    SIV = m9n.getSIV();
 }
 
 std::optional<Position> M9N::getPosition() {
-    if (tick.isComplete()) {
-        Position toReturn;
-        toReturn.alt = m9n.getAltitude() / 1000.0;
-        toReturn.lon = ((double)m9n.getLongitude()) * pow(10, -7);
-        toReturn.lat = ((double)m9n.getLatitude()) * pow(10, -7);
-        return toReturn;
-    }
-    return std::nullopt;
+    return pos;
 }
 
 std::optional<UTCTime> M9N::getUTCTime() {
-    if (tick.isComplete()) {
-        UTCTime toReturn;
-        toReturn.year = (int)m9n.getYear();
-        toReturn.month = (int)m9n.getMonth();
-        toReturn.day = (int)m9n.getDay();
-        toReturn.hour = (int)m9n.getHour();
-        toReturn.minute = (int)m9n.getMinute();
-        toReturn.second = (int)m9n.getSecond();
-        toReturn.hour = (int)m9n.getHour();
-        return toReturn;
-    }
-    return std::nullopt;
+    return time;
 }
 
 std::optional<int> M9N::getSIV() {
-    if (tick.isComplete()) {
-        return m9n.getSIV();
-    }
-    return std::nullopt;
+    return SIV;
 }

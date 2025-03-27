@@ -29,6 +29,10 @@ unsigned long Timer::timeRemaining() {
     return startTime + duration - millis();
 }
 
+float Timer::progress() {
+    return (float) time() / duration;
+}
+
 void Timer::setDuration(unsigned long newDuration) {
     duration = newDuration;
 }

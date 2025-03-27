@@ -23,37 +23,31 @@ void BME280::init() {
 
     bme.iirFilter(IIR16);
     bme.inactiveTime(inactive1000ms); //Setting time between measurements to 1 second
+
+    dataReady.setDuration(1000);
 }
 
-//NOTE: The way this sensor library works requires the use of the methoed "getSensorData" which returns 
-//humidity, pressure, and temperature. We could rewrite the barometer class to better match this syle, or we can
-//keep the implementation below that allows control over each variable. Discuss later...
+void BME280::prefetchData() {
+    long fetchedTemperature, fetchedHumidity, fetchedPressure;
+    bme.getSensorData(fetchedTemperature, fetchedHumidity, fetchedPressure);
+    pressure = (float)fetchedPressure / 100.0;
+    temperature = (float)fetchedTemperature / 100.0;
+    humidity = (float) fetchedHumidity / 100.0;
+    altitude = 44330.0*(1.0 - pow(((float) fetchedPressure / 100.0) / 1013.25, 0.1903));
+}
 
-float BME280::getPressure() {
-    long temperature, humidity, pressure;      
-    bme.getSensorData(temperature,humidity,pressure);
-    pressure = pressure/100.0; 
+std::optional<float> BME280::getPressure() {
     return pressure;
 }
 
-float BME280::getTemperature() {
-    long temperature, humidity, pressure;      
-    bme.getSensorData(temperature,humidity,pressure);
-    temperature = temperature/100.0; 
+std::optional<float> BME280::getTemperature() {
     return temperature;
 }
 
-float BME280::getAltitude() { 
-    static float Altitude;
-    long temp, hum, press;
-    bme.getSensorData(temp, hum, press);
-    Altitude = 44330.0*(1.0 - pow(((float)press / 100.0) / 1013.25, 0.1903)); // Convert into altitude in meters
-    return(Altitude);
+std::optional<float> BME280::getAltitude() { 
+    return altitude;
 }
 
-float BME280::getHumidity(){
-    long temperature, humidity, pressure;      
-    bme.getSensorData(temperature,humidity,pressure);
-    humidity = humidity/100.0; 
+std::optional<float> BME280::getHumidity(){
     return humidity;
 }

@@ -17,6 +17,7 @@ public:
     Timer(unsigned long duration);
     bool isComplete();
     unsigned long timeRemaining();
+    float progress();
     void setDuration(unsigned long newDuration);
     void reset();
     void reset(unsigned long newDuration);

@@ -6,25 +6,25 @@
 #include "data.h"
 #include "utilities/time.h"
 #include <optional>
-#include <BME280.h> 
 
 class Sensor {    
+protected:
+    Timer dataReady = Timer(0);
 public:
     virtual void init() = 0;
+    virtual void prefetchData() = 0;
     virtual void collectData(Data &data) = 0;
 };
 
 class IMU : public Sensor {
 public:
     void collectData(Data &data);
-    virtual Vector getAcceleration() = 0;
-    virtual Vector getGyro() = 0;
-    virtual Vector getOrientation() = 0;
+    virtual std::optional<Vector> getAcceleration() = 0;
+    virtual std::optional<Vector> getGyro() = 0;
+    virtual std::optional<Vector> getOrientation() = 0;
 };
 
 class GPSReceiver : public Sensor {
-protected:
-    Timer tick = Timer(1000); // Change to config.gpsrate or something later
 public:
     void collectData(Data &data);
     virtual std::optional<Position> getPosition() = 0;
@@ -35,25 +35,34 @@ public:
 class Barometer : public Sensor {
 public:
     void collectData(Data &data);
-    virtual float getPressure() = 0;
-    virtual float getTemperature() = 0;
-    virtual float getAltitude() = 0;
-    virtual float getHumidity() = 0;
+    virtual std::optional<float> getPressure() = 0;
+    virtual std::optional<float> getTemperature() = 0;
+    virtual std::optional<float> getAltitude() = 0;
+    virtual std::optional<float> getHumidity() = 0;
 };
 
 class BNO055 : public IMU {
+private:
+    std::optional<Vector> acceleration = std::nullopt;
+    std::optional<Vector> gyro = std::nullopt;
+    std::optional<Vector> orientation = std::nullopt;
 public:
     void init();
-    Vector getAcceleration();
-    Vector getGyro();
-    Vector getOrientation();
+    void prefetchData();
+    std::optional<Vector> getAcceleration();
+    std::optional<Vector> getGyro();
+    std::optional<Vector> getOrientation();
 };
 
 class M9N : public GPSReceiver {
 private:
     SFE_UBLOX_GNSS m9n;
+    std::optional<Position> pos = std::nullopt;
+    std::optional<UTCTime> time = std::nullopt;
+    std::optional<int> SIV = std::nullopt;
 public:
     void init();
+    void prefetchData();
     std::optional<Position> getPosition();
     std::optional<UTCTime> getUTCTime();
     std::optional<int> getSIV();
@@ -61,11 +70,15 @@ public:
 
 class BME280: public Barometer {
 private:
-
+    std::optional<float> pressure = std::nullopt;
+    std::optional<float> temperature = std::nullopt;
+    std::optional<float> humidity = std::nullopt;
+    std::optional<float> altitude = std::nullopt;
 public:
     void init();
-    float getPressure();
-    float getTemperature();
-    float getAltitude();
-    float getHumidity();
+    void prefetchData();
+    std::optional<float> getPressure();
+    std::optional<float> getTemperature();
+    std::optional<float> getAltitude();
+    std::optional<float> getHumidity();
 };
