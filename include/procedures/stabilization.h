@@ -30,6 +30,7 @@ class StabilizationAlgorithm {
 protected:
     double error;
 public:
+    // TODO: Change to pass by reference after flight
     virtual Solenoids getStabilization(Data data) = 0;
 };
 

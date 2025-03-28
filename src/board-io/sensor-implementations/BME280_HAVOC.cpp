@@ -6,8 +6,7 @@
 BME280_Class bme; 
 
 void BME280::init() {
-    while (!bme.begin(I2C_FAST_MODE_PLUS_MODE)) { 
-        // TODO: Handle error here once we get error lights going
+    while (!bme.begin()) { 
         errorLED.timedColor(colorPresets.magenta, 250);
         errorLED.timedColor(colorPresets.green, 250);
     }
@@ -21,12 +20,13 @@ void BME280::init() {
     bme.iirFilter(IIR16);
     //bme.inactiveTime(inactive1000ms); //Setting time between measurements to 1 second
 
-    dataReady.setDuration(1000);
+    dataReady.setDuration(0);
 }
 
 bool BME280::prefetchData() {
     // If the BME is in sleep mode it means a measurement has been completed
     if (bme.mode() == SleepMode) {
+        bme.mode(SleepMode); // Must set it to sleep mode again to avoid library trying to take another reading
         // Therefore we collect the data here...
         long fetchedTemperature, fetchedHumidity, fetchedPressure;
         bme.getSensorData(fetchedTemperature, fetchedHumidity, fetchedPressure);

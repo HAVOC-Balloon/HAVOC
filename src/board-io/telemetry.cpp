@@ -138,9 +138,9 @@ void SPILogger::writeTelemetry(Data &data) {
     currentFile.print(",");
     currentFile.print(data.gps.pos.alt);
     currentFile.print(",");
-    currentFile.print(data.gps.pos.lat);
+    currentFile.print(data.gps.pos.lat, 7);
     currentFile.print(",");
-    currentFile.print(data.gps.pos.lon);
+    currentFile.print(data.gps.pos.lon, 7);
     currentFile.print(",");
     currentFile.print(data.gps.time.year);
     currentFile.print(",");
@@ -171,10 +171,7 @@ void SPILogger::writeTelemetry(Data &data) {
     currentFile.print(data.solenoids);
     currentFile.println();
     if (flushTimer.isComplete()) {
-        errorLED.temporaryColor(colorPresets.red);
         currentFile.flush();
-        errorLED.clearTemporaryColor();
         flushTimer.reset();
     }
-    
 }

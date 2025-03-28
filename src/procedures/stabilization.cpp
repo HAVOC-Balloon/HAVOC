@@ -138,11 +138,13 @@ Solenoids BangBang::getStabilization(Data data) {
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
             //Normalized error
-            error = ((int)(data.orientation.x - data.target.target) % 360) - 180; //Normalization
-            Serial.println(error);
-            //targetVelocity = abs(error) > 10 ? constrain(error * 0.5, -50, 50) : 0;
+            error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180; //Normalization
+            errorLED.setColor({(int)(abs(error)*1.41),0,255-(int)(abs(error)*1.41)});
+            targetVelocity = abs(error) > 5 ? constrain(error * 0.8, -50, 50) : (errorLED.setColor(colorPresets.green), 0);
+            /*
             if (abs(error) < 7) {
                 targetVelocity = 0;
+                errorLED.setColor(colorPresets.green);
             } else {
                 error = error * 0.5;
                 if (error < -50) {
@@ -153,6 +155,7 @@ Solenoids BangBang::getStabilization(Data data) {
                     targetVelocity = error;
                 }
             }
+            */
 
             //NOTE: NO BREAK STATEMENT (we need to continue into next case)
     

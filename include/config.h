@@ -29,11 +29,9 @@ struct Config {
     // const int sampleRate = 50; //  ms. This isn't a rate. This is a time. Rate is 20Hz.
     const float seaLevelPressure = 1013.25; // hPa
     const double targetAltitude = 20000; // m
-    const double deactivateAltitude = 1000; // m
+    const double deactivateAltitude = 2000; // m
     const char * telemetryFilePrefix = "telemetry/HAVOC-Data-";
     const unsigned long solenoidCycleTime = 50; // ms
-    // No idea what this is but we can bring it back if we ever use it
-    // const double GPSTick = 1000; // ms?
 };
 
 struct Sensors {

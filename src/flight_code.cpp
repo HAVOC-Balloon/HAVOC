@@ -4,11 +4,10 @@
 
 void setup() {
     initPins();
-    setSolenoids(SOLENOIDS_OFF);
     logger->init();
+    sensors.barometer.init();
     sensors.imu.init();
     sensors.gps.init();
-    sensors.barometer.init();
     happyHavocLightDance();
 }
 
@@ -22,5 +21,4 @@ void loop() {
     updateFlightState();
     stateActions();
     logger->writeTelemetry(data);
-    Serial.println(millis());
 }

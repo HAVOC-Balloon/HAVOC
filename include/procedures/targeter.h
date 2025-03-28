@@ -3,6 +3,7 @@
 
 class Targeter {
 public:
+    // TODO: Change to pass by reference after flight
     virtual Target getTarget(Data data) = 0;
 };
 

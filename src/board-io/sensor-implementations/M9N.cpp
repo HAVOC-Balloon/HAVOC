@@ -6,15 +6,26 @@
 #include "board-io/sensors.h"
 #include "havoc.h"
 
-/**
- * NOTE:
- *      Here, I have it set up to where each getter will only update when
- *      it has passed the tick time, but only the overall `collectData()`
- *      function will update the tickTime. Keep that as a note: the specific
- *      getters for each value are meant to be used by the `collectData()`
- *      function, not the end user directly.
- *
- */
+ Position mostRecentPos;
+ UTCTime mostRecentTime;
+ int mostRecentSIV;
+
+ void pvtCallback(UBX_NAV_PVT_data_t *ubxDataStruct) {
+    mostRecentPos = {
+        ubxDataStruct->height / 1000.0,
+        ((double)ubxDataStruct->lat) * pow(10, -7),
+        ((double)ubxDataStruct->lon) * pow(10, -7)
+    };   
+    mostRecentTime = {
+        (int)ubxDataStruct->year,
+        (int)ubxDataStruct->month,
+        (int)ubxDataStruct->day,
+        (int)ubxDataStruct->hour,
+        (int)ubxDataStruct->min,
+        (int)ubxDataStruct->sec,
+    };
+    mostRecentSIV = ubxDataStruct->numSV;
+}
 
 void M9N::init() {
     // Optional debug statements are commented out
@@ -34,50 +45,43 @@ void M9N::init() {
         errorLED.timedColor(colorPresets.red, 250);
     }
     m9n.saveConfiguration();
-
+    m9n.setAutoPVTcallbackPtr(&pvtCallback);
     // Serial.println("GPS Online.");
 
     // Serial.println("Waiting for GPS lock");
-    int siv;
-    while ((siv = m9n.getSIV()) < 3 && true) {
-        if (siv == 0) {
-            errorLED.timedColor(colorPresets.red, 250);
-            errorLED.timedColor(colorPresets.green, 250);
-        } else if (siv == 1) {
-            errorLED.timedColor(colorPresets.red, 125);
-            errorLED.timedColor(colorPresets.green, 125);
-        } else {
-            errorLED.timedColor(colorPresets.red, 63);
-            errorLED.timedColor(colorPresets.green, 63);
+    bool sivCheck = true; //true/false for deactivating GPS wait
+    while (sivCheck) {
+        m9n.checkUblox();
+        m9n.checkCallbacks();
+        switch (mostRecentSIV) {
+            case 0:
+                errorLED.timedColor(colorPresets.red, 250);
+                errorLED.timedColor(colorPresets.green, 250);
+                break;
+            case 1:
+                errorLED.timedColor(colorPresets.red, 250);
+                errorLED.timedColor(colorPresets.green, 250);
+                break;
+            case 2:
+                errorLED.timedColor(colorPresets.red, 250);
+                errorLED.timedColor(colorPresets.green, 250);
+                break;
+            default:
+                sivCheck = false;
+                break;
         }
     }
-    
-    
 
-    dataReady.setDuration(1000);
+    dataReady.setDuration(0);
 }
 
 bool M9N::prefetchData() {
-    if (m9n.checkUblox()) {
-        errorLED.temporaryColor(colorPresets.blue);
-        pos = {
-            m9n.getAltitude() / 1000.0,
-            ((double)m9n.getLongitude()) * pow(10, -7),
-            ((double)m9n.getLatitude()) * pow(10, -7)
-        };
-        time = {
-            (int)m9n.getYear(),
-            (int)m9n.getMonth(),
-            (int)m9n.getDay(),
-            (int)m9n.getHour(),
-            (int)m9n.getMinute(),
-            (int)m9n.getSecond(),
-        };
-        SIV = m9n.getSIV();
-        errorLED.clearTemporaryColor();
-        return true;
-    }
-    return false;    
+    m9n.checkUblox();
+    m9n.checkCallbacks();
+    pos = mostRecentPos;
+    time = mostRecentTime;
+    SIV = mostRecentSIV;
+    return true;
 }
 
 std::optional<Position> M9N::getPosition() {

@@ -32,21 +32,20 @@ void BNO055::init() {
     if (bnoID != sensor.sensor_id)
     {
         // No calibration found
-        errorLED.timedColor(colorPresets.magenta, 250);
-        errorLED.timedColor(colorPresets.cyan, 250);
+        errorLED.colorSweep(colorPresets.red, 250);
+        errorLED.colorSweep(colorPresets.off, 250);
+        errorLED.colorSweep(colorPresets.red, 250);
+        errorLED.colorSweep(colorPresets.off, 250);
     }
     else
     {
-        Serial1.println("\nFound Calibration for this sensor in EEPROM.");
         eeAddress += sizeof(long);
         EEPROM.get(eeAddress, calibrationData);
 
             //displaySensorOffsets(calibrationData);
 
-        Serial.println("\n\nRestoring Calibration data to the BNO055...");
         bno.setSensorOffsets(calibrationData);
 
-        Serial1.println("\n\nCalibration data loaded into BNO055");
         //foundCalib = true;
     }
 }
