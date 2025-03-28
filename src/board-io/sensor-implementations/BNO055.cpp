@@ -12,26 +12,21 @@ sensors_event_t event;
 void BNO055::init() {
     if(!bno.begin())
     {
+        logger.writeErrorMessage("BNO055 was not found.");
         errorLED.timedColor(colorPresets.magenta, 250);
         errorLED.timedColor(colorPresets.red, 250);
     }
-
     bno.setExtCrystalUse(true);
-
-    // Below this is code for Calibration
+    // Calibration code
     int eeAddress = 0;
     long bnoID;
-    // bool foundCalib = false; // Unused variable warning.
-
     EEPROM.get(eeAddress, bnoID);
-
     adafruit_bno055_offsets_t calibrationData;
     sensor_t sensor;
-
     bno.getSensor(&sensor);
     if (bnoID != sensor.sensor_id)
     {
-        // No calibration found
+        logger.writeErrorMessage("BNO055 calibration data was not found.");
         errorLED.colorSweep(colorPresets.red, 250);
         errorLED.colorSweep(colorPresets.off, 250);
         errorLED.colorSweep(colorPresets.red, 250);
@@ -41,12 +36,7 @@ void BNO055::init() {
     {
         eeAddress += sizeof(long);
         EEPROM.get(eeAddress, calibrationData);
-
-            //displaySensorOffsets(calibrationData);
-
         bno.setSensorOffsets(calibrationData);
-
-        //foundCalib = true;
     }
 }
 

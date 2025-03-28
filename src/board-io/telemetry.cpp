@@ -75,6 +75,7 @@ void OpenLog::writeTelemetry(Data &data) {
 
 void SPILogger::init() {
     while (!SD.begin(config.pins.sdCSPin)) {
+        // Error message cannot be written to SD card before it is initialized.
         errorLED.timedColor(colorPresets.blue, 250);
         errorLED.timedColor(colorPresets.green, 250);
     }
@@ -100,78 +101,115 @@ void SPILogger::init() {
     Serial.print("Found ");
     Serial.println(fileName);
     // Once we find a file name that doesn't exist, use it!
-    while (!(currentFile = SD.open(fileName, FILE_WRITE))) {
+    while (!(telemetryFile = SD.open(fileName, FILE_WRITE))) {
+        // Error message cannot be written to SD card before it is initialized.
         errorLED.timedColor(colorPresets.magenta, 250);
         errorLED.timedColor(colorPresets.blue, 250);
+    }
+    strcpy(fileName, config.secondaryTelemetryFilePrefix);
+    sprintf(fileNumberStr, "%0*d", 5, fileNumber);
+    strcat(fileName, fileNumberStr);
+    strcat(fileName, ".txt");
+    while (!(secondaryTelemetryFile = SD.open(fileName, FILE_WRITE))) {
+        // Error message cannot be written to SD card before it is initialized.
+        errorLED.timedColor(colorPresets.magenta, 125);
+        errorLED.timedColor(colorPresets.blue, 125);
+    }
+    strcpy(fileName, config.errorMessageFilePrefix);
+    sprintf(fileNumberStr, "%0*d", 5, fileNumber);
+    strcat(fileName, fileNumberStr);
+    strcat(fileName, ".txt");
+    while (!(errorMessageFile = SD.open(fileName, FILE_WRITE))) {
+        // Error message cannot be written to SD card before it is initialized.
+        errorLED.timedColor(colorPresets.magenta, 63);
+        errorLED.timedColor(colorPresets.blue, 63);
     }
 }
 
 void SPILogger::writeTelemetry(Data &data) {
     static Timer flushTimer(2000);
+
+    telemetryFile.print(data.packetCount);
+    telemetryFile.print(",");
+    telemetryFile.print(data.missionTime);
+    telemetryFile.print(",");
+    telemetryFile.print(data.state);
+    telemetryFile.print(",");
+    telemetryFile.print(data.acceleration.x);
+    telemetryFile.print(",");
+    telemetryFile.print(data.acceleration.y);
+    telemetryFile.print(",");
+    telemetryFile.print(data.acceleration.z);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gyro.x);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gyro.y);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gyro.z);
+    telemetryFile.print(",");
+    telemetryFile.print(data.orientation.x);
+    telemetryFile.print(",");
+    telemetryFile.print(data.orientation.y);
+    telemetryFile.print(",");
+    telemetryFile.print(data.orientation.z);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.pos.alt);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.pos.lat, 7);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.pos.lon, 7);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.time.year);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.time.month);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.time.day);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.time.hour);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.time.minute);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.time.second);
+    telemetryFile.print(",");
+    telemetryFile.print(data.gps.SIV);
+    telemetryFile.print(",");
+    telemetryFile.print(data.atmo.alt);
+    telemetryFile.print(",");
+    telemetryFile.print(data.atmo.pressure);
+    telemetryFile.print(",");
+    telemetryFile.print(data.atmo.temperature);
+    telemetryFile.print(",");
+    telemetryFile.print(data.atmo.humidity);
+    telemetryFile.print(",");
+    telemetryFile.print(data.target.mode);
+    telemetryFile.print(",");
+    telemetryFile.print(data.target.target);
+    telemetryFile.print(",");
+    telemetryFile.print(data.solenoids);
+    telemetryFile.println();
     // Flush written data to SD card to ensure it's written and not just
     // waiting in the buffer
     // This is important because microcontrollers can't guarantee
     // that file I/O that waits too long won't be corrupted by power loss
-    currentFile.print(data.packetCount);
-    currentFile.print(",");
-    currentFile.print(data.missionTime);
-    currentFile.print(",");
-    currentFile.print(data.state);
-    currentFile.print(",");
-    currentFile.print(data.acceleration.x);
-    currentFile.print(",");
-    currentFile.print(data.acceleration.y);
-    currentFile.print(",");
-    currentFile.print(data.acceleration.z);
-    currentFile.print(",");
-    currentFile.print(data.gyro.x);
-    currentFile.print(",");
-    currentFile.print(data.gyro.y);
-    currentFile.print(",");
-    currentFile.print(data.gyro.z);
-    currentFile.print(",");
-    currentFile.print(data.orientation.x);
-    currentFile.print(",");
-    currentFile.print(data.orientation.y);
-    currentFile.print(",");
-    currentFile.print(data.orientation.z);
-    currentFile.print(",");
-    currentFile.print(data.gps.pos.alt);
-    currentFile.print(",");
-    currentFile.print(data.gps.pos.lat, 7);
-    currentFile.print(",");
-    currentFile.print(data.gps.pos.lon, 7);
-    currentFile.print(",");
-    currentFile.print(data.gps.time.year);
-    currentFile.print(",");
-    currentFile.print(data.gps.time.month);
-    currentFile.print(",");
-    currentFile.print(data.gps.time.day);
-    currentFile.print(",");
-    currentFile.print(data.gps.time.hour);
-    currentFile.print(",");
-    currentFile.print(data.gps.time.minute);
-    currentFile.print(",");
-    currentFile.print(data.gps.time.second);
-    currentFile.print(",");
-    currentFile.print(data.gps.SIV);
-    currentFile.print(",");
-    currentFile.print(data.atmo.alt);
-    currentFile.print(",");
-    currentFile.print(data.atmo.pressure);
-    currentFile.print(",");
-    currentFile.print(data.atmo.temperature);
-    currentFile.print(",");
-    currentFile.print(data.atmo.humidity);
-    currentFile.print(",");
-    currentFile.print(data.target.mode);
-    currentFile.print(",");
-    currentFile.print(data.target.target);
-    currentFile.print(",");
-    currentFile.print(data.solenoids);
-    currentFile.println();
     if (flushTimer.isComplete()) {
-        currentFile.flush();
+        telemetryFile.flush();
         flushTimer.reset();
     }
+}
+
+void SPILogger::writeSecondaryTelemetry(const char * telemetry, bool newline, bool alwaysFlush) {
+    static Timer flushTimer(2000);
+    secondaryTelemetryFile.print(telemetry);
+    if (newline) {secondaryTelemetryFile.println();}
+    if (flushTimer.isComplete() || alwaysFlush) {
+        telemetryFile.flush();
+        flushTimer.reset();
+    }
+}
+
+void SPILogger::writeErrorMessage(const char * error) {
+    errorMessageFile.print(millis());
+    errorMessageFile.print(" ms: ");
+    errorMessageFile.println(error);
+    errorMessageFile.flush();
 }

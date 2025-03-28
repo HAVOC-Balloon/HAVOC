@@ -16,8 +16,12 @@ public:
 
 class SPILogger: public Logger {
 private:
-    File currentFile;
+    File telemetryFile;
+    File secondaryTelemetryFile;
+    File errorMessageFile;
 public:
     void init();
     void writeTelemetry(Data &data);
+    void writeSecondaryTelemetry(const char * telemetry, bool newline = true, bool alwaysFlush = false);
+    void writeErrorMessage(const char * error);
 };

@@ -6,21 +6,16 @@
 BME280_Class bme; 
 
 void BME280::init() {
-    while (!bme.begin()) { 
+    while (!bme.begin()) {
+        logger.writeErrorMessage("BME280 was not found.");
         errorLED.timedColor(colorPresets.magenta, 250);
         errorLED.timedColor(colorPresets.green, 250);
     }
-
     bme.mode(ForcedMode); // Force one measurement to begin
-
     bme.setOversampling(TemperatureSensor,Oversample16);
     bme.setOversampling(HumiditySensor,   Oversample16);
     bme.setOversampling(PressureSensor,   Oversample16);
-
     bme.iirFilter(IIR16);
-    //bme.inactiveTime(inactive1000ms); //Setting time between measurements to 1 second
-
-    dataReady.setDuration(0);
 }
 
 bool BME280::prefetchData() {

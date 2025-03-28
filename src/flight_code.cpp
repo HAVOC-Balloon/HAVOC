@@ -4,7 +4,7 @@
 
 void setup() {
     initPins();
-    logger->init();
+    logger.init();
     sensors.barometer.init();
     sensors.imu.init();
     sensors.gps.init();
@@ -20,5 +20,5 @@ void loop() {
     sensors.barometer.collectData(data);
     updateFlightState();
     stateActions();
-    logger->writeTelemetry(data);
+    logger.writeTelemetry(data);
 }

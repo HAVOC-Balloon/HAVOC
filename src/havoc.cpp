@@ -6,7 +6,7 @@ Config config;
 Data data;
 Sensors sensors;
 TargetPresets targetPresets;
-Logger* logger = new SPILogger();
+SPILogger logger = SPILogger();
 ErrorLED errorLED = ErrorLED(config.pins.redLed, config.pins.greenLed, config.pins.blueLed);
 
 void initPins() {

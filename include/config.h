@@ -31,7 +31,10 @@ struct Config {
     const double targetAltitude = 20000; // m
     const double deactivateAltitude = 2000; // m
     const char * telemetryFilePrefix = "telemetry/HAVOC-Data-";
+    const char * secondaryTelemetryFilePrefix = "extra/HAVOC-Extra-";
+    const char * errorMessageFilePrefix = "errors/HAVOC-Errors-";
     const unsigned long solenoidCycleTime = 50; // ms
+    const bool waitForGPSLock = true;
 };
 
 struct Sensors {
