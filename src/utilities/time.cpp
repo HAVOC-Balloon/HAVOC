@@ -21,8 +21,12 @@ Timer::Timer(unsigned long duration) : Stopwatch() {
     this->duration = duration;
 }
 
-bool Timer::isComplete() {
+bool Timer::complete() {
     return millis() >= startTime + duration;
+}
+
+bool Timer::incomplete() {
+    return !complete();
 }
 
 unsigned long Timer::timeRemaining() {
@@ -54,8 +58,12 @@ unsigned long Alarm::getEndTime() {
     return endTime;
 }
 
-bool Alarm::isComplete() {
+bool Alarm::complete() {
     return millis() >= endTime;
+}
+
+bool Alarm::incomplete() {
+    return !complete();
 }
 
 unsigned long Alarm::timeRemaining() {

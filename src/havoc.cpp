@@ -31,12 +31,12 @@ void blinkLEDs() {
     static Timer cycleTime = Timer(config.blink.cycleTime);
     static Timer duration = Timer(config.blink.duration);
 
-    if (cycleTime.isComplete()) {
+    if (cycleTime.complete()) {
         digitalWrite(config.pins.sideLed, HIGH);
         duration.reset();
         cycleTime.reset();
     }
-    if (duration.isComplete()) {
+    if (duration.complete()) {
         digitalWrite(config.pins.sideLed, LOW);
     }
 }
@@ -82,7 +82,7 @@ void stateActions() {
 void setSolenoids(Solenoids solenoidState) {
     static Timer canToggleSolenoids = Timer(config.solenoidCycleTime);
 
-    if (solenoidState == data.solenoids || !canToggleSolenoids.isComplete()) {
+    if (solenoidState == data.solenoids || canToggleSolenoids.incomplete()) {
         return;
     }
 

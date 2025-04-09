@@ -22,6 +22,6 @@ void loop() {
     updateFlightState();
     stateActions();
     logger.writeTelemetry(data);
-    while (!loopTimer.isComplete()) {}
+    while (loopTimer.incomplete()) {}
     loopTimer.reset();
 }
