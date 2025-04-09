@@ -42,17 +42,36 @@ void blinkLEDs() {
 }
 
 void updateFlightState() {
+    static Timer stateTimer(0);
     switch (data.state) {
         case STANDBY:
-            if (data.gps.pos.alt >= config.targetAltitude) {
-                // TODO: Make this resistant to one-time altitude errors
-                data.state = STABILIZATION;
+            if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
+                data.state = PRESTABILIZATION;
+                stateTimer.reset(config.waitTimes.stabilization);
+            }
+            break;
+        case PRESTABILIZATION:
+            if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
+                if (stateTimer.complete()) {
+                    data.state = STABILIZATION;
+                }
+            } else {
+                data.state = STANDBY;
             }
             break;
         case STABILIZATION:
-            if (data.gps.pos.alt <= config.deactivateAltitude) {
-                // TODO: Make this resistant to one-time altitude errors
-                data.state = LANDED;
+            if (data.gps.pos.alt <= config.deactivateAltitude && data.gps.SIV >= 3) {
+                data.state = PRELANDED;
+                stateTimer.reset(config.waitTimes.landed);
+            }
+            break;
+        case PRELANDED:
+            if (data.gps.pos.alt <= config.deactivateAltitude && data.gps.SIV >= 3) {
+                if (stateTimer.complete()) {
+                    data.state = LANDED;
+                }
+            } else {
+                data.state = STABILIZATION;
             }
             break;
         case LANDED:

@@ -20,10 +20,16 @@ struct BaudRates {
     const int serial1 = 115200;
 };
 
+struct WaitTimes {
+    const unsigned long stabilization = 5000;
+    const unsigned long landed = 10000;
+};
+
 struct Config {
     const Pins pins;
     const BaudRates bauds;
     const Blink blink;
+    const WaitTimes waitTimes;
     // TO BE DISCUSSED: DELETE SAMPLE RATE
     // BECAUSE NOT LOGGING EVERY LOOP IS SILLY IF YOU CAN
     // const int sampleRate = 50; //  ms. This isn't a rate. This is a time. Rate is 20Hz.

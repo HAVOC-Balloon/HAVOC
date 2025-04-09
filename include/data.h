@@ -4,11 +4,10 @@
 
 enum FlightState {
     STANDBY = 0,
-    STABILIZATION = 1,
-    LANDED = 2
-    // There were additional flight states of PAN and
-    // STABILIZATION_2 in the previous code. Those are stupid
-    // and have been removed.
+    PRESTABILIZATION = 1,
+    STABILIZATION = 2,
+    PRELANDED = 3,
+    LANDED = 4
 };
 
 struct Vector {
