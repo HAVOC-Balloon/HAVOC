@@ -30,8 +30,7 @@ class StabilizationAlgorithm {
 protected:
     double error;
 public:
-    // TODO: Change to pass by reference after flight
-    virtual Solenoids getStabilization(Data data) = 0;
+    virtual Solenoids getStabilization(Data &data) = 0;
 };
 
 
@@ -40,7 +39,7 @@ private:
     OutputTransform outputTransform;
 public:
     CascadedPID(OutputTransform transform);
-    Solenoids getStabilization(Data data);
+    Solenoids getStabilization(Data &data);
 };
 
 class PurePID: public StabilizationAlgorithm {
@@ -48,16 +47,16 @@ private:
     OutputTransform outputTransform;
 public:
     PurePID(OutputTransform transform);
-    Solenoids getStabilization(Data data);
+    Solenoids getStabilization(Data &data);
 };
 
 class PiddedBangBang: public StabilizationAlgorithm{
 public:
-    Solenoids getStabilization(Data data);
+    Solenoids getStabilization(Data &data);
 };
 
 class BangBang: public StabilizationAlgorithm {
 public:
-    Solenoids getStabilization(Data data);
+    Solenoids getStabilization(Data &data);
 };
 

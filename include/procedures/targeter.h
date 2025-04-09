@@ -3,8 +3,7 @@
 
 class Targeter {
 public:
-    // TODO: Change to pass by reference after flight
-    virtual Target getTarget(Data data) = 0;
+    virtual Target getTarget(Data &data) = 0;
 };
 
 class ConstantTargeter: public Targeter {
@@ -12,12 +11,12 @@ private:
     Target target;
 public:
     ConstantTargeter(Target target);
-    Target getTarget(Data data);
+    Target getTarget(Data &data);
 };
 
 class SolarTargeter: public Targeter {
 public:
-    Target getTarget(Data data);
+    Target getTarget(Data &data);
 };
 
 class GPSTargeter: public Targeter {
@@ -25,7 +24,7 @@ private:
     Position position;
 public:
     GPSTargeter(Position position);
-    Target getTarget(Data data);
+    Target getTarget(Data &data);
 };
 
 struct TargetPresets {
