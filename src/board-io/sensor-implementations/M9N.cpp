@@ -12,9 +12,9 @@
 
  void pvtCallback(UBX_NAV_PVT_data_t *ubxDataStruct) {
     mostRecentPos = {
-        ubxDataStruct->height / 1000.0,
         ((double)ubxDataStruct->lat) * pow(10, -7),
-        ((double)ubxDataStruct->lon) * pow(10, -7)
+        ((double)ubxDataStruct->lon) * pow(10, -7),
+        ubxDataStruct->height / 1000.0
     };   
     mostRecentTime = {
         (int)ubxDataStruct->year,
