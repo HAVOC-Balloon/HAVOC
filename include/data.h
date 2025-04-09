@@ -35,9 +35,6 @@ struct UTCTime {
 };
 
 struct GPS {
-    // Nikki says we should use a timer class instead of the next two.
-    // unsigned long lastTimeUpdate = 0;
-    // unsigned long lastTime = 0;
     Position pos;
     UTCTime time;
     int SIV;
@@ -60,9 +57,6 @@ struct Target {
 enum Solenoids { SOLENOIDS_OFF = 0, CLOCKWISE = 1, COUNTERCLOCKWISE = 2 };
 
 struct Data {
-    // Nikki says we shouldn't use this.
-    // Drew says it should be called "previous time" if we do.
-    // long lastTime = 0;
     unsigned long packetCount = 0;
     unsigned long missionTime = 0;  // ms
     FlightState state = FlightState::STANDBY;
@@ -73,14 +67,4 @@ struct Data {
     Atmospheric atmo;
     Target target;
     Solenoids solenoids = SOLENOIDS_OFF;
-    
-    // If additional subsets of the code, outside of the primary loop,
-    // have telemetry, they should format it themselves and append
-    // it to this variable.
-    // Appended telemetry should be CSV and should END with a comma.
-
-    // extraTelemetry has been temporarily removed until we determine
-    // a proper mechanism for allowing telemetry to be collected
-    // from alternate sources
-    // std::string extraTelemetry = "";
 };

@@ -30,9 +30,6 @@ struct Config {
     const BaudRates bauds;
     const Blink blink;
     const WaitTimes waitTimes;
-    // TO BE DISCUSSED: DELETE SAMPLE RATE
-    // BECAUSE NOT LOGGING EVERY LOOP IS SILLY IF YOU CAN
-    // const int sampleRate = 50; //  ms. This isn't a rate. This is a time. Rate is 20Hz.
     const float seaLevelPressure = 1013.25; // hPa
     const double targetAltitude = 20000; // m
     const double deactivateAltitude = 2000; // m

@@ -1,5 +1,6 @@
 #include "data.h"
 #include "procedures/stabilization.h"
+
 Solenoids OutputTransform::getTransformed(float continuousOutput) {
     return Solenoids::SOLENOIDS_OFF;
 }

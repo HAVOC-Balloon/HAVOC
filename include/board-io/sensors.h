@@ -1,8 +1,5 @@
 #pragma once
-
-
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-
 #include "data.h"
 #include "utilities/time.h"
 #include <optional>

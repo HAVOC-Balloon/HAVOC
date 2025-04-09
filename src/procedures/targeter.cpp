@@ -1,7 +1,6 @@
 #include "data.h"
 #include "procedures/targeter.h"
 
-
 ConstantTargeter::ConstantTargeter(Target target) {
     this->target = target;
 }
@@ -33,7 +32,6 @@ Target GPSTargeter::getTarget(Data &data) {
     int solar_Azimuth = ((int)location.getSolarAzimuth(t));
     */
    // P.S. This is the GPS targeter class; it should be in SolarTargeter!
-
 
     return target;
 }

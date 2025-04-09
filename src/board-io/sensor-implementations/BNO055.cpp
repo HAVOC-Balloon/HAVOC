@@ -4,9 +4,7 @@
 #include "board-io/sensors.h"
 #include <EEPROM.h>
 
-
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
-
 sensors_event_t event;
 
 void BNO055::init() {
