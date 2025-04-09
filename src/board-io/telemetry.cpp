@@ -39,11 +39,11 @@ void OpenLog::writeTelemetry(Data &data) {
     Serial1.print(",");
     Serial1.print(data.orientation.z);
     Serial1.print(",");
-    Serial1.print(data.gps.pos.alt);
+    Serial1.print(data.gps.pos.alt, 3);
     Serial1.print(",");
-    Serial1.print(data.gps.pos.lat);
+    Serial1.print(data.gps.pos.lat, 7);
     Serial1.print(",");
-    Serial1.print(data.gps.pos.lon);
+    Serial1.print(data.gps.pos.lon, 7);
     Serial1.print(",");
     Serial1.print(data.gps.time.year);
     Serial1.print(",");
@@ -153,7 +153,7 @@ void SPILogger::writeTelemetry(Data &data) {
     telemetryFile.print(",");
     telemetryFile.print(data.orientation.z);
     telemetryFile.print(",");
-    telemetryFile.print(data.gps.pos.alt);
+    telemetryFile.print(data.gps.pos.alt, 3);
     telemetryFile.print(",");
     telemetryFile.print(data.gps.pos.lat, 7);
     telemetryFile.print(",");
