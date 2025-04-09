@@ -16,7 +16,6 @@ void BNO055::init() {
         errorLED.timedColor(colorPresets.magenta, 250);
         errorLED.timedColor(colorPresets.red, 250);
     }
-    bno.setExtCrystalUse(true);
     // Calibration code
     int eeAddress = 0;
     long bnoID;
