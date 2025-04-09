@@ -53,12 +53,12 @@ void M9N::init() {
                 errorLED.timedColor(colorPresets.green, 250);
                 break;
             case 1:
-                errorLED.timedColor(colorPresets.red, 250);
-                errorLED.timedColor(colorPresets.green, 250);
+                errorLED.timedColor(colorPresets.red, 125);
+                errorLED.timedColor(colorPresets.green, 125);
                 break;
             case 2:
-                errorLED.timedColor(colorPresets.red, 250);
-                errorLED.timedColor(colorPresets.green, 250);
+                errorLED.timedColor(colorPresets.red, 60);
+                errorLED.timedColor(colorPresets.green, 60);
                 break;
             default:
                 sivCheck = false;
