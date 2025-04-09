@@ -33,6 +33,7 @@ struct Config {
     const char * telemetryFilePrefix = "telemetry/HAVOC-Data-";
     const char * secondaryTelemetryFilePrefix = "extra/HAVOC-Extra-";
     const char * errorMessageFilePrefix = "errors/HAVOC-Errors-";
+    const unsigned long loopCycleTime = 50; // ms
     const unsigned long solenoidCycleTime = 50; // ms
     const bool waitForGPSLock = true;
 };

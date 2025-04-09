@@ -12,6 +12,7 @@ void setup() {
 }
 
 void loop() {
+    static Timer loopTimer(config.loopCycleTime);
     data.packetCount += 1;
     data.missionTime = millis();
     blinkLEDs();
@@ -21,4 +22,6 @@ void loop() {
     updateFlightState();
     stateActions();
     logger.writeTelemetry(data);
+    while (!loopTimer.isComplete()) {}
+    loopTimer.reset();
 }
