@@ -52,7 +52,7 @@ void updateFlightState() {
             break;
         case PRESTABILIZATION:
             if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
-                if (stateTimer.complete()) {
+                if (stateTimer.isComplete()) {
                     data.state = STABILIZATION;
                 }
             } else {
@@ -67,7 +67,7 @@ void updateFlightState() {
             break;
         case PRELANDED:
             if (data.gps.pos.alt <= config.deactivateAltitude && data.gps.SIV >= 3) {
-                if (stateTimer.complete()) {
+                if (stateTimer.isComplete()) {
                     data.state = LANDED;
                 }
             } else {
