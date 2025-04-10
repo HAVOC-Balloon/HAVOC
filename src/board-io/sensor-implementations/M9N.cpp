@@ -12,9 +12,9 @@
 
  void pvtCallback(UBX_NAV_PVT_data_t *ubxDataStruct) {
     mostRecentPos = {
-        ubxDataStruct->height / 1000.0,
         ((double)ubxDataStruct->lat) * pow(10, -7),
-        ((double)ubxDataStruct->lon) * pow(10, -7)
+        ((double)ubxDataStruct->lon) * pow(10, -7),
+        ubxDataStruct->height / 1000.0
     };   
     mostRecentTime = {
         (int)ubxDataStruct->year,
@@ -28,28 +28,22 @@
 }
 
 void M9N::init() {
-    // Optional debug statements are commented out
-
-    // Initialization
     while (!m9n.begin()) {
-        // Serial.println("GPS not found. Retrying momentarily.");
+        logger.writeErrorMessage("M9N was not found.");
         errorLED.timedColor(colorPresets.red, 250);
         errorLED.timedColor(colorPresets.blue, 250);
     }
-    // Updating settings
     m9n.setI2COutput(COM_TYPE_UBX);
     m9n.setNavigationFrequency(5);
     if (!m9n.setDynamicModel(DYN_MODEL_AIRBORNE4g)) {
-        // Serial1.println(F("*** Warning: setDynamicModel failed ***"));
+        logger.writeErrorMessage("M9N Dynamic Model could not be set.");
         errorLED.timedColor(colorPresets.cyan, 250);
         errorLED.timedColor(colorPresets.red, 250);
     }
     m9n.saveConfiguration();
     m9n.setAutoPVTcallbackPtr(&pvtCallback);
-    // Serial.println("GPS Online.");
 
-    // Serial.println("Waiting for GPS lock");
-    bool sivCheck = true; //true/false for deactivating GPS wait
+    bool sivCheck = config.waitForGPSLock;
     while (sivCheck) {
         m9n.checkUblox();
         m9n.checkCallbacks();
@@ -59,20 +53,18 @@ void M9N::init() {
                 errorLED.timedColor(colorPresets.green, 250);
                 break;
             case 1:
-                errorLED.timedColor(colorPresets.red, 250);
-                errorLED.timedColor(colorPresets.green, 250);
+                errorLED.timedColor(colorPresets.red, 125);
+                errorLED.timedColor(colorPresets.green, 125);
                 break;
             case 2:
-                errorLED.timedColor(colorPresets.red, 250);
-                errorLED.timedColor(colorPresets.green, 250);
+                errorLED.timedColor(colorPresets.red, 60);
+                errorLED.timedColor(colorPresets.green, 60);
                 break;
             default:
                 sivCheck = false;
                 break;
         }
     }
-
-    dataReady.setDuration(0);
 }
 
 bool M9N::prefetchData() {

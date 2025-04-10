@@ -11,7 +11,7 @@ extern Config config;
 extern Data data;
 extern Sensors sensors;
 extern TargetPresets targetPresets;
-extern Logger* logger;
+extern SPILogger logger;
 extern ErrorLED errorLED;
 
 void initPins();

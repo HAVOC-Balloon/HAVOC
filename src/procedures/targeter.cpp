@@ -1,16 +1,15 @@
 #include "data.h"
 #include "procedures/targeter.h"
 
-
 ConstantTargeter::ConstantTargeter(Target target) {
     this->target = target;
 }
 
-Target ConstantTargeter::getTarget(Data data) {
+Target ConstantTargeter::getTarget(Data &data) {
     return target;
 }
 
-Target SolarTargeter::getTarget(Data data) {
+Target SolarTargeter::getTarget(Data &data) {
     Target target;
     target.mode = TargetingMode::ORIENTATION;        
     target.target = 0; // TODO: SOLAR POSITIONING CODE HERE
@@ -21,7 +20,7 @@ GPSTargeter::GPSTargeter(Position position) {
     this->position = position;
 }
 
-Target GPSTargeter::getTarget(Data data) {
+Target GPSTargeter::getTarget(Data &data) {
     Target target;
     target.mode = TargetingMode::ORIENTATION;
     target.target = 0; // TODO: GPS CODE HERE
@@ -33,7 +32,6 @@ Target GPSTargeter::getTarget(Data data) {
     int solar_Azimuth = ((int)location.getSolarAzimuth(t));
     */
    // P.S. This is the GPS targeter class; it should be in SolarTargeter!
-
 
     return target;
 }

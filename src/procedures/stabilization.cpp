@@ -1,5 +1,6 @@
 #include "data.h"
 #include "procedures/stabilization.h"
+
 Solenoids OutputTransform::getTransformed(float continuousOutput) {
     return Solenoids::SOLENOIDS_OFF;
 }
@@ -67,7 +68,7 @@ CascadedPID::CascadedPID(OutputTransform transform) {
     outputTransform = transform;
 }
 
-Solenoids CascadedPID::getStabilization(Data data) {
+Solenoids CascadedPID::getStabilization(Data &data) {
     float pidOutput;
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
@@ -94,7 +95,7 @@ PurePID::PurePID(OutputTransform transform) {
     outputTransform = transform;
 }
 
-Solenoids PurePID::getStabilization(Data data) {
+Solenoids PurePID::getStabilization(Data &data) {
     //TODO
     float pidOutput;
     switch(data.target.mode){
@@ -119,7 +120,7 @@ Solenoids PurePID::getStabilization(Data data) {
 
 /*
 This should just be an output transform
-Solenoids PiddedBangBang::getStabilization(Data data){
+Solenoids PiddedBangBang::getStabilization(Data &data){
     float pidOutput;
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
@@ -133,7 +134,7 @@ Solenoids PiddedBangBang::getStabilization(Data data){
 }
 */
 
-Solenoids BangBang::getStabilization(Data data) {
+Solenoids BangBang::getStabilization(Data &data) {
     float targetVelocity = data.target.target;
     switch(data.target.mode){
         case TargetingMode::ORIENTATION:
