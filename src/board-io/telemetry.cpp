@@ -191,7 +191,7 @@ void SPILogger::writeTelemetry(Data &data) {
     // waiting in the buffer
     // This is important because microcontrollers can't guarantee
     // that file I/O that waits too long won't be corrupted by power loss
-    if (flushTimer.complete()) {
+    if (flushTimer.isComplete()) {
         telemetryFile.flush();
         flushTimer.reset();
     }
@@ -201,7 +201,7 @@ void SPILogger::writeSecondaryTelemetry(const char * telemetry, bool newline, bo
     static Timer flushTimer(2000);
     secondaryTelemetryFile.print(telemetry);
     if (newline) {secondaryTelemetryFile.println();}
-    if (flushTimer.complete() || alwaysFlush) {
+    if (flushTimer.isComplete() || alwaysFlush) {
         telemetryFile.flush();
         flushTimer.reset();
     }

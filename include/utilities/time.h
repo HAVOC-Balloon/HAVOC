@@ -15,8 +15,7 @@ protected:
     unsigned long duration; // ms
 public:
     Timer(unsigned long duration);
-    bool complete();
-    bool incomplete();
+    bool isComplete();
     unsigned long timeRemaining();
     float progress();
     void setDuration(unsigned long newDuration);
@@ -30,8 +29,7 @@ protected:
 public:
     Alarm(unsigned long endTime);
     unsigned long getEndTime();
-    bool complete();
-    bool incomplete();
+    bool isComplete();
     unsigned long timeRemaining();
     void setEndTime(unsigned long newEndTime);
 };

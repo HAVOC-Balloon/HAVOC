@@ -10,7 +10,7 @@ Solenoids PFM::getTransformed(float continuousOutput){
     static Timer ClockwiseTimer(0);
     static Timer CounterClockwiseTimer(0);
 
-    if(PWMTimer.complete()){
+    if(PWMTimer.isComplete()){
         //set all new
         onPercent = abs(continuousOutput);
         if(onPercent < deadzone){
@@ -49,9 +49,9 @@ Solenoids PFM::getTransformed(float continuousOutput){
         }
     }
 
-    if(ClockwiseTimer.incomplete()){
+    if(!ClockwiseTimer.isComplete()){
         return Solenoids::CLOCKWISE;
-    }else if(CounterClockwiseTimer.incomplete()){
+    }else if(!CounterClockwiseTimer.isComplete()){
         return Solenoids::COUNTERCLOCKWISE;
     }else{
         return Solenoids::SOLENOIDS_OFF;

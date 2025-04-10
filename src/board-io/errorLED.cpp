@@ -46,7 +46,7 @@ void ErrorLED::timedColor(Color color, unsigned long duration) {
 // THIS IS A BLOCKING FUNCTION.
 void ErrorLED::colorSweep(Color nextColor, unsigned long duration) {
     Timer sweep = Timer(duration);
-    while (!sweep.complete()) {
+    while (!sweep.isComplete()) {
         float progress = sweep.progress();
         // Gain function taken from 
         float a = 0.5*pow(2.0*((progress<0.5)?progress:1.0-progress),2);
