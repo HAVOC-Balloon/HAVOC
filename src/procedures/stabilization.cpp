@@ -6,11 +6,11 @@ Solenoids OutputTransform::getTransformed(float continuousOutput) {
 }
 
 Solenoids PFM::getTransformed(float continuousOutput){
-    static Timer PWMTimer(0);
+    static Timer PFMTimer(0);
     static Timer ClockwiseTimer(0);
     static Timer CounterClockwiseTimer(0);
 
-    if(PWMTimer.isComplete()){
+    if(PFMTimer.isComplete()){
         //set all new
         onPercent = abs(continuousOutput);
         if(onPercent < deadzone){
@@ -35,15 +35,15 @@ Solenoids PFM::getTransformed(float continuousOutput){
         }
 
         if(onPercent == 0){
-            PWMTimer.reset(cycleTime);
+            PFMTimer.reset(cycleTime);
             ClockwiseTimer.reset(0);
             CounterClockwiseTimer.reset(0);
         }else if(continuousOutput > 0){
-            PWMTimer.reset(onTime + offTime);
+            PFMTimer.reset(onTime + offTime);
             ClockwiseTimer.reset(onTime);
             CounterClockwiseTimer.reset(0);
         }else if(continuousOutput < 0){
-            PWMTimer.reset(onTime + offTime);
+            PFMTimer.reset(onTime + offTime);
             ClockwiseTimer.reset(0);
             CounterClockwiseTimer.reset(onTime);
         }
@@ -69,7 +69,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
             static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
             static PIDMath oVelocityPID = PIDMath(0.006, 0, 0, 7);
             //Normalized error
-            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;            
+            error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;            
             pidOutput = oVelocityPID.getOutput(
                 constrain(orientationPID.getOutput(error), -50, 50)
             );
@@ -81,7 +81,6 @@ Solenoids CascadedPID::getStabilization(Data &data) {
         default:
             return Solenoids::SOLENOIDS_OFF;
     }
-
     return outputTransform.getTransformed(pidOutput);
 }
 
@@ -97,7 +96,7 @@ Solenoids PurePID::getStabilization(Data &data) {
             //Needs to be tuned
             static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
             //Normalized error
-            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
+            error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
             pidOutput = orientationPID.getOutput(error);
             break;
         case TargetingMode::VELOCITY:
@@ -108,7 +107,6 @@ Solenoids PurePID::getStabilization(Data &data) {
         default:
             return Solenoids::SOLENOIDS_OFF;
     }
-
     return outputTransform.getTransformed(pidOutput);
 }
 
