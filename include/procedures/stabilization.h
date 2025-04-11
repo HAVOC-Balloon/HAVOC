@@ -21,11 +21,6 @@ public:
     Solenoids getTransformed(float continuousOutput);
 };
 
-class BangBangTransform: public OutputTransform{
-public:
-    Solenoids getTransformed(float continuousOutput);
-};
-
 class StabilizationAlgorithm {
 protected:
     double error;
@@ -50,12 +45,9 @@ public:
     Solenoids getStabilization(Data &data);
 };
 
-class PiddedBangBang: public StabilizationAlgorithm{
-public:
-    Solenoids getStabilization(Data &data);
-};
-
 class BangBang: public StabilizationAlgorithm {
+private:
+    enum {STABLE, UNSTABLE} status = STABLE;
 public:
     Solenoids getStabilization(Data &data);
 };

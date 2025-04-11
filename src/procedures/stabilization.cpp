@@ -58,12 +58,6 @@ Solenoids PFM::getTransformed(float continuousOutput){
     }
 }
 
-/*
-Solenoids BangBangTransform::getTransformed(float continuousOutput){
-
-}
-*/
-
 CascadedPID::CascadedPID(OutputTransform transform) {
     outputTransform = transform;
 }
@@ -118,61 +112,50 @@ Solenoids PurePID::getStabilization(Data &data) {
     return outputTransform.getTransformed(pidOutput);
 }
 
-/*
-This should just be an output transform
-Solenoids PiddedBangBang::getStabilization(Data &data){
-    float pidOutput;
-    switch(data.target.mode){
-        case TargetingMode::ORIENTATION:
-            //Needs to be tuned
-            static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
-            error = int(data.target.target - (360 - data.orientation.x)) % 360 - 180;
-            pidOutput = orientationPID.getOutput(error);
-
-            break;
-    }
-}
-*/
-
 Solenoids BangBang::getStabilization(Data &data) {
-    float targetVelocity = data.target.target;
-    switch(data.target.mode){
-        case TargetingMode::ORIENTATION:
-            //Normalized error
-            error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180; //Normalization
-            errorLED.setColor({(int)(abs(error)*1.41),0,255-(int)(abs(error)*1.41)});
-            targetVelocity = abs(error) > 5 ? constrain(error * 0.8, -50, 50) : (errorLED.setColor(colorPresets.green), 0);
-            /*
-            if (abs(error) < 7) {
-                targetVelocity = 0;
-                errorLED.setColor(colorPresets.green);
-            } else {
-                error = error * 0.5;
-                if (error < -50) {
-                    targetVelocity = -50;
-                } else if (error > 50) {
-                    targetVelocity = 50;
-                } else {
-                    targetVelocity = error;
-                }
-            }
-            */
-
-            //NOTE: NO BREAK STATEMENT (we need to continue into next case)
-    
-        case TargetingMode::VELOCITY:
-            error = targetVelocity - data.gyro.z;
-            if(error > 5){
-                return Solenoids::CLOCKWISE;
-            }else if(error < -5){
-                return Solenoids::COUNTERCLOCKWISE;
-            }else{
-                return Solenoids::SOLENOIDS_OFF;
-            }
-            break;
-        default:
-            return Solenoids::SOLENOIDS_OFF;
+    // Default to solenoids off
+    Solenoids solenoidState = SOLENOIDS_OFF;
+    // Normalized orientation error
+    error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
+    // If outside orientation bounds, correct orientation
+    if (data.target.mode == ORIENTATION && abs(error) >= 5) {
+        if (error < 0 && data.gyro.z < 15) {
+           solenoidState = CLOCKWISE;
+        }
+        else if (error > 0 && data.gyro.z > -15) {
+          solenoidState = COUNTERCLOCKWISE;
+        }
+        else {
+            solenoidState = SOLENOIDS_OFF;
+        }
+        // Set LED based on orientation
+        errorLED.setColor({
+            (int)(abs(error) * 1.41),       // RED
+            0,                              // GREEN
+            255 - (int)(abs(error) * 1.41)  // BLUE
+        });
+    } 
+    // If within orientation bounds, control speed to 5 deg/sec
+    else if (data.target.mode == VELOCITY || abs(data.gyro.z) >= 5) {
+        float velocityError = 0;
+        if (data.target.mode == VELOCITY) {
+            velocityError = data.gyro.z - data.target.target;
+            // Set LED based on velocity
+            errorLED.setColor({
+                (int)(abs(velocityError) * 5),       // RED
+                0,                                   // GREEN
+                255 - (int)(abs(velocityError) * 5)  // BLUE
+            });
+        }
+        else {
+            errorLED.setColor(colorPresets.green);
+        }
+        if (velocityError < 0) {
+            solenoidState = CLOCKWISE;
+        }
+        else { 
+            solenoidState = COUNTERCLOCKWISE;
+        }
     }
-    
-    //return Solenoids::SOLENOIDS_OFF;
+    return solenoidState;
 }
