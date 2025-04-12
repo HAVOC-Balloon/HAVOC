@@ -106,7 +106,7 @@ Solenoids PurePID::getStabilization(Data &data) {
             break;
         case TargetingMode::VELOCITY:
             //Needs to be tuned
-            static PIDMath velocityPID = PIDMath(0.005, 0, 0, 7);
+            static PIDMath velocityPID = PIDMath(0.005, 0, 0.0001, 7);
             error = data.gyro.z - data.target.target;
             pidOutput = velocityPID.getOutput(error);
 

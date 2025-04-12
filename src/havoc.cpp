@@ -87,7 +87,8 @@ void stateActions() {
 
             //Testing PID!
             data.target = targetPresets.rotationLimiter->getTarget(data);
-            requestedSolenoidState = PurePID(new PFM()).getStabilization(data);
+            //requestedSolenoidState = PurePID(new PFM()).getStabilization(data);
+            requestedSolenoidState = BangBang().getStabilization(data);
             setSolenoids(requestedSolenoidState);
             break;
         case FlightState::STABILIZATION:
@@ -105,7 +106,7 @@ void stateActions() {
 
 void setSolenoids(Solenoids solenoidState) {
     static Timer canToggleSolenoids = Timer(config.solenoidCycleTime);
-
+    
     if (solenoidState == data.solenoids || !canToggleSolenoids.isComplete()) {
         return;
     }

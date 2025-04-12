@@ -6,18 +6,34 @@ void setup() {
     logger.init();
     sensors.barometer.init();
     sensors.imu.init();
+    setSolenoids(SOLENOIDS_OFF);
+    delay(500);
     //sensors.gps.init();
     setSolenoids(COUNTERCLOCKWISE);
     //digitalWrite(14, HIGH);
-    delay(500);
-    setSolenoids(SOLENOIDS_OFF);
     delay(250);
+    setSolenoids(SOLENOIDS_OFF);
+    delay(500);
     //digitalWrite(14, LOW);
     setSolenoids(CLOCKWISE);
     //digitalWrite(15, HIGH);
-    delay(500);
+    delay(250);
     //digitalWrite(15, LOW);
+
     setSolenoids(SOLENOIDS_OFF);
+    delay(500);
+    for(int i = 0; i < 3; i++){
+        digitalWrite(14, HIGH);
+        delay(100);
+        digitalWrite(14, LOW);
+        digitalWrite(15, LOW);
+        delay(500);
+        digitalWrite(15, HIGH);
+        delay(100);
+        digitalWrite(14, LOW);
+        digitalWrite(15, LOW);
+        delay(500);
+    }
     happyHavocLightDance();
 }
 
