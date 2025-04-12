@@ -83,7 +83,12 @@ void stateActions() {
     Solenoids requestedSolenoidState;
     switch (data.state) {
         case FlightState::STANDBY:
-            setSolenoids(SOLENOIDS_OFF);
+            //setSolenoids(SOLENOIDS_OFF);
+
+            //Testing PID!
+            data.target = targetPresets.rotationLimiter->getTarget(data);
+            requestedSolenoidState = PurePID(new PFM()).getStabilization(data);
+            setSolenoids(requestedSolenoidState);
             break;
         case FlightState::STABILIZATION:
             data.target = targetPresets.north->getTarget(data);

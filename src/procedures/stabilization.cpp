@@ -58,8 +58,8 @@ Solenoids PFM::getTransformed(float continuousOutput){
     }
 }
 
-CascadedPID::CascadedPID(OutputTransform transform) {
-    outputTransform = transform;
+CascadedPID::CascadedPID(OutputTransform *transform) {
+    outputTransform = *transform;
 }
 
 Solenoids CascadedPID::getStabilization(Data &data) {
@@ -69,13 +69,14 @@ Solenoids CascadedPID::getStabilization(Data &data) {
             static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
             static PIDMath oVelocityPID = PIDMath(0.006, 0, 0, 7);
             //Normalized error
-            error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;            
+            error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
             pidOutput = oVelocityPID.getOutput(
                 constrain(orientationPID.getOutput(error), -50, 50)
             );
             break;
         case TargetingMode::VELOCITY:
             static PIDMath velocityPID = PIDMath(0.006, 0, 0, 7);
+            error = data.gyro.z - data.target.target;
             pidOutput = velocityPID.getOutput(error);
             break;
         default:
@@ -84,8 +85,12 @@ Solenoids CascadedPID::getStabilization(Data &data) {
     return outputTransform.getTransformed(pidOutput);
 }
 
-PurePID::PurePID(OutputTransform transform) {
+PurePID::PurePID(OutputTransform *transform) {
     outputTransform = transform;
+}
+
+PurePID::~PurePID(){
+    delete outputTransform;
 }
 
 Solenoids PurePID::getStabilization(Data &data) {
@@ -101,13 +106,24 @@ Solenoids PurePID::getStabilization(Data &data) {
             break;
         case TargetingMode::VELOCITY:
             //Needs to be tuned
-            static PIDMath velocityPID = PIDMath(0.006, 0, 0, 7);
+            static PIDMath velocityPID = PIDMath(0.005, 0, 0, 7);
+            error = data.gyro.z - data.target.target;
             pidOutput = velocityPID.getOutput(error);
+
+            if(abs(error) < 7){
+                errorLED.setColor(colorPresets.green);
+            }else{
+                errorLED.setColor({
+                    (int)(abs(error) * 5),       // RED
+                    0,                           // GREEN
+                    255 - (int)(abs(error) * 5)  // BLUE
+                });
+            }
             break;
         default:
             return Solenoids::SOLENOIDS_OFF;
     }
-    return outputTransform.getTransformed(pidOutput);
+    return outputTransform->getTransformed(pidOutput);
 }
 
 Solenoids BangBang::getStabilization(Data &data) {

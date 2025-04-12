@@ -5,7 +5,7 @@
 
 class OutputTransform {
 public:
-    Solenoids getTransformed(float continuousOutput);
+    virtual Solenoids getTransformed(float continuousOutput);
 };
 
 class PFM: public OutputTransform {
@@ -18,7 +18,7 @@ private:
     unsigned long onTime;
     unsigned long offTime;
 public:
-    Solenoids getTransformed(float continuousOutput);
+    virtual Solenoids getTransformed(float continuousOutput);
 };
 
 class StabilizationAlgorithm {
@@ -33,15 +33,16 @@ class CascadedPID: public StabilizationAlgorithm {
 private:
     OutputTransform outputTransform;
 public:
-    CascadedPID(OutputTransform transform);
+    CascadedPID(OutputTransform *transform);
     Solenoids getStabilization(Data &data);
 };
 
 class PurePID: public StabilizationAlgorithm {
 private:
-    OutputTransform outputTransform;
+    OutputTransform *outputTransform;
 public:
-    PurePID(OutputTransform transform);
+    PurePID(OutputTransform *transform);
+    ~PurePID();
     Solenoids getStabilization(Data &data);
 };
 

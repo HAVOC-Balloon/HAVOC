@@ -6,7 +6,18 @@ void setup() {
     logger.init();
     sensors.barometer.init();
     sensors.imu.init();
-    sensors.gps.init();
+    //sensors.gps.init();
+    setSolenoids(COUNTERCLOCKWISE);
+    //digitalWrite(14, HIGH);
+    delay(500);
+    setSolenoids(SOLENOIDS_OFF);
+    delay(250);
+    //digitalWrite(14, LOW);
+    setSolenoids(CLOCKWISE);
+    //digitalWrite(15, HIGH);
+    delay(500);
+    //digitalWrite(15, LOW);
+    setSolenoids(SOLENOIDS_OFF);
     happyHavocLightDance();
 }
 
@@ -16,7 +27,7 @@ void loop() {
     data.missionTime = millis();
     blinkLEDs();
     sensors.imu.collectData(data);
-    sensors.gps.collectData(data);
+    //sensors.gps.collectData(data);
     sensors.barometer.collectData(data);
     updateFlightState();
     stateActions();
