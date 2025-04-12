@@ -24,12 +24,12 @@ void setup() {
     delay(500);
     for(int i = 0; i < 3; i++){
         digitalWrite(14, HIGH);
-        delay(100);
+        delay(config.solenoidCycleTime);
         digitalWrite(14, LOW);
         digitalWrite(15, LOW);
         delay(500);
         digitalWrite(15, HIGH);
-        delay(100);
+        delay(config.solenoidCycleTime);
         digitalWrite(14, LOW);
         digitalWrite(15, LOW);
         delay(500);
