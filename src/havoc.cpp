@@ -83,6 +83,8 @@ void updateFlightState() {
 void stateActions() {
   Solenoids requestedSolenoidState;
   switch (data.state) {
+    case FlightState::STANDBY:
+      break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.north->getTarget(data);
       requestedSolenoidState = BangBang().getStabilization(data);

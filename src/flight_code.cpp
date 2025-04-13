@@ -4,10 +4,20 @@
 
 void setup() {
   initPins();
+  setSolenoids(SOLENOIDS_OFF);
+  delay(500);
+  setSolenoids(COUNTERCLOCKWISE);
+  delay(100);
+  setSolenoids(SOLENOIDS_OFF);
+  delay(500);
+  setSolenoids(CLOCKWISE);
+  delay(100);
+  setSolenoids(SOLENOIDS_OFF);
   logger.init();
   sensors.barometer.init();
   sensors.imu.init();
   sensors.gps.init();
+
   happyHavocLightDance();
 }
 
