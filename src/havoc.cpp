@@ -50,6 +50,7 @@ void updateFlightState() {
         data.state = PRESTABILIZATION;
         stateTimer.reset(config.waitTimes.stabilization);
       }
+      data.state = STABILIZATION; 
       break;
     case PRESTABILIZATION:
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {

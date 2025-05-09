@@ -8,6 +8,15 @@ void setup() {
   sensors.barometer.init();
   sensors.imu.init();
   sensors.gps.init();
+
+  setSolenoids(SOLENOIDS_OFF);
+  delay(500);
+  setSolenoids(CLOCKWISE);
+  delay(50);
+  setSolenoids(COUNTERCLOCKWISE);
+  delay(50);
+  setSolenoids(SOLENOIDS_OFF);
+  
   happyHavocLightDance();
 }
 
