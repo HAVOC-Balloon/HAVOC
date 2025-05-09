@@ -32,10 +32,11 @@ class StabilizationAlgorithm {
 
 class CascadedPID : public StabilizationAlgorithm {
  private:
-  OutputTransform outputTransform;
+  OutputTransform *outputTransform;
 
  public:
   CascadedPID(OutputTransform *transform);
+  ~CascadedPID(); 
   Solenoids getStabilization(Data &data);
 };
 

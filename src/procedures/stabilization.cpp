@@ -10,7 +10,7 @@ Solenoids OutputTransform::getTransformed(float continuousOutput) {
 Solenoids PFM::getTransformed(float continuousOutput) {
   static Timer PFMTimer(0);
   static Timer ClockwiseTimer(0);
-  static Timer CounterClockwiseTimer(0);
+  static Timer CounterClockwiseTimer(0); 
 
   if (PFMTimer.isComplete()) {
     // set all new
@@ -58,18 +58,21 @@ Solenoids PFM::getTransformed(float continuousOutput) {
   } else {
     return Solenoids::SOLENOIDS_OFF;
   }
+
 }
 
 CascadedPID::CascadedPID(OutputTransform *transform) {
-  outputTransform = *transform;
+  outputTransform = transform;
 }
+
+CascadedPID::~CascadedPID(){delete outputTransform;}
 
 Solenoids CascadedPID::getStabilization(Data &data) {
   float pidOutput;
   switch (data.target.mode) {
     case TargetingMode::ORIENTATION:
       static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
-      static PIDMath oVelocityPID = PIDMath(0.006, 0, 0, 7);
+      static PIDMath oVelocityPID = PIDMath(0.3, 0, 0, 5);
       // Normalized error
       error =
           ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
@@ -84,7 +87,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
     default:
       return Solenoids::SOLENOIDS_OFF;
   }
-  return outputTransform.getTransformed(pidOutput);
+  return outputTransform->getTransformed(pidOutput);
 }
 
 PurePID::PurePID(OutputTransform *transform) { outputTransform = transform; }
@@ -105,24 +108,27 @@ Solenoids PurePID::getStabilization(Data &data) {
       break;
     case TargetingMode::VELOCITY:
       // Needs to be tuned
-      static PIDMath velocityPID = PIDMath(0.005, 0, 0, 7);
+      static PIDMath velocityPID = PIDMath(0.3, 0, 0, 5); //0.01
       error = data.gyro.z - data.target.target;
       pidOutput = velocityPID.getOutput(error);
 
       if (abs(error) < 7) {
         errorLED.setColor(colorPresets.green);
       } else {
-        errorLED.setColor({
-            (int)(abs(error) * 5),       // RED
-            0,                           // GREEN
-            255 - (int)(abs(error) * 5)  // BLUE
-        });
+        errorLED.setColor(colorPresets.red); 
+        /*errorLED.setColor({
+            //(int)(abs(error) * 5),       // RED
+            //0,                           // GREEN
+            //255 - (int)(abs(error) * 5)  // BLUE
+            errorLED.setColor(colorPresets.red);  
+        });*/
       }
       break;
     default:
       return Solenoids::SOLENOIDS_OFF;
   }
-  return outputTransform->getTransformed(pidOutput);
+  
+  return outputTransform->getTransformed(pidOutput);  
 }
 
 // I rewrote what is below because I hate how this is laid out, but I'm too

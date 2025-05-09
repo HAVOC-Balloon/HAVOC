@@ -83,6 +83,7 @@ void updateFlightState() {
 
 void stateActions() {
   Solenoids requestedSolenoidState;
+  //PFM *transform = new PFM(); 
   switch (data.state) {
     case FlightState::STANDBY:
       break;
@@ -92,7 +93,10 @@ void stateActions() {
       break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.north->getTarget(data);
-      requestedSolenoidState = BangBang().getStabilization(data);
+      requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
+      //requestedSolenoidState = PurePID(new PFM()).getStabilization(data); 
+      //data.target = targetPresets.north->getTarget(data);
+      //requestedSolenoidState = BangBang().getStabilization(data);
       setSolenoids(requestedSolenoidState);
       digitalWrite(0, LOW);
       digitalWrite(1, LOW);
