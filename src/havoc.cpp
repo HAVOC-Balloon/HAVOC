@@ -84,16 +84,18 @@ void updateFlightState() {
 void stateActions() {
   Solenoids requestedSolenoidState;
   switch (data.state) {
+    case FlightState::STANDBY:
+      break;
+    case FlightState::PRESTABILIZATION:
+      digitalWrite(0, HIGH);
+      digitalWrite(1, HIGH);
+      break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.north->getTarget(data);
       requestedSolenoidState = BangBang().getStabilization(data);
       setSolenoids(requestedSolenoidState);
       digitalWrite(0, LOW);
       digitalWrite(1, LOW);
-      break;
-    case FlightState::PRESTABILIZATION:
-      digitalWrite(0, HIGH);
-      digitalWrite(1, HIGH);
       break;
     default:
       setSolenoids(SOLENOIDS_OFF);
