@@ -79,6 +79,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
       //pidOutput = oVelocityPID.getOutput(constrain(orientationPID.getOutput(error), -50, 50));
       //Separating these two out in order to be able to use target velocity elsewhere
+      //FOr the love of god this should work
       targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
       velocityError = data.gyro.z - targetVelocity;
       pidOutput = oVelocityPID.getOutput(velocityError);
