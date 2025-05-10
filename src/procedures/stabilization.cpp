@@ -90,9 +90,20 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       }
       break;
     case TargetingMode::VELOCITY:
-      static PIDMath velocityPID = PIDMath(0.006, 0, 0, 7);
+      //static PIDMath velocityPID = PIDMath(0.006, 0, 0, 7);
+      //error = data.gyro.z - data.target.target;
+      //pidOutput = velocityPID.getOutput(error);
+      //break;
+      // Needs to be tuned
+      static PIDMath velocityPID = PIDMath(0.05, 0, 0, 5); //0.01
       error = data.gyro.z - data.target.target;
       pidOutput = velocityPID.getOutput(error);
+
+      if (abs(error) < 7) {
+        errorLED.setColor(colorPresets.green);
+      } else {
+        errorLED.setColor(colorPresets.red); 
+      }
       break;
     default:
       return Solenoids::SOLENOIDS_OFF;
