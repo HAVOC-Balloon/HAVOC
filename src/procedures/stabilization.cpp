@@ -70,6 +70,7 @@ CascadedPID::~CascadedPID(){delete outputTransform;}
 Solenoids CascadedPID::getStabilization(Data &data) {
   float pidOutput;
   float targetVelocity;
+  float velocityError;
   switch (data.target.mode) {
     case TargetingMode::ORIENTATION:
       static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
@@ -79,9 +80,10 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       //pidOutput = oVelocityPID.getOutput(constrain(orientationPID.getOutput(error), -50, 50));
       //Separating these two out in order to be able to use target velocity elsewhere
       targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
-      pidOutput = oVelocityPID.getOutput(targetVelocity);
+      velocityError = data.gyro.z - targetVelocity;
+      pidOutput = oVelocityPID.getOutput(velocityError);
 
-      if(abs(data.gyro.z - targetVelocity) > 5){
+      if(abs(velocityError) > 5){
         errorLED.setColor(colorPresets.red);
       }else if(abs(error) > 10){
         errorLED.setColor(colorPresets.blue);
