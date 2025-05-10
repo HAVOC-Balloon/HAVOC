@@ -71,16 +71,18 @@ Solenoids CascadedPID::getStabilization(Data &data) {
   float pidOutput;
   float targetVelocity;
   float velocityError;
+  float okp = 1.0;
   switch (data.target.mode) {
     case TargetingMode::ORIENTATION:
-      static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
+      //static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
       static PIDMath oVelocityPID = PIDMath(0.05, 0, 0, 5);
       // Normalized error
       error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
       //pidOutput = oVelocityPID.getOutput(constrain(orientationPID.getOutput(error), -50, 50));
       //Separating these two out in order to be able to use target velocity elsewhere
       //FOr the love of god this should work
-      targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
+      //targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
+      targetVelocity = constrain(error * okp, 50, -50);
       velocityError = data.gyro.z - targetVelocity;
       pidOutput = oVelocityPID.getOutput(velocityError);
 
@@ -330,4 +332,12 @@ Solenoids BangBang::getStabilization(Data &data) {
   }
 
   return solenoidState;
+}
+
+PanPID::PanPID(OutputTransform *transform){outputTransform = transform;}
+
+PanPID::~PanPID() { delete outputTransform;}
+
+Solenoids PanPID::getStabilization(Data &data){
+  float pidOutput;
 }

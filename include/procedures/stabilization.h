@@ -57,3 +57,13 @@ class BangBang : public StabilizationAlgorithm {
  public:
   Solenoids getStabilization(Data &data);
 };
+
+class PanPID : public StabilizationAlgorithm {
+  private:
+   OutputTransform *outputTransform;
+ 
+  public:
+   PanPID(OutputTransform *transform);
+   ~PanPID(); 
+   Solenoids getStabilization(Data &data);
+ };
