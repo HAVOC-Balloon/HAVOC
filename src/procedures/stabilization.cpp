@@ -69,15 +69,25 @@ CascadedPID::~CascadedPID(){delete outputTransform;}
 
 Solenoids CascadedPID::getStabilization(Data &data) {
   float pidOutput;
+  float targetVelocity;
   switch (data.target.mode) {
     case TargetingMode::ORIENTATION:
       static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
       static PIDMath oVelocityPID = PIDMath(0.05, 0, 0, 5);
       // Normalized error
-      error =
-          ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
-      pidOutput = oVelocityPID.getOutput(
-          constrain(orientationPID.getOutput(error), -50, 50));
+      error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
+      //pidOutput = oVelocityPID.getOutput(constrain(orientationPID.getOutput(error), -50, 50));
+      //Separating these two out in order to be able to use target velocity elsewhere
+      targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
+      pidOutput = oVelocityPID.getOutput(targetVelocity);
+
+      if(abs(data.gyro.z - targetVelocity) > 5){
+        errorLED.setColor(colorPresets.red);
+      }else if(abs(error) > 10){
+        errorLED.setColor(colorPresets.blue);
+      }else{
+        errorLED.setColor(colorPresets.green);
+      }
       break;
     case TargetingMode::VELOCITY:
       static PIDMath velocityPID = PIDMath(0.006, 0, 0, 7);
