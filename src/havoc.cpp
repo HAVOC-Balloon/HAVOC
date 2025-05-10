@@ -93,8 +93,8 @@ void stateActions() {
       break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.north->getTarget(data); 
-      requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
-      //requestedSolenoidState = PurePID(new PFM()).getStabilization(data); 
+      //requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
+      requestedSolenoidState = PurePID(new PFM()).getStabilization(data); 
       //data.target = targetPresets.north->getTarget(data);
       //requestedSolenoidState = BangBang().getStabilization(data);
       setSolenoids(requestedSolenoidState);
