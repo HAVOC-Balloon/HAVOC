@@ -72,7 +72,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
   switch (data.target.mode) {
     case TargetingMode::ORIENTATION:
       static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
-      static PIDMath oVelocityPID = PIDMath(0.3, 0, 0, 5);
+      static PIDMath oVelocityPID = PIDMath(0.05, 0, 0, 5);
       // Normalized error
       error =
           ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
@@ -108,7 +108,7 @@ Solenoids PurePID::getStabilization(Data &data) {
       break;
     case TargetingMode::VELOCITY:
       // Needs to be tuned
-      static PIDMath velocityPID = PIDMath(0.3, 0, 0, 5); //0.01
+      static PIDMath velocityPID = PIDMath(0.05, 0, 0, 5); //0.01
       error = data.gyro.z - data.target.target;
       pidOutput = velocityPID.getOutput(error);
 
