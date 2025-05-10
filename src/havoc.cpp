@@ -50,7 +50,6 @@ void updateFlightState() {
         data.state = PRESTABILIZATION;
         stateTimer.reset(config.waitTimes.stabilization);
       }
-      data.state = STABILIZATION; 
       break;
     case PRESTABILIZATION:
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
@@ -92,11 +91,8 @@ void stateActions() {
       digitalWrite(1, HIGH);
       break;
     case FlightState::STABILIZATION:
-      data.target = targetPresets.north->getTarget(data); 
+      data.target = targetPresets.east->getTarget(data); 
       requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
-      //requestedSolenoidState = PurePID(new PFM()).getStabilization(data); 
-      //data.target = targetPresets.north->getTarget(data);
-      //requestedSolenoidState = BangBang().getStabilization(data);
       setSolenoids(requestedSolenoidState);
       digitalWrite(0, LOW);
       digitalWrite(1, LOW);

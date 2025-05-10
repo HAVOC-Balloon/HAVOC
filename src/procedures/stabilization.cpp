@@ -71,7 +71,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
   float pidOutput;
   float targetVelocity;
   float velocityError;
-  float okp = 1.0;
+  float okp = 0.5;
   switch (data.target.mode) {
     case TargetingMode::ORIENTATION:
       //static PIDMath orientationPID = PIDMath(1.0, 0, 0, 10);
@@ -82,7 +82,19 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       //Separating these two out in order to be able to use target velocity elsewhere
       //FOr the love of god this should work
       //targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
-      targetVelocity = constrain(error * okp, 50, -50);
+      //targetVelocity = constrain(error * okp, 50, -50);
+      targetVelocity = error * okp;
+
+      if (abs(error) < 10){
+        targetVelocity = 0;
+      }
+      else if (targetVelocity > 50){
+        targetVelocity = 50;
+      }
+      else if (targetVelocity < -50){
+        targetVelocity = -50;
+      }
+
       velocityError = data.gyro.z - targetVelocity;
       pidOutput = oVelocityPID.getOutput(velocityError);
 

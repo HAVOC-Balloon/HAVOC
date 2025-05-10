@@ -38,7 +38,7 @@ struct Config {
   const char* errorMessageFilePrefix = "errors/HAVOC-Errors-";
   const unsigned long loopCycleTime = 15;      // ms
   const unsigned long solenoidCycleTime = 40;  // ms
-  const bool waitForGPSLock = false;
+  const bool waitForGPSLock = true;
 };
 
 struct Sensors {
