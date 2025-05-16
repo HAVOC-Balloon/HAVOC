@@ -21,8 +21,9 @@ struct BaudRates {
 };
 
 struct WaitTimes {
-  const unsigned long stabilization = 5000;
-  const unsigned long landed = 10000;
+  const unsigned long stabilization = 5000; // ms
+  const unsigned long burst = 5000;  // ms
+  const unsigned long landed = 10000; // ms
 };
 
 struct Config {

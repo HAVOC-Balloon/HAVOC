@@ -44,6 +44,7 @@ void blinkLEDs() {
 
 void updateFlightState() {
   static Timer stateTimer(0);
+  static double lastAltitude = 0; 
   switch (data.state) {
     case STANDBY:
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
@@ -54,6 +55,7 @@ void updateFlightState() {
     case PRESTABILIZATION:
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
         if (stateTimer.isComplete()) {
+          digitalWrite(config.pins.sideLed, LOW); // Deactivate Side LEDs for STAB 
           data.state = STABILIZATION;
         }
       } else {
@@ -61,6 +63,20 @@ void updateFlightState() {
       }
       break;
     case STABILIZATION:
+      if ((lastAltitude - data.gps.pos.alt) > 5 && data.gps.SIV >= 3){
+        data.state = BALLOON_DEMISE;
+        stateTimer.reset(config.waitTimes.burst); 
+      }
+      break;
+    case BALLOON_DEMISE:
+      if((lastAltitude - data.gps.pos.alt) > 5 && data.gps.SIV >= 3){ 
+        if(stateTimer.isComplete()){data.state = CONFIRMED_BALLOON_DEMISE;} 
+      }
+      else{
+        data.state = STABILIZATION; 
+      }
+      break;
+    case CONFIRMED_BALLOON_DEMISE:
       if (data.gps.pos.alt <= config.deactivateAltitude && data.gps.SIV >= 3) {
         data.state = PRELANDED;
         stateTimer.reset(config.waitTimes.landed);
@@ -78,6 +94,7 @@ void updateFlightState() {
     case LANDED:
       break;
   }
+  lastAltitude = data.gps.pos.alt; 
 }
 
 void stateActions() {
@@ -85,17 +102,34 @@ void stateActions() {
   //PFM *transform = new PFM(); 
   switch (data.state) {
     case FlightState::STANDBY:
+      digitalWrite(0, HIGH); //Activation
+      digitalWrite(1, HIGH); //Shut Down Notice
+      blinkLEDs();
       break;
     case FlightState::PRESTABILIZATION:
-      digitalWrite(0, HIGH);
-      digitalWrite(1, HIGH);
+      digitalWrite(0, HIGH); //Activation
+      digitalWrite(1, HIGH); //Shut Down Notice
+      blinkLEDs();
       break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.east->getTarget(data); 
       requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
       setSolenoids(requestedSolenoidState);
       digitalWrite(0, LOW);
-      digitalWrite(1, LOW);
+      digitalWrite(1, HIGH); 
+      break;
+    case BALLOON_DEMISE:
+      break; // Do not add actions (wait timer)
+    case CONFIRMED_BALLOON_DEMISE:
+      digitalWrite(0, LOW);
+      digitalWrite(1, LOW); 
+      blinkLEDs();
+      break;
+    case PRELANDED:
+      blinkLEDs();
+      break;
+    case LANDED:
+      blinkLEDs();
       break;
     default:
       setSolenoids(SOLENOIDS_OFF);

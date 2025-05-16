@@ -33,7 +33,7 @@ void loop() {
   static Timer loopTimer(config.loopCycleTime);
   data.packetCount += 1;
   data.missionTime = millis();
-  blinkLEDs();
+  //blinkLEDs();
   sensors.imu.collectData(data);
   sensors.gps.collectData(data);
   sensors.barometer.collectData(data);
