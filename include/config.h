@@ -9,11 +9,13 @@ struct Pins {
   const int greenLed = 3;
   const int blueLed = 22;
   const int sdCSPin = 10;
+  const int SDN = 1;
+  const int NGPOWER = 0; 
 };
 
 struct Blink {
   const int cycleTime = 1000;  // ms
-  const int duration = 50;     // ms
+  const int duration = 50;     // ms 50
 };
 
 struct BaudRates {
@@ -39,7 +41,7 @@ struct Config {
   const char* errorMessageFilePrefix = "errors/HAVOC-Errors-";
   const unsigned long loopCycleTime = 15;      // ms
   const unsigned long solenoidCycleTime = 40;  // ms
-  const bool waitForGPSLock = true;
+  const bool waitForGPSLock = false;
 };
 
 struct Sensors {

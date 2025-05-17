@@ -14,6 +14,8 @@ void initPins() {
   pinMode(config.pins.clockwise, OUTPUT);
   pinMode(config.pins.counterclockwise, OUTPUT);
   setSolenoids(SOLENOIDS_OFF);
+  pinMode(config.pins.SDN, OUTPUT);
+  pinMode(config.pins.NGPOWER, OUTPUT); 
   pinMode(config.pins.sideLed, OUTPUT);
   digitalWrite(config.pins.sideLed, HIGH);
   errorLED.initPins();
@@ -47,6 +49,8 @@ void updateFlightState() {
   static double lastAltitude = 0; 
   switch (data.state) {
     case STANDBY:
+      //digitalWrite(0, HIGH); //Activation
+      //digitalWrite(1, HIGH); //Shut Down Notice
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
         data.state = PRESTABILIZATION;
         stateTimer.reset(config.waitTimes.stabilization);
@@ -102,27 +106,35 @@ void stateActions() {
   //PFM *transform = new PFM(); 
   switch (data.state) {
     case FlightState::STANDBY:
-      digitalWrite(0, HIGH); //Activation
-      digitalWrite(1, HIGH); //Shut Down Notice
-      blinkLEDs();
+      /*digitalWrite(0, LOW); //Activation
+      digitalWrite(1, LOW); //Shut Down Notice
+      delay(3000); 
+      digitalWrite(0, LOW); //Activation
+      digitalWrite(1, HIGH); //Shut Down Notice*/
+      //blinkLEDs();
+      //delay(3000);
+      //digitalWrite(16, HIGH);
+      //delay(1000);
+      //digitalWrite(16, LOW);
+      //delay(1000); */
       break;
     case FlightState::PRESTABILIZATION:
-      digitalWrite(0, HIGH); //Activation
-      digitalWrite(1, HIGH); //Shut Down Notice
-      blinkLEDs();
+      //digitalWrite(0, LOW); //Activation
+      //digitalWrite(1, LOW); //Shut Down Notice
+      //blinkLEDs();
       break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.east->getTarget(data); 
       requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
       setSolenoids(requestedSolenoidState);
-      digitalWrite(0, LOW);
-      digitalWrite(1, HIGH); 
+      //digitalWrite(0, LOW);
+      //digitalWrite(1, HIGH); 
       break;
     case BALLOON_DEMISE:
       break; // Do not add actions (wait timer)
     case CONFIRMED_BALLOON_DEMISE:
-      digitalWrite(0, LOW);
-      digitalWrite(1, LOW); 
+      //digitalWrite(0, LOW);
+      //digitalWrite(1, LOW); 
       blinkLEDs();
       break;
     case PRELANDED:
