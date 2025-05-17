@@ -49,17 +49,18 @@ void updateFlightState() {
   static double lastAltitude = 0; 
   switch (data.state) {
     case STANDBY:
-      //digitalWrite(0, HIGH); //Activation
-      //digitalWrite(1, HIGH); //Shut Down Notice
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
         data.state = PRESTABILIZATION;
         stateTimer.reset(config.waitTimes.stabilization);
-      }
+      }  
       break;
     case PRESTABILIZATION:
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
         if (stateTimer.isComplete()) {
           digitalWrite(config.pins.sideLed, LOW); // Deactivate Side LEDs for STAB 
+
+          errorLED.setColor(colorPresets.off); 
+
           data.state = STABILIZATION;
         }
       } else {
@@ -67,14 +68,17 @@ void updateFlightState() {
       }
       break;
     case STABILIZATION:
-      if ((lastAltitude - data.gps.pos.alt) > 5 && data.gps.SIV >= 3){
+      if ((lastAltitude - data.gps.pos.alt) > 6 && data.gps.SIV >= 3){
         data.state = BALLOON_DEMISE;
         stateTimer.reset(config.waitTimes.burst); 
       }
       break;
     case BALLOON_DEMISE:
-      if((lastAltitude - data.gps.pos.alt) > 5 && data.gps.SIV >= 3){ 
-        if(stateTimer.isComplete()){data.state = CONFIRMED_BALLOON_DEMISE;} 
+      if((lastAltitude - data.gps.pos.alt) > 6 && data.gps.SIV >= 3){ 
+        if(stateTimer.isComplete()){
+          data.state = CONFIRMED_BALLOON_DEMISE;
+          errorLED.setColor(colorPresets.green);
+        } 
       }
       else{
         data.state = STABILIZATION; 
@@ -106,35 +110,27 @@ void stateActions() {
   //PFM *transform = new PFM(); 
   switch (data.state) {
     case FlightState::STANDBY:
-      /*digitalWrite(0, LOW); //Activation
-      digitalWrite(1, LOW); //Shut Down Notice
-      delay(3000); 
-      digitalWrite(0, LOW); //Activation
-      digitalWrite(1, HIGH); //Shut Down Notice*/
-      //blinkLEDs();
-      //delay(3000);
-      //digitalWrite(16, HIGH);
-      //delay(1000);
-      //digitalWrite(16, LOW);
-      //delay(1000); */
+      digitalWrite(config.pins.NGPOWER, LOW); //Activation
+      digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      blinkLEDs();
       break;
     case FlightState::PRESTABILIZATION:
-      //digitalWrite(0, LOW); //Activation
-      //digitalWrite(1, LOW); //Shut Down Notice
+      digitalWrite(config.pins.NGPOWER, LOW); //Activation
+      digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
       //blinkLEDs();
       break;
     case FlightState::STABILIZATION:
-      data.target = targetPresets.east->getTarget(data); 
+      data.target = targetPresets.NG->getTarget(data);  
       requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
       setSolenoids(requestedSolenoidState);
-      //digitalWrite(0, LOW);
-      //digitalWrite(1, HIGH); 
+      digitalWrite(config.pins.NGPOWER, HIGH); //Activation
+      digitalWrite(config.pins.SDN, LOW); //Shut Down Notice 
       break;
     case BALLOON_DEMISE:
       break; // Do not add actions (wait timer)
     case CONFIRMED_BALLOON_DEMISE:
-      //digitalWrite(0, LOW);
-      //digitalWrite(1, LOW); 
+      digitalWrite(config.pins.NGPOWER, HIGH); //Activation
+      digitalWrite(config.pins.SDN, HIGH); //Shut Down Notice
       blinkLEDs();
       break;
     case PRELANDED:

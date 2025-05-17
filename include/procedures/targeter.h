@@ -32,6 +32,7 @@ struct TargetPresets {
     Targeter* east = new ConstantTargeter({TargetingMode::ORIENTATION, 90});
     Targeter* south = new ConstantTargeter({TargetingMode::ORIENTATION, 180});
     Targeter* west = new ConstantTargeter({TargetingMode::ORIENTATION, 270});
+    Targeter* NG = new ConstantTargeter({TargetingMode::ORIENTATION, 297}); 
     Targeter* rotationLimiter = new ConstantTargeter({TargetingMode::VELOCITY, 0});
     Targeter* slowClockwise = new ConstantTargeter({TargetingMode::VELOCITY, -10});
     Targeter* slowCounterclockwise = new ConstantTargeter({TargetingMode::VELOCITY, 10});

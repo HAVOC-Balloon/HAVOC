@@ -99,11 +99,11 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       pidOutput = oVelocityPID.getOutput(velocityError);
 
       if(abs(velocityError) > 5){
-        errorLED.setColor(colorPresets.red);
+        //errorLED.setColor(colorPresets.red);
       }else if(abs(error) > 10){
-        errorLED.setColor(colorPresets.blue);
+        //errorLED.setColor(colorPresets.blue);
       }else{
-        errorLED.setColor(colorPresets.green);
+        //errorLED.setColor(colorPresets.green);
       }
       break;
     case TargetingMode::VELOCITY:
@@ -117,9 +117,9 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       pidOutput = velocityPID.getOutput(error);
 
       if (abs(error) < 7) {
-        errorLED.setColor(colorPresets.green);
+        //errorLED.setColor(colorPresets.green);
       } else {
-        errorLED.setColor(colorPresets.red); 
+        //errorLED.setColor(colorPresets.red); 
       }
       break;
     default:

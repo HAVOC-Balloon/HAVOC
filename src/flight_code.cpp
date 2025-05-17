@@ -27,29 +27,22 @@ void setup() {
   setSolenoids(SOLENOIDS_OFF);
   
   happyHavocLightDance();
-  
-  pinMode(config.pins.SDN, OUTPUT);
-  pinMode(config.pins.NGPOWER, OUTPUT); 
-
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH); 
 }
 
 void loop() {
-  //static Timer loopTimer(config.loopCycleTime);
-  //data.packetCount += 1;
-  //data.missionTime = millis();
+  static Timer loopTimer(config.loopCycleTime);
+  data.packetCount += 1;
+  data.missionTime = millis();
   //blinkLEDs();
-  digitalWrite(config.pins.NGPOWER, HIGH);
-  digitalWrite(config.pins.SDN, HIGH);
-  digitalWrite(13, HIGH); 
-  //sensors.imu.collectData(data);
-  //sensors.gps.collectData(data);
-  //sensors.barometer.collectData(data);
-  //updateFlightState();
-  //stateActions();
-  //logger.writeTelemetry(data);
-  //while (!loopTimer.isComplete()) {
-  //}
-  //loopTimer.reset();
+  //digitalWrite(config.pins.SDN, HIGH);
+  //digitalWrite(config.pins.NGPOWER, HIGH); 
+  sensors.imu.collectData(data);
+  sensors.gps.collectData(data);
+  sensors.barometer.collectData(data);
+  updateFlightState();
+  stateActions();
+  logger.writeTelemetry(data);
+  while (!loopTimer.isComplete()) {
+  }
+  loopTimer.reset();
 }
