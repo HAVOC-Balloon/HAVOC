@@ -74,7 +74,7 @@ void updateFlightState() {
       }
       break;
     case BALLOON_DEMISE:
-      if((lastAltitude - data.gps.pos.alt) > 6 && data.gps.SIV >= 3){ 
+      if((lastAltitude - data.gps.pos.alt) >= -0.01 && data.gps.SIV >= 3){ 
         if(stateTimer.isComplete()){
           data.state = CONFIRMED_BALLOON_DEMISE;
           errorLED.setColor(colorPresets.green);
