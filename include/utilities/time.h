@@ -3,7 +3,7 @@
 class Stopwatch {
 protected:
     unsigned long startTime;
-public:
+public: 
     Stopwatch();
     unsigned long getStartTime();
     unsigned long time();

@@ -5,8 +5,8 @@
 #include "havoc.h"
 
 class OutputTransform {
- public:
-  virtual Solenoids getTransformed(float continuousOutput);
+  public:
+    virtual Solenoids getTransformed(float continuousOutput);
 };
 
 class PFM : public OutputTransform {
@@ -67,3 +67,13 @@ class PanPID : public StabilizationAlgorithm {
    ~PanPID(); 
    Solenoids getStabilization(Data &data);
  };
+
+
+class PhasePlane : public StabilizationAlgorithm {
+ private:
+  double stabilizationFunction(double velocity, double angle);
+  bool aboveUpperBound();
+  bool belowLowerBound();
+ public:
+  Solenoids getStabilization(Data &data);
+};

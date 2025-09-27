@@ -80,7 +80,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
       //pidOutput = oVelocityPID.getOutput(constrain(orientationPID.getOutput(error), -50, 50));
       //Separating these two out in order to be able to use target velocity elsewhere
-      //FOr the love of god this should work
+      //For the love of god this should work
       //targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
       //targetVelocity = constrain(error * okp, 50, -50);
       targetVelocity = error * okp;
@@ -169,55 +169,6 @@ Solenoids PurePID::getStabilization(Data &data) {
   return outputTransform->getTransformed(pidOutput);  
 }
 
-// I rewrote what is below because I hate how this is laid out, but I'm too
-// scared to delete it completely Solenoids BangBang::getStabilization(Data
-// &data) {
-//   // TODO Update this to use a deadband variable
-//   // Default to solenoids off
-//   Solenoids solenoidState = SOLENOIDS_OFF;
-//   // Normalized orientation error
-//   error = ((int)((data.orientation.x - data.target.target) + 540) % 360) -
-//   180;
-//   // If outside orientation bounds, correct orientation
-//   if (data.target.mode == ORIENTATION && abs(error) >= 15) {
-//     if (error < 0 && data.gyro.z < 30) {
-//       solenoidState = CLOCKWISE;
-//     } else if (error > 0 && data.gyro.z > -30) {
-//       solenoidState = COUNTERCLOCKWISE;
-//     } else {
-//       solenoidState = SOLENOIDS_OFF;
-//     }
-//     // Set LED based on orientation
-//     errorLED.setColor({
-//         (int)(abs(error) * 1.41),       // RED
-//         0,                              // GREEN
-//         255 - (int)(abs(error) * 1.41)  // BLUE
-//     });
-//   }
-//   // If within orientation bounds, control speed to 5 deg/sec
-//   else if (data.target.mode == VELOCITY || abs(data.gyro.z) >= 15) {
-//     float velocityError = 0;
-//     if (data.target.mode == VELOCITY) {
-//       velocityError = data.gyro.z - data.target.target;
-//       // Set LED based on velocity
-//       errorLED.setColor({
-//           (int)(abs(velocityError) * 5),       // RED
-//           0,                                   // GREEN
-//           255 - (int)(abs(velocityError) * 5)  // BLUE
-//       });
-//     } else {
-//       errorLED.setColor(colorPresets.green);
-//     }
-//     if (velocityError > 15) {
-//       solenoidState = COUNTERCLOCKWISE;
-//     } else if (abs(velocityError) > 15) {
-//       solenoidState = CLOCKWISE;
-//     } else {
-//       solenoidState = SOLENOIDS_OFF;
-//     }
-//   }
-//   return solenoidState;
-// }
 
 // This is the new version updated to be logical (hopefully)
 Solenoids BangBang::getStabilization(Data &data) {
@@ -352,4 +303,40 @@ PanPID::~PanPID() { delete outputTransform;}
 
 Solenoids PanPID::getStabilization(Data &data){
   float pidOutput;
+}
+
+
+// An angle from -180 to 180 degrees
+Solenoids PhasePlane::getStabilization(Data &data) {
+
+  // TODO Change these to pull from the config file
+  double slope = -1;
+  double velocityLimit = 10;
+  double deadband = 10;
+
+  double velocity = data.gyro.z;
+  double angle = data.orientation.z;
+
+  double slangle = slope * angle; // Thanks Drew, technically think of this as just y
+
+  if (velocityLimit <= slangle) {
+    if (velocity >= velocityLimit + deadband) {
+      return CLOCKWISE;
+    } else if (velocity <= velocityLimit + deadband) {
+      return COUNTERCLOCKWISE;
+    }
+  } else if (-velocityLimit - deadband >= slangle) {
+    if (velocity <= -velocityLimit - deadband) {
+      return COUNTERCLOCKWISE;
+    } else if (velocity >= velocityLimit + deadband) {
+      return CLOCKWISE;
+    }
+  } else {
+    if (velocity >= slangle + deadband) {
+      return CLOCKWISE;
+    } else if (velocity <= slangle - deadband) {
+      return COUNTERCLOCKWISE;
+    }
+  }
+  return SOLENOIDS_OFF;
 }
