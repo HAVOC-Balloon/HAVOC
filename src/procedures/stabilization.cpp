@@ -80,7 +80,7 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
       //pidOutput = oVelocityPID.getOutput(constrain(orientationPID.getOutput(error), -50, 50));
       //Separating these two out in order to be able to use target velocity elsewhere
-      //FOr the love of god this should work
+      //For the love of god this should work
       //targetVelocity = constrain(orientationPID.getOutput(error), -50, 50);
       //targetVelocity = constrain(error * okp, 50, -50);
       targetVelocity = error * okp;
@@ -107,10 +107,6 @@ Solenoids CascadedPID::getStabilization(Data &data) {
       }
       break;
     case TargetingMode::VELOCITY:
-      //static PIDMath velocityPID = PIDMath(0.006, 0, 0, 7);
-      //error = data.gyro.z - data.target.target;
-      //pidOutput = velocityPID.getOutput(error);
-      //break;
       // Needs to be tuned
       static PIDMath velocityPID = PIDMath(0.05, 0, 0, 5); //0.01
       error = data.gyro.z - data.target.target;
@@ -169,56 +165,6 @@ Solenoids PurePID::getStabilization(Data &data) {
   return outputTransform->getTransformed(pidOutput);  
 }
 
-// I rewrote what is below because I hate how this is laid out, but I'm too
-// scared to delete it completely Solenoids BangBang::getStabilization(Data
-// &data) {
-//   // TODO Update this to use a deadband variable
-//   // Default to solenoids off
-//   Solenoids solenoidState = SOLENOIDS_OFF;
-//   // Normalized orientation error
-//   error = ((int)((data.orientation.x - data.target.target) + 540) % 360) -
-//   180;
-//   // If outside orientation bounds, correct orientation
-//   if (data.target.mode == ORIENTATION && abs(error) >= 15) {
-//     if (error < 0 && data.gyro.z < 30) {
-//       solenoidState = CLOCKWISE;
-//     } else if (error > 0 && data.gyro.z > -30) {
-//       solenoidState = COUNTERCLOCKWISE;
-//     } else {
-//       solenoidState = SOLENOIDS_OFF;
-//     }
-//     // Set LED based on orientation
-//     errorLED.setColor({
-//         (int)(abs(error) * 1.41),       // RED
-//         0,                              // GREEN
-//         255 - (int)(abs(error) * 1.41)  // BLUE
-//     });
-//   }
-//   // If within orientation bounds, control speed to 5 deg/sec
-//   else if (data.target.mode == VELOCITY || abs(data.gyro.z) >= 15) {
-//     float velocityError = 0;
-//     if (data.target.mode == VELOCITY) {
-//       velocityError = data.gyro.z - data.target.target;
-//       // Set LED based on velocity
-//       errorLED.setColor({
-//           (int)(abs(velocityError) * 5),       // RED
-//           0,                                   // GREEN
-//           255 - (int)(abs(velocityError) * 5)  // BLUE
-//       });
-//     } else {
-//       errorLED.setColor(colorPresets.green);
-//     }
-//     if (velocityError > 15) {
-//       solenoidState = COUNTERCLOCKWISE;
-//     } else if (abs(velocityError) > 15) {
-//       solenoidState = CLOCKWISE;
-//     } else {
-//       solenoidState = SOLENOIDS_OFF;
-//     }
-//   }
-//   return solenoidState;
-// }
-
 // This is the new version updated to be logical (hopefully)
 Solenoids BangBang::getStabilization(Data &data) {
   // TODO Update the deadband to pull from the Config file
@@ -267,61 +213,6 @@ Solenoids BangBang::getStabilization(Data &data) {
     //            255 - (int)(abs(velocityError) * 5)  // BLUE
     //        });
   }
-
-  // If outside orientation bounds, correct orientation
-  // if (data.target.mode == ORIENTATION) {
-  //  // Normalizing orientation error
-  //  // error = fmod(data.orientation.x, 180) - data.target.target - 90;
-  //
-  //  //  // Checking to see if it is already going in the right direction
-  //  //  if (data.gyro.z < -1 &&
-  //  //      data.solenoids == COUNTERCLOCKWISE) {  // && error > 0) {
-  //  //    // Set LED based on velocity
-  //  //    errorLED.setColor({
-  //  //        255,  // RED
-  //  //        0,    // GREEN
-  //  //        255   // BLUE
-  //  //    });
-  //  //
-  //  //    return SOLENOIDS_OFF;
-  //  //  } else if (data.gyro.z > 1 &&
-  //  //             data.solenoids == COUNTERCLOCKWISE) {  // && error < 0) {
-  //  //    // Set LED based on velocity
-  //  //    errorLED.setColor({
-  //  //        255,  // RED
-  //  //        0,    // GREEN
-  //  //        255   // BLUE
-  //  //    });
-  //  //
-  //  //    return SOLENOIDS_OFF;
-  //  //  }
-  //
-  //  error =
-  //      ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
-  //
-  //  if (error < -orientationDeadband && data.gyro.z > -moveVelocity) {
-  //    solenoidState = CLOCKWISE;
-  //  } else if (error > orientationDeadband && data.gyro.z < moveVelocity) {
-  //    solenoidState = COUNTERCLOCKWISE;
-  //  } else {
-  //    if (data.gyro.z > velocityDeadband) {
-  //      solenoidState = CLOCKWISE;
-  //    } else if (abs(data.gyro.z) > velocityDeadband) {
-  //      solenoidState = COUNTERCLOCKWISE;
-  //    } else {
-  //      solenoidState = SOLENOIDS_OFF;
-  //    }
-  //  }
-  //
-  //  // Set LED based on orientation
-  //  errorLED.setColor({
-  //      (int)(abs(error) * 1.41),       // RED
-  //      0,                              // GREEN
-  //      255 - (int)(abs(error) * 1.41)  // BLUE
-  //  });
-  //
-  //  return solenoidState;
-  //}
 
   // If within orientation bounds, control speed to the deadband
   if (data.target.mode == VELOCITY) {
