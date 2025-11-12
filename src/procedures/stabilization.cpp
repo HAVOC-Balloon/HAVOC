@@ -248,17 +248,54 @@ Solenoids PanPID::getStabilization(Data &data){
 
 // An angle from -180 to 180 degrees
 Solenoids PhasePlane::getStabilization(Data &data) {
+  // VLIMIT _______   ^
+  //              .\  |   .
+  //              . \ |   .<-PWINT
+  //              .  \|   .
+  //       <--------------------> ORIENTATION
+  //              .   |\ <- SLOPE
+  //       PWINT->.   | \ .  ____
+  //              .   |  \_______+ DEAD
+  //              .   v   .  ____- BAND
+  //              VELOCITY
 
   // TODO Change these to pull from the config file
-  double slope = -1;
-  double velocityLimit = 10;
-  double deadband = 10;
+  static double slope = -1;
+  static double velocityLimit = 10;
+  static double deadband = 4;
+  static double piecewiseInterval = abs(velocityLimit / slope);
 
   double velocity = data.gyro.z;
-  double angle = data.orientation.z;
+  double orientation = data.orientation.z;
 
-  double slangle = slope * angle; // Thanks Drew, technically think of this as just y
+  if (orientation > piecewiseInterval) {
+    if (velocity < (-velocityLimit) - deadband) {
+      return COUNTERCLOCKWISE;
+    } else if (velocity > (-velocityLimit) + deadband) {
+      return CLOCKWISE;
+    }
+  } else if (orientation < -piecewiseInterval) {
+    if (velocity < velocityLimit - deadband) {
+      return COUNTERCLOCKWISE;
+    } else if (velocity > velocityLimit + deadband) {
+      return CLOCKWISE;
+    }
+  } else {
+    if (velocity > (orientation * slope) + deadband) {
+      return COUNTERCLOCKWISE;
+    } else if (velocity < (orientation * slope) - deadband) {
+      return CLOCKWISE;
+    }
+  }
+  return SOLENOIDS_OFF;
 
+  // The below code has been commented out because it has not
+  // been tested and may work if the above code does not work.
+  // However, I am of the opinion that the above formulation is
+  // much more readable and likely more mathematically accurate.
+  /*
+  double slangle = orientation * slope;
+  
   if (velocityLimit <= slangle) {
     if (velocity >= velocityLimit + deadband) {
       return CLOCKWISE;
@@ -279,4 +316,5 @@ Solenoids PhasePlane::getStabilization(Data &data) {
     }
   }
   return SOLENOIDS_OFF;
+  */
 }
