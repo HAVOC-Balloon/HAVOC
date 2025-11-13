@@ -120,7 +120,16 @@ void stateActions() {
       blinkLEDs();
       break;
     case FlightState::STABILIZATION:
-      data.target = targetPresets.north->getTarget(data);  
+      if (data.gps.pos.alt % 1000 < 250) {
+        data.target = targetPresets.north->getTarget(data);  
+      } else if (data.gps.pos.alt % 1000 < 500) {
+        data.target = targetPresets.east->getTarget(data);  
+      } else if (data.gps.pos.alt % 1000 < 750) {
+        data.target = targetPresets.south->getTarget(data);  
+      } else {
+        data.target = targetPresets.west->getTarget(data);  
+      }
+      // data.target = targetPresets.north->getTarget(data);  
       requestedSolenoidState = PhasePlane().getStabilization(data); 
       setSolenoids(requestedSolenoidState);
       // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
