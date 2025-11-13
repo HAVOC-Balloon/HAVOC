@@ -110,27 +110,27 @@ void stateActions() {
   //PFM *transform = new PFM(); 
   switch (data.state) {
     case FlightState::STANDBY:
-      digitalWrite(config.pins.NGPOWER, LOW); //Activation
-      digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      // digitalWrite(config.pins.NGPOWER, LOW); //Activation
+      // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
       blinkLEDs();
       break;
     case FlightState::PRESTABILIZATION:
-      digitalWrite(config.pins.NGPOWER, LOW); //Activation
-      digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
-      //blinkLEDs();
+      // digitalWrite(config.pins.NGPOWER, LOW); //Activation
+      // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      blinkLEDs();
       break;
     case FlightState::STABILIZATION:
       data.target = targetPresets.north->getTarget(data);  
       requestedSolenoidState = PhasePlane().getStabilization(data); 
       setSolenoids(requestedSolenoidState);
-      digitalWrite(config.pins.NGPOWER, HIGH); //Activation
-      digitalWrite(config.pins.SDN, LOW); //Shut Down Notice 
+      // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
+      // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice 
       break;
     case BALLOON_DEMISE:
       break; // Do not add actions (wait timer)
     case CONFIRMED_BALLOON_DEMISE:
-      digitalWrite(config.pins.NGPOWER, HIGH); //Activation
-      digitalWrite(config.pins.SDN, HIGH); //Shut Down Notice
+      // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
+      // digitalWrite(config.pins.SDN, HIGH); //Shut Down Notice
       blinkLEDs();
       break;
     case PRELANDED:
