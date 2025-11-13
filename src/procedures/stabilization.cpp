@@ -263,13 +263,7 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   
 
-  static double slope = -1.5; 
-  static double velocityLimit = 45;
-  static double deadband = 6;
-  static double piecewiseInterval = abs(velocityLimit / slope);
-
-  double velocity = -data.gyro.z;
-  error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
+  double slope = -1.5; 
 /////////////////Temp Code for JCHS/////////////////
   if(data.gps.pos.alt < 21000){
     slope = -1.0;
@@ -283,6 +277,12 @@ Solenoids PhasePlane::getStabilization(Data &data) {
     slope = -2.0;
   }
   /////////////////////////////////////////////////
+  double velocityLimit = 45;
+  double deadband = 6;
+  double piecewiseInterval = abs(velocityLimit / slope);
+
+  double velocity = -data.gyro.z;
+  error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
   if (abs(error) < deadband) { 
     errorLED.setColor(colorPresets.green);
   } else {
