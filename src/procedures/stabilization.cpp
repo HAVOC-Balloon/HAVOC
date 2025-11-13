@@ -260,46 +260,73 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   //              VELOCITY
 
   // TODO Change these to pull from the config file
-  static double slope = -1;
-  static double velocityLimit = 10;
-  static double deadband = 4;
+
+  
+
+  static double slope = -1.5; 
+  static double velocityLimit = 45;
+  static double deadband = 6;
   static double piecewiseInterval = abs(velocityLimit / slope);
 
-  double velocity = data.gyro.z;
-  double orientation = data.orientation.z;
+  double velocity = -data.gyro.z;
+  error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
+/////////////////Temp Code for JCHS/////////////////
+  if(data.gps.pos.alt < 21000){
+    slope = -1.0;
+  }
 
-  if (orientation > piecewiseInterval) {
+  else if(data.gps.pos.alt < 22000){
+    slope = -1.5;
+  }
+
+  else{
+    slope = -2.0;
+  }
+  /////////////////////////////////////////////////
+  if (abs(error) < deadband) { 
+    errorLED.setColor(colorPresets.green);
+  } else {
+    errorLED.setColor({
+      (int)(abs(error) * 1.41),       // RED
+      0,                           // GREEN
+      255 - (int)(abs(error) * 1.41)  // BLUE
+    });      
+  }
+
+   
+  if (error > piecewiseInterval) {
     if (velocity < (-velocityLimit) - deadband) {
-      return COUNTERCLOCKWISE;
+      return CLOCKWISE;
     } else if (velocity > (-velocityLimit) + deadband) {
-      return CLOCKWISE;
-    }
-  } else if (orientation < -piecewiseInterval) {
-    if (velocity < velocityLimit - deadband) {
       return COUNTERCLOCKWISE;
-    } else if (velocity > velocityLimit + deadband) {
+    }
+  } else if (error < -piecewiseInterval) {
+    if (velocity < velocityLimit - deadband) {
       return CLOCKWISE;
+    } else if (velocity > velocityLimit + deadband) {
+      return COUNTERCLOCKWISE;
     }
   } else {
-    if (velocity > (orientation * slope) + deadband) {
+    if (velocity > (error * slope) + deadband) {
       return COUNTERCLOCKWISE;
-    } else if (velocity < (orientation * slope) - deadband) {
-      return CLOCKWISE;
+    } else if (velocity < (error * slope) - deadband) {
+      return CLOCKWISE; 
     }
   }
-  return SOLENOIDS_OFF;
+
+  return SOLENOIDS_OFF; 
 
   // The below code has been commented out because it has not
   // been tested and may work if the above code does not work.
   // However, I am of the opinion that the above formulation is
   // much more readable and likely more mathematically accurate.
   /*
-  double slangle = orientation * slope;
+  double slangle = error * slope;
   
-  if (velocityLimit <= slangle) {
+  if (velocityLimit + deadband <= slangle) {
     if (velocity >= velocityLimit + deadband) {
       return CLOCKWISE;
-    } else if (velocity <= velocityLimit + deadband) {
+    } else if (velocity <= velocityLimit - deadband) {
       return COUNTERCLOCKWISE;
     }
   } else if (-velocityLimit - deadband >= slangle) {
@@ -315,6 +342,5 @@ Solenoids PhasePlane::getStabilization(Data &data) {
       return COUNTERCLOCKWISE;
     }
   }
-  return SOLENOIDS_OFF;
-  */
+  return SOLENOIDS_OFF;*/
 }

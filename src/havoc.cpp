@@ -120,8 +120,8 @@ void stateActions() {
       //blinkLEDs();
       break;
     case FlightState::STABILIZATION:
-      data.target = targetPresets.NG->getTarget(data);  
-      requestedSolenoidState = CascadedPID(new PFM()).getStabilization(data);
+      data.target = targetPresets.north->getTarget(data);  
+      requestedSolenoidState = PhasePlane().getStabilization(data); 
       setSolenoids(requestedSolenoidState);
       digitalWrite(config.pins.NGPOWER, HIGH); //Activation
       digitalWrite(config.pins.SDN, LOW); //Shut Down Notice 
