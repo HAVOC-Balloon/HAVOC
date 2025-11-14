@@ -14,8 +14,8 @@ void initPins() {
   pinMode(config.pins.clockwise, OUTPUT);
   pinMode(config.pins.counterclockwise, OUTPUT);
   setSolenoids(SOLENOIDS_OFF);
-  pinMode(config.pins.SDN, OUTPUT);
-  pinMode(config.pins.NGPOWER, OUTPUT); 
+  // pinMode(config.pins.SDN, OUTPUT);
+  // pinMode(config.pins.NGPOWER, OUTPUT); 
   pinMode(config.pins.sideLed, OUTPUT);
   digitalWrite(config.pins.sideLed, HIGH);
   errorLED.initPins();
@@ -129,9 +129,11 @@ void stateActions() {
       requestedSolenoidState = PhasePlane().getStabilization(data); 
       setSolenoids(requestedSolenoidState);
       // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
-      // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice 
+      // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      blinkLEDs(); 
       break;
     case BALLOON_DEMISE:
+      blinkLEDs();
       break; // Do not add actions (wait timer)
     case CONFIRMED_BALLOON_DEMISE:
       // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
