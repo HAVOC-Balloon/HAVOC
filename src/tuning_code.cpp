@@ -7,7 +7,8 @@ void setup() {
   logger.init();
   sensors.barometer.init();
   sensors.imu.init();
-  sensors.gps.init();
+  // Disable GPS for tuning
+  //sensors.gps.init();
   setSolenoids(SOLENOIDS_OFF);
   delay(500);
   setSolenoids(CLOCKWISE);
@@ -24,8 +25,10 @@ void loop() {
   data.missionTime = millis();
   blinkLEDs();
   sensors.imu.collectData(data);
-  sensors.gps.collectData(data);
+  //sensors.gps.collectData(data);
   sensors.barometer.collectData(data);
+  // Set to stabilization for tuning
+  data.gps.pos.alt = 24000;
   data.state = FlightState::STABILIZATION;
   stateActions();
   logger.writeTelemetry(data);
