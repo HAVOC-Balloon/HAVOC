@@ -57,10 +57,6 @@ void updateFlightState() {
     case PRESTABILIZATION:
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
         if (stateTimer.isComplete()) {
-          digitalWrite(config.pins.sideLed, LOW); // Deactivate Side LEDs for STAB 
-
-          errorLED.setColor(colorPresets.off); 
-
           data.state = STABILIZATION;
         }
       } else {
