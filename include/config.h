@@ -34,14 +34,14 @@ struct Config {
   const Blink blink;
   const WaitTimes waitTimes;
   const float seaLevelPressure = 1013.25;  // hPa
-  const double targetAltitude = 21336;     // m
+  const double targetAltitude = 19975;     // m
   const double deactivateAltitude = 2000;  // m
   const char* telemetryFilePrefix = "telemetry/HAVOC-Data-";
   const char* secondaryTelemetryFilePrefix = "extra/HAVOC-Extra-";
   const char* errorMessageFilePrefix = "errors/HAVOC-Errors-";
   const unsigned long loopCycleTime = 15;      // ms
   const unsigned long solenoidCycleTime = 40;  // ms
-  const bool waitForGPSLock = false;
+  const bool waitForGPSLock = true;
 };
 
 struct Sensors {

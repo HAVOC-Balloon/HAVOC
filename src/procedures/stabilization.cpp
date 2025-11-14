@@ -283,6 +283,9 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   double velocity = -data.gyro.z;
   error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
+  /////////////////////////////////////////////////
+  // Error LED commented out for flight!
+  /*
   if (abs(error) < deadband) { 
     errorLED.setColor(colorPresets.green);
   } else {
@@ -292,8 +295,9 @@ Solenoids PhasePlane::getStabilization(Data &data) {
       255 - (int)(abs(error) * 1.41)  // BLUE
     });      
   }
+  */
+  ////////////////////////////////////////////////
 
-   
   if (error > piecewiseInterval) {
     if (velocity < (-velocityLimit) - deadband) {
       return CLOCKWISE;

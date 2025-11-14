@@ -8,7 +8,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 sensors_event_t event;
 
 void BNO055::init() {
-    if(!bno.begin())
+    while(!bno.begin())
     {
         logger.writeErrorMessage("BNO055 was not found.");
         errorLED.timedColor(colorPresets.magenta, 250);
