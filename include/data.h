@@ -57,6 +57,7 @@ struct Target {
 };
 
 enum Solenoids { SOLENOIDS_OFF = 0, CLOCKWISE = 1, COUNTERCLOCKWISE = 2 };
+// TODO Add in error for error LEDs and stuff
 
 struct Data {
     unsigned long packetCount = 0;

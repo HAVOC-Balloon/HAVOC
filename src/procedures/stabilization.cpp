@@ -261,8 +261,6 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   // TODO Change these to pull from the config file
 
-  
-
   double slope = -1.5; 
 /////////////////Temp Code for JCHS/////////////////
   if(data.gps.pos.alt < 21000){
@@ -284,6 +282,7 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   double velocity = -data.gyro.z;
   error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
   /////////////////////////////////////////////////
+  // TODO Move to HAVOC.cpp pulling from Data
   // Error LED commented out for flight!
   /*
   if (abs(error) < deadband) { 
@@ -319,32 +318,4 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   }
 
   return SOLENOIDS_OFF; 
-
-  // The below code has been commented out because it has not
-  // been tested and may work if the above code does not work.
-  // However, I am of the opinion that the above formulation is
-  // much more readable and likely more mathematically accurate.
-  /*
-  double slangle = error * slope;
-  
-  if (velocityLimit + deadband <= slangle) {
-    if (velocity >= velocityLimit + deadband) {
-      return CLOCKWISE;
-    } else if (velocity <= velocityLimit - deadband) {
-      return COUNTERCLOCKWISE;
-    }
-  } else if (-velocityLimit - deadband >= slangle) {
-    if (velocity <= -velocityLimit - deadband) {
-      return COUNTERCLOCKWISE;
-    } else if (velocity >= velocityLimit + deadband) {
-      return CLOCKWISE;
-    }
-  } else {
-    if (velocity >= slangle + deadband) {
-      return CLOCKWISE;
-    } else if (velocity <= slangle - deadband) {
-      return COUNTERCLOCKWISE;
-    }
-  }
-  return SOLENOIDS_OFF;*/
 }
