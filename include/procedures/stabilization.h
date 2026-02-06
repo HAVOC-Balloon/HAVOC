@@ -70,10 +70,15 @@ class PanPID : public StabilizationAlgorithm {
 
 
 class PhasePlane : public StabilizationAlgorithm {
- private:
-  double stabilizationFunction(double velocity, double angle);
-  bool aboveUpperBound();
-  bool belowLowerBound();
- public:
-  Solenoids getStabilization(Data &data);
+  private:
+    double stabilizationFunction(double velocity, double angle);
+    bool aboveUpperBound();
+    bool belowLowerBound();
+  public:
+    Solenoids getStabilization(Data &data);
+};
+
+class AltTest : public StabilizationAlgorithm{
+  public:
+    Solenoids getStabilization(Data &data);
 };

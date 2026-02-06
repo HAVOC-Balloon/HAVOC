@@ -274,9 +274,11 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   else{
     slope = -2.0;
   }
+  //COMMENT THIS OUT
+  slope = -1.0;
   /////////////////////////////////////////////////
   double velocityLimit = 45;
-  double deadband = 6;
+  double deadband = 15;
   double piecewiseInterval = abs(velocityLimit / slope);
 
   double velocity = -data.gyro.z;
@@ -299,23 +301,47 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   if (error > piecewiseInterval) {
     if (velocity < (-velocityLimit) - deadband) {
+      errorLED.setColor(colorPresets.blue);
       return CLOCKWISE;
     } else if (velocity > (-velocityLimit) + deadband) {
+      errorLED.setColor(colorPresets.red);
       return COUNTERCLOCKWISE;
     }
   } else if (error < -piecewiseInterval) {
     if (velocity < velocityLimit - deadband) {
+      errorLED.setColor(colorPresets.blue);
       return CLOCKWISE;
     } else if (velocity > velocityLimit + deadband) {
+      errorLED.setColor(colorPresets.red);
       return COUNTERCLOCKWISE;
     }
   } else {
     if (velocity > (error * slope) + deadband) {
+      errorLED.setColor(colorPresets.red);
       return COUNTERCLOCKWISE;
     } else if (velocity < (error * slope) - deadband) {
+      errorLED.setColor(colorPresets.blue);
       return CLOCKWISE; 
     }
   }
 
+  errorLED.setColor(colorPresets.green);
+
   return SOLENOIDS_OFF; 
+}
+
+Solenoids AltTest::getStabilization(Data &data) {
+  static Timer alternating(0);
+  if(alternating.timeRemaining() > 750){
+    return CLOCKWISE;
+  }else if(alternating.timeRemaining() > 500){
+    return SOLENOIDS_OFF;
+  }else if(alternating.timeRemaining() > 250){
+    return COUNTERCLOCKWISE;
+  }else if(alternating.timeRemaining() > 0){
+    return SOLENOIDS_OFF;
+  }else{
+    alternating.reset(1000);
+    return SOLENOIDS_OFF;
+  }
 }
