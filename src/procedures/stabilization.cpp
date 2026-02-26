@@ -262,7 +262,7 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   // TODO Change these to pull from the config file
 
   double slope = -1.5; 
-/////////////////Temp Code for JCHS/////////////////
+/////////////////Temp Code for Not JCHS/////////////////
   if(data.gps.pos.alt < 21000){
     slope = -1.0;
   }
@@ -274,8 +274,8 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   else{
     slope = -2.0;
   }
-  //COMMENT THIS OUT
-  slope = -2.0;
+  
+  
   /////////////////////////////////////////////////
   double velocityLimit = 45;
   double deadband = 10;
@@ -285,8 +285,8 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   error = ((int)((data.orientation.x - data.target.target) + 540) % 360) - 180;
   /////////////////////////////////////////////////
   // TODO Move to HAVOC.cpp pulling from Data
+  
   // Error LED commented out for flight!
-  /*
   if (abs(error) < deadband) { 
     errorLED.setColor(colorPresets.green);
   } else {
@@ -296,36 +296,28 @@ Solenoids PhasePlane::getStabilization(Data &data) {
       255 - (int)(abs(error) * 1.41)  // BLUE
     });      
   }
-  */
+  
   ////////////////////////////////////////////////
 
   if (error > piecewiseInterval) {
     if (velocity < (-velocityLimit) - deadband) {
-      errorLED.setColor(colorPresets.blue);
       return CLOCKWISE;
     } else if (velocity > (-velocityLimit) + deadband) {
-      errorLED.setColor(colorPresets.red);
       return COUNTERCLOCKWISE;
     }
   } else if (error < -piecewiseInterval) {
     if (velocity < velocityLimit - deadband) {
-      errorLED.setColor(colorPresets.blue);
       return CLOCKWISE;
     } else if (velocity > velocityLimit + deadband) {
-      errorLED.setColor(colorPresets.red);
       return COUNTERCLOCKWISE;
     }
   } else {
     if (velocity > (error * slope) + deadband) {
-      errorLED.setColor(colorPresets.red);
       return COUNTERCLOCKWISE;
     } else if (velocity < (error * slope) - deadband) {
-      errorLED.setColor(colorPresets.blue);
       return CLOCKWISE; 
     }
   }
-
-  errorLED.setColor(colorPresets.green);
 
   return SOLENOIDS_OFF; 
 }

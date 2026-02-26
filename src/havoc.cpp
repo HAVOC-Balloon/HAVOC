@@ -101,6 +101,7 @@ void updateFlightState() {
   lastAltitude = data.gps.pos.alt; 
 }
 
+// TODO Remove the BlinkLEDs
 void stateActions() {
   Solenoids requestedSolenoidState;
   //PFM *transform = new PFM(); 
