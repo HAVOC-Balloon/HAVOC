@@ -126,8 +126,8 @@ void stateActions() {
         data.target = targetPresets.west->getTarget(data);  
       }
       // data.target = targetPresets.north->getTarget(data);  
-      //requestedSolenoidState = PhasePlane().getStabilization(data);
-      requestedSolenoidState = AltTest().getStabilization(data);
+      requestedSolenoidState = PhasePlane().getStabilization(data);
+      //requestedSolenoidState = AltTest().getStabilization(data);
       setSolenoids(requestedSolenoidState);
       // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
