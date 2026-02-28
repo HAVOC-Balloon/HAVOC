@@ -2,12 +2,12 @@
 #include <board-io/sensors.h>
 
 struct Pins {
-  const int clockwise = 15;
-  const int counterclockwise = 14;
+  const int clockwise = 36; //4.0 -> 15
+  const int counterclockwise = 37; //4.0 -> 14
   const int sideLed = 16;
-  const int redLed = 23;
-  const int greenLed = 3;
-  const int blueLed = 22;
+  const int redLed = 3; //4.0 -> 23
+  const int greenLed = 22; //4.0 -> 3
+  const int blueLed = 23; //4.0 -> 22
   const int sdCSPin = 10;
   const int SDN = 1;
   const int NGPOWER = 0;  

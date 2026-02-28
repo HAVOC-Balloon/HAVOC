@@ -286,7 +286,7 @@ Solenoids PhasePlane::getStabilization(Data &data) {
   /////////////////////////////////////////////////
   // TODO Move to HAVOC.cpp pulling from Data
   
-  // Error LED commented out for flight!
+  // // Error LED commented out for flight!
   if (abs(error) < deadband) { 
     errorLED.setColor(colorPresets.green);
   } else {
