@@ -4,12 +4,14 @@
 
 enum FlightState {
     STANDBY = 0,
+    LOW_STABILIZATION = 7,
+    STANDBY_TWO_ELECTRIC_BOOGALOO = 8,
     PRESTABILIZATION = 1,
     STABILIZATION = 2,
     BALLOON_DEMISE = 3,
     CONFIRMED_BALLOON_DEMISE = 4,
     PRELANDED = 5,
-    LANDED = 6
+    LANDED = 6,
 };
 
 struct Vector {

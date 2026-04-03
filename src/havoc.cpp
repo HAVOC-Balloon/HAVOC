@@ -49,6 +49,22 @@ void updateFlightState() {
   static double lastAltitude = 0; 
   switch (data.state) {
     case STANDBY:
+      // UPDATED for low stabilization
+      if (data.gps.pos.alt >= 1600 && data.gps.SIV >= 3) {
+        data.state = LOW_STABILIZATION;
+        // UPDATED for low stabilization to be 100 seconds (100000 ms)
+        stateTimer.reset(100000);
+      }  
+      break;
+    case LOW_STABILIZATION:
+      // ADDED for low stabilization
+      if ((data.gps.pos.alt > 2000 && data.gps.SIV >= 3) || stateTimer.isComplete()){
+        data.state = STANDBY_TWO_ELECTRIC_BOOGALOO;
+        stateTimer.reset(0); // UPDATED to just default to 0
+      }
+      break;
+    case STANDBY_TWO_ELECTRIC_BOOGALOO:
+      // UPDATED for low stabilization (the same as old standby)
       if (data.gps.pos.alt >= config.targetAltitude && data.gps.SIV >= 3) {
         data.state = PRESTABILIZATION;
         stateTimer.reset(config.waitTimes.stabilization);
@@ -111,6 +127,21 @@ void stateActions() {
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
       blinkLEDs();
       break;
+
+    case FlightState::LOW_STABILIZATION: 
+      // The same thing as regular stabilization
+      data.target = targetPresets.north->getTarget(data);  
+      requestedSolenoidState = PhasePlane().getStabilization(data);
+      setSolenoids(requestedSolenoidState);
+      blinkLEDs(); 
+
+    case FlightState::STANDBY_TWO_ELECTRIC_BOOGALOO:
+      // Same thing as regular standby
+      // digitalWrite(config.pins.NGPOWER, LOW); //Activation
+      // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      blinkLEDs();
+      break;
+
     case FlightState::PRESTABILIZATION:
       // digitalWrite(config.pins.NGPOWER, LOW); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
@@ -126,7 +157,7 @@ void stateActions() {
       } else {
         data.target = targetPresets.west->getTarget(data);  
       }
-      // data.target = targetPresets.north->getTarget(data);  
+      data.target = targetPresets.north->getTarget(data);  
       requestedSolenoidState = PhasePlane().getStabilization(data);
       //requestedSolenoidState = AltTest().getStabilization(data);
       setSolenoids(requestedSolenoidState);

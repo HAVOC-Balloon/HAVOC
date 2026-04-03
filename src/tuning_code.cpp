@@ -13,6 +13,8 @@ void setup() {
   delay(500);
   setSolenoids(CLOCKWISE);
   delay(50);
+  setSolenoids(SOLENOIDS_OFF);
+  delay(500);
   setSolenoids(COUNTERCLOCKWISE);
   delay(50);
   setSolenoids(SOLENOIDS_OFF);

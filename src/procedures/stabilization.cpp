@@ -261,24 +261,10 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   // TODO Change these to pull from the config file
 
-  double slope = -1.5; 
-/////////////////Temp Code for Not JCHS/////////////////
-  if(data.gps.pos.alt < 21000){
-    slope = -1.0;
-  }
-
-  else if(data.gps.pos.alt < 22000){
-    slope = -1.5;
-  }
-
-  else{
-    slope = -2.0;
-  }
+  double slope = -1; 
   
-  
-  /////////////////////////////////////////////////
-  double velocityLimit = 45;
-  double deadband = 10;
+  double velocityLimit = 40;
+  double deadband = 12;
   double piecewiseInterval = abs(velocityLimit / slope);
 
   double velocity = -data.gyro.z;
