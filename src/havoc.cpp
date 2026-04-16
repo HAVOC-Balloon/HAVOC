@@ -59,8 +59,6 @@ void updateFlightState() {
     case LOW_STABILIZATION:
       // ADDED for low stabilization
       if ((data.gps.pos.alt > 2000 && data.gps.SIV >= 3) || stateTimer.isComplete()){
-        //MUST turn solenoids off to make sure its not stuck open when it changes states
-        setSolenoids(SOLENOIDS_OFF);
         data.state = STANDBY_TWO_ELECTRIC_BOOGALOO;
         stateTimer.reset(0); // UPDATED to just default to 0
       }
@@ -83,8 +81,6 @@ void updateFlightState() {
       break;
     case STABILIZATION:
       if ((lastAltitude - data.gps.pos.alt) > 6 && data.gps.SIV >= 3){
-        //MUST turn solenoids off to make sure its not stuck open when it changes states
-        setSolenoids(SOLENOIDS_OFF);
         data.state = BALLOON_DEMISE;
         stateTimer.reset(config.waitTimes.burst); 
       }
@@ -129,6 +125,8 @@ void stateActions() {
     case FlightState::STANDBY:
       // digitalWrite(config.pins.NGPOWER, LOW); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
 
@@ -143,12 +141,16 @@ void stateActions() {
       // Same thing as regular standby
       // digitalWrite(config.pins.NGPOWER, LOW); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
 
     case FlightState::PRESTABILIZATION:
       // digitalWrite(config.pins.NGPOWER, LOW); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
     case FlightState::STABILIZATION:
@@ -170,17 +172,25 @@ void stateActions() {
       blinkLEDs(); 
       break;
     case BALLOON_DEMISE:
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break; // Do not add actions (wait timer)
     case CONFIRMED_BALLOON_DEMISE:
       // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
       // digitalWrite(config.pins.SDN, HIGH); //Shut Down Notice
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
     case PRELANDED:
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
     case LANDED:
+      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
     default:
