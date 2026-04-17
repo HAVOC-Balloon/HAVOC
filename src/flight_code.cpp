@@ -38,8 +38,6 @@ void loop() {
   /**
    * 
    * Blue                 - Standby (either one)  "Not Red" - Nikki
-   * Cyan (Blue & Green)  - Pre-Stabilization 
-   * Green                - Stabilization 
    * Red                  - Confirmed Balloon Demise
    * Magenta (Red & Blue) - Landed
    * 
@@ -52,26 +50,12 @@ void loop() {
         0,       // GREEN
         255      // BLUE
       });   
-      break; 
-    case LOW_STABILIZATION: 
-      errorLED.setColor({
-        0,       // RED
-        255,     // GREEN
-        255      // BLUE
-      });   
-      break; 
+      break;
     case STANDBY_TWO_ELECTRIC_BOOGALOO: 
       errorLED.setColor({
         0,       // RED
         0,       // GREEN
         255      // BLUE
-      });   
-      break;
-    case STABILIZATION: 
-      errorLED.setColor({
-        0,       // RED
-        255,     // GREEN
-        0        // BLUE
       });   
       break;
     case CONFIRMED_BALLOON_DEMISE: 
