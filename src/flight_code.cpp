@@ -10,11 +10,16 @@ void setup() {
   sensors.gps.init();
   setSolenoids(SOLENOIDS_OFF);
   delay(500);
-  setSolenoids(CLOCKWISE);
-  delay(50);
-  setSolenoids(COUNTERCLOCKWISE);
-  delay(50);
-  setSolenoids(SOLENOIDS_OFF);
+  for(int i = 0; i < 2; i++){
+    setSolenoids(CLOCKWISE);
+    delay(50);
+    setSolenoids(SOLENOIDS_OFF);
+    delay(200);
+    setSolenoids(COUNTERCLOCKWISE);
+    delay(50);
+    setSolenoids(SOLENOIDS_OFF);
+    delay(200);
+  }
   happyHavocLightDance();
 }
 
