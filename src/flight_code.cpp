@@ -72,7 +72,8 @@ void loop() {
         255        // BLUE
       });   
       break; 
-
+    default:
+      break;
   }
 
   logger.writeTelemetry(data);
