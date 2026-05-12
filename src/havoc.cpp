@@ -136,12 +136,13 @@ void stateActions() {
       requestedSolenoidState = PhasePlane().getStabilization(data);
       setSolenoids(requestedSolenoidState);
       blinkLEDs(); 
+      break;
 
     case FlightState::STANDBY_TWO_ELECTRIC_BOOGALOO:
       // Same thing as regular standby
       // digitalWrite(config.pins.NGPOWER, LOW); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
-      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      // MUST turn solenoids offD to make sure its not stuck open when it changes states
       setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
@@ -149,7 +150,7 @@ void stateActions() {
     case FlightState::PRESTABILIZATION:
       // digitalWrite(config.pins.NGPOWER, LOW); //Activation
       // digitalWrite(config.pins.SDN, LOW); //Shut Down Notice
-      //MUST turn solenoids off to make sure its not stuck open when it changes states
+      // MUST turn solenoids off to make sure its not stuck open when it changes states
       setSolenoids(SOLENOIDS_OFF);
       blinkLEDs();
       break;
