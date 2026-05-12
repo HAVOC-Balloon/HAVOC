@@ -58,7 +58,7 @@ void updateFlightState() {
       break;
     case LOW_STABILIZATION:
       // ADDED for low stabilization
-      if ((data.gps.pos.alt > 2000 && data.gps.SIV >= 3) || stateTimer.isComplete()){
+      if ((data.gps.pos.alt > 2050 && data.gps.SIV >= 3) || stateTimer.isComplete()){
         data.state = STANDBY_TWO_ELECTRIC_BOOGALOO;
         stateTimer.reset(0); // UPDATED to just default to 0
       }
@@ -132,7 +132,7 @@ void stateActions() {
 
     case FlightState::LOW_STABILIZATION: 
       // The same thing as regular stabilization
-      data.target = targetPresets.north->getTarget(data);  
+      data.target = targetPresets.east->getTarget(data);  
       requestedSolenoidState = PhasePlane().getStabilization(data);
       setSolenoids(requestedSolenoidState);
       blinkLEDs(); 
@@ -154,7 +154,7 @@ void stateActions() {
       blinkLEDs();
       break;
     case FlightState::STABILIZATION:
-      if ((int)data.gps.pos.alt % 1000 < 250) {
+      /*if ((int)data.gps.pos.alt % 1000 < 250) {
         data.target = targetPresets.north->getTarget(data);  
       } else if ((int)data.gps.pos.alt % 1000 < 500) {
         data.target = targetPresets.east->getTarget(data);  
@@ -162,8 +162,8 @@ void stateActions() {
         data.target = targetPresets.south->getTarget(data);  
       } else {
         data.target = targetPresets.west->getTarget(data);  
-      }
-      data.target = targetPresets.north->getTarget(data);  
+      }*/
+      data.target = targetPresets.west->getTarget(data);  
       requestedSolenoidState = PhasePlane().getStabilization(data);
       //requestedSolenoidState = AltTest().getStabilization(data);
       setSolenoids(requestedSolenoidState);
