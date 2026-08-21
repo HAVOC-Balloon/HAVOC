@@ -261,9 +261,9 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   // TODO Change these to pull from the config file
 
-  double slope = -1; 
+  double slope = -0.5; 
   
-  double velocityLimit = 40;
+  double velocityLimit = 30;
   double deadband = 12;
   double piecewiseInterval = abs(velocityLimit / slope);
 
