@@ -46,10 +46,12 @@ void loop() {
   data.state = FlightState::STABILIZATION;
   stateActions();
   logger.writeTelemetry(data);
+  //Comment this out if not connected to computer
   monitor.writeTelemetry(data);
   while (!loopTimer.isComplete()) {}
   loopTimer.reset();
 
   //Slow down the loop so I can read the data
+  //DELETE THIS
   delay(500);
 }
