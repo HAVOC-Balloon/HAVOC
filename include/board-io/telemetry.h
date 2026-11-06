@@ -14,6 +14,12 @@ public:
     void writeTelemetry(Data &data);
 };
 
+class SerialMonitor: public Logger {
+public:
+    void init();
+    void writeTelemetry(Data &data);
+};
+
 class SPILogger: public Logger {
 private:
     File telemetryFile;

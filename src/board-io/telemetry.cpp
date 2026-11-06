@@ -70,7 +70,86 @@ void OpenLog::writeTelemetry(Data &data) {
     Serial1.print(data.target.target);
     Serial1.print(",");
     Serial1.print(data.solenoids);
+    Serial1.print(",");
+    Serial1.print(data.temp1);
+    Serial1.print(",");
+    Serial1.print(data.temp2);
     Serial1.println();
+}
+
+void SerialMonitor::init() {
+    Serial.begin(config.bauds.serial);
+    delay(1000);
+    Serial.println("Serial Monitor Initialized");
+}
+
+void SerialMonitor::writeTelemetry(Data &data) {
+    // This implementation looks sort of messy or maybe slow,
+    // but I can assure you after a deep dive into the implementation
+    // of Serial1.print that it's no more inefficient than any other
+    // implementation --- from what I can tell, the limiting factor
+    // is always going to be on Arduino's side of things.
+    Serial.print(data.packetCount);
+    Serial.print(",");
+    Serial.print(data.missionTime);
+    Serial.print(",");
+    Serial.print(data.state);
+    Serial.print(",");
+    Serial.print(data.acceleration.x);
+    Serial.print(",");
+    Serial.print(data.acceleration.y);
+    Serial.print(",");
+    Serial.print(data.acceleration.z);
+    Serial.print(",");
+    Serial.print(data.gyro.x);
+    Serial.print(",");
+    Serial.print(data.gyro.y);
+    Serial.print(",");
+    Serial.print(data.gyro.z);
+    Serial.print(",");
+    Serial.print(data.orientation.x);
+    Serial.print(",");
+    Serial.print(data.orientation.y);
+    Serial.print(",");
+    Serial.print(data.orientation.z);
+    Serial.print(",");
+    Serial.print(data.gps.pos.alt, 3);
+    Serial.print(",");
+    Serial.print(data.gps.pos.lat, 7);
+    Serial.print(",");
+    Serial.print(data.gps.pos.lon, 7);
+    Serial.print(",");
+    Serial.print(data.gps.time.year);
+    Serial.print(",");
+    Serial.print(data.gps.time.month);
+    Serial.print(",");
+    Serial.print(data.gps.time.day);
+    Serial.print(",");
+    Serial.print(data.gps.time.hour);
+    Serial.print(",");
+    Serial.print(data.gps.time.minute);
+    Serial.print(",");
+    Serial.print(data.gps.time.second);
+    Serial.print(",");
+    Serial.print(data.gps.SIV);
+    Serial.print(",");
+    Serial.print(data.atmo.alt);
+    Serial.print(",");
+    Serial.print(data.atmo.pressure);
+    Serial.print(",");
+    Serial.print(data.atmo.temperature);
+    Serial.print(",");
+    Serial.print(data.target.mode);
+    Serial.print(",");
+    Serial.print(data.target.target);
+    Serial.print(",");
+    Serial.print(data.solenoids);
+    Serial.print(",");
+    Serial.print(data.temp1);
+    Serial.print(",");
+    Serial.print(data.temp2);
+    Serial.println();
+    //Serial.printf("NTC1: %.2f C   NTC2: %.2f C\n", data.temp1, data.temp2);
 }
 
 void SPILogger::init() {
@@ -186,6 +265,10 @@ void SPILogger::writeTelemetry(Data &data) {
     telemetryFile.print(data.target.target);
     telemetryFile.print(",");
     telemetryFile.print(data.solenoids);
+    telemetryFile.print(",");
+    telemetryFile.print(data.temp1);
+    telemetryFile.print(",");
+    telemetryFile.print(data.temp2);
     telemetryFile.println();
     // Flush written data to SD card to ensure it's written and not just
     // waiting in the buffer

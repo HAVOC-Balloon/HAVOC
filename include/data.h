@@ -72,4 +72,6 @@ struct Data {
     Atmospheric atmo;
     Target target;
     Solenoids solenoids = SOLENOIDS_OFF;
+    float temp1;
+    float temp2;
 };

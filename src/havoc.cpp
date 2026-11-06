@@ -7,6 +7,7 @@ Data data;
 Sensors sensors;
 TargetPresets targetPresets;
 SPILogger logger = SPILogger();
+SerialMonitor monitor = SerialMonitor();
 ErrorLED errorLED =
     ErrorLED(config.pins.redLed, config.pins.greenLed, config.pins.blueLed);
 
@@ -19,6 +20,8 @@ void initPins() {
   pinMode(config.pins.sideLed, OUTPUT);
   digitalWrite(config.pins.sideLed, HIGH);
   errorLED.initPins();
+  pinMode(config.pins.thermistor1, INPUT);
+  pinMode(config.pins.thermistor2, INPUT);
 }
 
 void happyHavocLightDance() {

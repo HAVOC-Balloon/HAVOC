@@ -12,6 +12,7 @@ extern Data data;
 extern Sensors sensors;
 extern TargetPresets targetPresets;
 extern SPILogger logger;
+extern SerialMonitor monitor;
 extern ErrorLED errorLED;
 
 void initPins();

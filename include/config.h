@@ -11,6 +11,8 @@ struct Pins {
   const int sdCSPin = 10;
   const int SDN = 1;
   const int NGPOWER = 0;  
+  const int thermistor1 = A11;
+  const int thermistor2 = A16;
 };
 
 struct Blink {
@@ -20,6 +22,7 @@ struct Blink {
 
 struct BaudRates {
   const int serial1 = 115200;
+  const int serial = 9600;
 };
 
 struct WaitTimes {
@@ -48,4 +51,5 @@ struct Sensors {
   BNO055 imu = BNO055();
   M9N gps = M9N();
   BME280 barometer = BME280();
+  NTC thermistor = NTC();
 };

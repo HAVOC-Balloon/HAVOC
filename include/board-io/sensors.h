@@ -38,6 +38,11 @@ public:
     virtual std::optional<float> getHumidity() = 0;
 };
 
+class Thermistor: public Sensor {
+public:
+    void collectData(Data &data);
+};
+
 class BNO055 : public IMU {
 private:
     std::optional<Vector> acceleration = std::nullopt;
@@ -78,4 +83,13 @@ public:
     std::optional<float> getTemperature();
     std::optional<float> getAltitude();
     std::optional<float> getHumidity();
+};
+
+class NTC: public Thermistor{
+public:
+    void init();
+    void collectData(Data &data);
+    //Since its just a read you don't need to prefetch data, but it yelled at me to
+    bool prefetchData();
+    float readCelsius(int pin);
 };
