@@ -34,12 +34,12 @@ float readCelsius(int pin) {
   // Beta equation
   float tK = 1.0f / (1.0f / (T_NOMINAL + 273.15f) + logf(rNtc / R_NOMINAL) / BETA);
   return tK - 273.15f;
+  Serial.println("hi");
 }
 
 void setup() {
   Serial.begin(9600);
   delay(1000);
-  Serial.println("hi");
   pinMode(thermistor1Pin, INPUT);
   pinMode(thermistor2Pin, INPUT);
   analogReadResolution(12);
