@@ -167,7 +167,7 @@ void stateActions() {
       } else {
         data.target = targetPresets.west->getTarget(data);  
       }*/
-      data.target = targetPresets.west->getTarget(data);  
+      data.target = targetPresets.south->getTarget(data);  
       requestedSolenoidState = PhasePlane().getStabilization(data);
       //requestedSolenoidState = AltTest().getStabilization(data);
       setSolenoids(requestedSolenoidState);

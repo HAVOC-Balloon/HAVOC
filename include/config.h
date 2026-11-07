@@ -37,7 +37,7 @@ struct Config {
   const Blink blink;
   const WaitTimes waitTimes;
   const float seaLevelPressure = 1013.25;  // hPa
-  const double targetAltitude = 16995;     // m
+  const double targetAltitude = 18995;     // m
   const double deactivateAltitude = 2000;  // m
   const char* telemetryFilePrefix = "telemetry/HAVOC-Data-";
   const char* secondaryTelemetryFilePrefix = "extra/HAVOC-Extra-";
