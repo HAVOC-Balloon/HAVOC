@@ -135,9 +135,9 @@ void stateActions() {
 
     case FlightState::LOW_STABILIZATION: 
       // The same thing as regular stabilization
-      data.target = targetPresets.west->getTarget(data);  
-      requestedSolenoidState = PhasePlane().getStabilization(data);
-      setSolenoids(requestedSolenoidState);
+      //data.target = targetPresets.west->getTarget(data);  
+      //requestedSolenoidState = PhasePlane().getStabilization(data);
+      //setSolenoids(requestedSolenoidState);
       blinkLEDs(); 
       break;
 
@@ -184,7 +184,7 @@ void stateActions() {
       // digitalWrite(config.pins.NGPOWER, HIGH); //Activation
       // digitalWrite(config.pins.SDN, HIGH); //Shut Down Notice
       //MUST turn solenoids off to make sure its not stuck open when it changes states
-      setSolenoids(SOLENOIDS_OFF);
+      setSolenoids(CLOCKWISE); //Open solenoid to vent remaining gas
       blinkLEDs();
       break;
     case PRELANDED:

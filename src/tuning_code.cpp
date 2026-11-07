@@ -6,13 +6,13 @@
 void setup() {
   initPins();
   //Comment this line out if not connected to computer
-  monitor.init();
+  //monitor.init();
   //TODO: Why does this not work
-  //logger.init();
+  logger.init();
   sensors.barometer.init();
   sensors.imu.init();
   //Add this line for thermistor
-  sensors.thermistor.init();
+  sensors.thermistor.init(); //moved
   // Disable GPS for tuning
   //sensors.gps.init();
   setSolenoids(SOLENOIDS_OFF);
@@ -47,11 +47,11 @@ void loop() {
   stateActions();
   logger.writeTelemetry(data);
   //Comment this out if not connected to computer
-  monitor.writeTelemetry(data);
+  //monitor.writeTelemetry(data);
   while (!loopTimer.isComplete()) {}
   loopTimer.reset();
 
   //Slow down the loop so I can read the data
   //DELETE THIS
-  delay(500);
+  //delay(500);
 }

@@ -8,6 +8,7 @@ void setup() {
   sensors.barometer.init();
   sensors.imu.init();
   sensors.gps.init();
+  sensors.thermistor.init();
   setSolenoids(SOLENOIDS_OFF);
   delay(500);
   for(int i = 0; i < 2; i++){
@@ -31,6 +32,7 @@ void loop() {
   sensors.imu.collectData(data);
   sensors.gps.collectData(data);
   sensors.barometer.collectData(data);
+  sensors.thermistor.collectData(data);
   updateFlightState();
   stateActions();
 

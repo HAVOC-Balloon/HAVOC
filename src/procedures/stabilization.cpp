@@ -261,10 +261,10 @@ Solenoids PhasePlane::getStabilization(Data &data) {
 
   // TODO Change these to pull from the config file
 
-  double slope = -0.5; 
+  double slope = -1.0; 
   
-  double velocityLimit = 30;
-  double deadband = 12;
+  double velocityLimit = 60;
+  double deadband = 25;
   double piecewiseInterval = abs(velocityLimit / slope);
 
   double velocity = -data.gyro.z;
