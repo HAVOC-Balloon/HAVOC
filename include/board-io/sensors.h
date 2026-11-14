@@ -79,3 +79,7 @@ public:
     std::optional<float> getAltitude();
     std::optional<float> getHumidity();
 };
+
+
+// TODO THERMISTER?? I HARDLY KNOWER
+// Assigned: Alexander for Code; Titan for Math (readCelsius)
